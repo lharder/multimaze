@@ -54,7 +54,7 @@ local function parse( self, message )
 			-- custom factor depending on the network latency
 			self.targetPos = message.attrs.pos
 			self.dir = vmath.normalize( self.targetPos - self.pos )
-			self.targetPos = self.targetPos + self.dir * self.speed * 0,07
+			self.targetPos = self.targetPos + self.dir * self.speed * 0,06
 
 			-- When moving into position diagonally, the remote object is 
 			-- slower than the original. Apparently, the movement is "up" 
