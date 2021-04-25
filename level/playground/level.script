@@ -39,7 +39,7 @@ local function createPlayer( factoryUrl, pos, speed, txtCaption, isLocalHero )
 		})
 	end
 
-	return PLAYER_ID
+	return id
 end
 
 
