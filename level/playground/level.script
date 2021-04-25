@@ -16,14 +16,15 @@ end
 
 
 local function createPlayer( factoryUrl, pos, speed, txtCaption, isLocalHero )
-	-- pos.z = .5
-	PLAYER_ID = factory.create( factoryUrl, pos, nil, { 
+	local id = factory.create( factoryUrl, pos, nil, { 
 		speed = speed,  
 		isLocalHero = isLocalHero 
 	}, 1.2 )
-	label.set_text( msg.url( nil, PLAYER_ID, "caption" ), txtCaption )
+	label.set_text( msg.url( nil, id, "caption" ), txtCaption )
 	
 	if isLocalHero then 
+		PLAYER_ID = id
+		
 		-- important: user input only from the one per host / right client!
 		msg.post( PLAYER_ID, "acquire_input_focus" ) 
 		msg.post( "@render:", "use_fixed_fit_projection", { near = -1, far = 1 } )
@@ -82,7 +83,7 @@ end
 
 
 function init( self )
-	GAME:start( "192.168.178.31" )
+	GAME:start( "192.168.178.24" )
 
 	-- create serverside objects to run the game
 	if GAME:isServer() then

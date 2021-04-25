@@ -133,7 +133,7 @@ function init( self )
 	-- provide a pointer for player's direction
 	self.pointer = factory.create( "/factories#pointerfactory", vmath.vector3() )
 	go.set_parent( self.pointer, go.get_id() )
-
+	
 	-- init this object and receive my globalId
 	msg.post( ".", MSG_ON_FIRST_TICK )
 end
