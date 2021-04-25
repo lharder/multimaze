@@ -1,0 +1,119 @@
+image: "/assets/characters/sfactor2.png"
+tile_width: 64
+tile_height: 64
+tile_margin: 0
+tile_spacing: 0
+collision: ""
+material_tag: "tile"
+collision_groups: "default"
+animations {
+  id: "standdown"
+  start_tile: 56
+  end_tile: 56
+  playback: PLAYBACK_NONE
+  fps: 30
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "standleft"
+  start_tile: 68
+  end_tile: 68
+  playback: PLAYBACK_NONE
+  fps: 30
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "standright"
+  start_tile: 80
+  end_tile: 80
+  playback: PLAYBACK_NONE
+  fps: 30
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "standup"
+  start_tile: 92
+  end_tile: 92
+  playback: PLAYBACK_NONE
+  fps: 30
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "walkdown0"
+  start_tile: 55
+  end_tile: 57
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "walkdown1"
+  start_tile: 55
+  end_tile: 57
+  playback: PLAYBACK_ONCE_BACKWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "walkleft0"
+  start_tile: 67
+  end_tile: 69
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "walkleft1"
+  start_tile: 67
+  end_tile: 69
+  playback: PLAYBACK_ONCE_BACKWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "walkright0"
+  start_tile: 79
+  end_tile: 81
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "walkright1"
+  start_tile: 79
+  end_tile: 81
+  playback: PLAYBACK_ONCE_BACKWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "walkup0"
+  start_tile: 91
+  end_tile: 93
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "walkup1"
+  start_tile: 91
+  end_tile: 93
+  playback: PLAYBACK_ONCE_BACKWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+extrude_borders: 2
+inner_padding: 0
+sprite_trim_mode: SPRITE_TRIM_MODE_OFF

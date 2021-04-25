@@ -1,0 +1,22 @@
+require( "deflibs.defold" )
+local Envelope = require( "nexus.envelope" )
+local Defmap = require( "nexus.defmap" )
+
+local lua = require( "deflibs.lualib" )
+local Map = require( "nexus.map" )
+local Game = require( "nexus.game" )
+local Host = require( "nexus.host" )
+
+-- global ---------------------------
+GAME = Game.new( "MultiMaze" )
+CAMERA_ID = "/camera"
+PLAYER_ID = ""
+MAP = {}
+
+-------------------------------------
+
+function init( self )
+	lua.randomize()
+	msg.post( "main:/screenmaster", "load", { level = "setup" } ) 
+end
+
