@@ -37,8 +37,6 @@ local function createPlayer( factoryUrl, pos, speed, txtCaption, isLocalHero )
 			vertical = true, 
 			immediate = false
 		})
-
-		GAME:sync( PLAYER_ID )
 	end
 
 	return id
@@ -71,6 +69,11 @@ local function parse( message )
 			message.attrs.isLocalHero 
 		)
 		GAME.client.registry:set( message.attrs.gid, id )
+
+		-- auto sync pos and rot of player (after global registry!)
+		if message.attrs.isLocalHero then 
+			GAME:sync( PLAYER_ID ) 
+		end
 		
 	elseif message.meta.type == Events.CREATE_ROBOT then
 		local id = createRobot( 
@@ -85,7 +88,8 @@ end
 
 
 function init( self )
-	GAME:start( "192.168.178.24", 10 )
+	-- GAME:start( "192.168.178.24", 10 )
+	GAME:start()
 
 	-- create serverside objects to run the game
 	if GAME:isServer() then
