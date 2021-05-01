@@ -72,7 +72,7 @@ local function parse( message )
 
 		-- auto sync pos and rot of player (after global registry!)
 		if message.attrs.isLocalHero then 
-			GAME:sync( PLAYER_ID ) 
+			GAME:sync( message.attrs.gid ) 
 		end
 		
 	elseif message.meta.type == Events.CREATE_ROBOT then
