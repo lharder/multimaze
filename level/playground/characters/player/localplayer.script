@@ -192,14 +192,16 @@ function update( self, dt )
 		-- set calculated position only if it can be reached
 		go.set_position( self.pos ) 
 
+		--[[
 		-- Distance covered before a new position is transmitted 
 		-- to the other clients: depends on go's speed!
 		-- Send only after significant change to reduce no of events
 		self.dist = math.abs( vmath.length( self.pos - self.oldPos ) )
-		if self.dist >= 1 then
+		if self.dist >= .5 then
 			local evt = Events.newMoveTo( self.gid, self.pos )
 			GAME.client:sendToOtherClients( evt )
 		end
+		--]]
 	end
 end
 
