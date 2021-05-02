@@ -1,30 +1,32 @@
 local defgui = require( "defgui.defgui" )
+local Host = require( "nexus.host" )
 
 local MSG_SCREEN_LOADED = hash( "screenmaster:loaded" )
 
+local x = 50
+local y = 450
 
-function display( self )
-	local x = -190
-	local y = 450
-	
+local function display( self )
 	-- display a checkbox for each callsign
 	for _, callsign in ipairs( GAME.hosts:keys() ) do
-		-- calc position
-		x = x + 240
-		if x > 900 then
-			x = -190
-			y = y - 50
-		end
-				
 		-- does a checkbox exist already?
 		local checkbox = self.form.fields[ callsign ] 
 		if checkbox == nil then
+			-- calc position
+			if x > 800 then
+				x = 50
+				y = y - 50
+			end
+			
+			pprint( callsign .. ", " .. x .. ", " .. y )
 			checkbox = self.form:addCheckbox( callsign, x, y,
 				function() 
 				end, 
 				callsign 
 			)
 			checkbox:check( true )
+
+			x = x + 320
 		end
 	end
 end
@@ -80,7 +82,6 @@ function init( self )
 		checkbox = "checkbox/root",  
 		label = "label/root",
 	})
-
 end
 
 
