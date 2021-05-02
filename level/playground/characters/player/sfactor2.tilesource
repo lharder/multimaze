@@ -10,7 +10,7 @@ animations {
   id: "standdown"
   start_tile: 56
   end_tile: 56
-  playback: PLAYBACK_NONE
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 30
   flip_horizontal: 0
   flip_vertical: 0
@@ -19,7 +19,7 @@ animations {
   id: "standleft"
   start_tile: 68
   end_tile: 68
-  playback: PLAYBACK_NONE
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 30
   flip_horizontal: 0
   flip_vertical: 0
@@ -28,7 +28,7 @@ animations {
   id: "standright"
   start_tile: 80
   end_tile: 80
-  playback: PLAYBACK_NONE
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 30
   flip_horizontal: 0
   flip_vertical: 0
@@ -37,7 +37,7 @@ animations {
   id: "standup"
   start_tile: 92
   end_tile: 92
-  playback: PLAYBACK_NONE
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 30
   flip_horizontal: 0
   flip_vertical: 0

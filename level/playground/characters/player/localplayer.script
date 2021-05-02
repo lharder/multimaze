@@ -54,6 +54,7 @@ local function animWalk( self )
 		end
 
 		sprite.play_flipbook( "#sprite", name, function( id, tileNo ) 
+			pprint( "stop animation" )
 			self.animating = false
 			self.animNo = 1 - self.animNo
 		end )
@@ -63,10 +64,6 @@ local function animWalk( self )
 			go.set( "#playercam", "dir", self.dir )
 		end
 	end
-end
-
-
-local function parse( self, message )
 end
 
 
