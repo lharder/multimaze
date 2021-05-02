@@ -1,4 +1,4 @@
-image: "/assets/characters/sfactor2.png"
+image: "/assets/characters/hero01.png"
 tile_width: 64
 tile_height: 64
 tile_margin: 0
@@ -8,109 +8,73 @@ material_tag: "tile"
 collision_groups: "default"
 animations {
   id: "standdown"
-  start_tile: 56
-  end_tile: 56
+  start_tile: 2
+  end_tile: 2
   playback: PLAYBACK_ONCE_FORWARD
-  fps: 30
+  fps: 8
   flip_horizontal: 0
   flip_vertical: 0
 }
 animations {
   id: "standleft"
-  start_tile: 68
-  end_tile: 68
+  start_tile: 6
+  end_tile: 6
   playback: PLAYBACK_ONCE_FORWARD
-  fps: 30
+  fps: 8
   flip_horizontal: 0
   flip_vertical: 0
 }
 animations {
   id: "standright"
-  start_tile: 80
-  end_tile: 80
+  start_tile: 10
+  end_tile: 10
   playback: PLAYBACK_ONCE_FORWARD
-  fps: 30
+  fps: 8
   flip_horizontal: 0
   flip_vertical: 0
 }
 animations {
   id: "standup"
-  start_tile: 92
-  end_tile: 92
+  start_tile: 14
+  end_tile: 14
   playback: PLAYBACK_ONCE_FORWARD
-  fps: 30
+  fps: 8
   flip_horizontal: 0
   flip_vertical: 0
 }
 animations {
-  id: "walkdown0"
-  start_tile: 55
-  end_tile: 57
+  id: "walkdown"
+  start_tile: 1
+  end_tile: 4
   playback: PLAYBACK_ONCE_FORWARD
-  fps: 12
+  fps: 8
   flip_horizontal: 0
   flip_vertical: 0
 }
 animations {
-  id: "walkdown1"
-  start_tile: 55
-  end_tile: 57
-  playback: PLAYBACK_ONCE_BACKWARD
-  fps: 12
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
-  id: "walkleft0"
-  start_tile: 67
-  end_tile: 69
+  id: "walkleft"
+  start_tile: 5
+  end_tile: 8
   playback: PLAYBACK_ONCE_FORWARD
-  fps: 12
+  fps: 8
   flip_horizontal: 0
   flip_vertical: 0
 }
 animations {
-  id: "walkleft1"
-  start_tile: 67
-  end_tile: 69
-  playback: PLAYBACK_ONCE_BACKWARD
-  fps: 12
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
-  id: "walkright0"
-  start_tile: 79
-  end_tile: 81
+  id: "walkright"
+  start_tile: 9
+  end_tile: 12
   playback: PLAYBACK_ONCE_FORWARD
-  fps: 12
+  fps: 8
   flip_horizontal: 0
   flip_vertical: 0
 }
 animations {
-  id: "walkright1"
-  start_tile: 79
-  end_tile: 81
-  playback: PLAYBACK_ONCE_BACKWARD
-  fps: 12
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
-  id: "walkup0"
-  start_tile: 91
-  end_tile: 93
+  id: "walkup"
+  start_tile: 13
+  end_tile: 16
   playback: PLAYBACK_ONCE_FORWARD
-  fps: 12
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
-  id: "walkup1"
-  start_tile: 91
-  end_tile: 93
-  playback: PLAYBACK_ONCE_BACKWARD
-  fps: 12
+  fps: 8
   flip_horizontal: 0
   flip_vertical: 0
 }

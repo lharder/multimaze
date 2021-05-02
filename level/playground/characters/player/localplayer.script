@@ -44,19 +44,17 @@ local function animWalk( self )
 			self.animating = true 
 			if math.abs( self.dir.x ) > math.abs( self.dir.y ) then 
 				-- x-axis movement is more significant
-				if self.dir.x > 0 then name = "walkright" .. self.animNo end
-				if self.dir.x < 0 then name = "walkleft" .. self.animNo end
+				if self.dir.x > 0 then name = "walkright" end
+				if self.dir.x < 0 then name = "walkleft" end
 			else
 				-- y-axis movement is more significant
-				if self.dir.y > 0 then name = "walkup" .. self.animNo end
-				if self.dir.y < 0 then name = "walkdown" .. self.animNo end
+				if self.dir.y > 0 then name = "walkup" end
+				if self.dir.y < 0 then name = "walkdown" end
 			end
 		end
 
 		sprite.play_flipbook( "#sprite", name, function( id, tileNo ) 
-			pprint( "stop animation" )
 			self.animating = false
-			self.animNo = 1 - self.animNo
 		end )
 		
 		-- adjust camera if change of dir occurrs
@@ -112,8 +110,6 @@ function init( self )
 	self.speed = 0
 
 	-- allow for change of animation only after completion
-	-- animation has 2 parts to be more responsive
-	self.animNo = 1
 	self.animating = false
 
 	-- prevent too many keystroke identical events
@@ -128,7 +124,7 @@ function init( self )
 	self.buttons = {}
 
 	-- provide a pointer for player's direction
-	self.pointer = factory.create( "/factories#pointerfactory", vmath.vector3() )
+	self.pointer = factory.create( "/factories#pointerfactory", vmath.vector3(), nil, nil, 1.2 )
 	go.set_parent( self.pointer, go.get_id() )
 	
 	-- init this object and receive my globalId

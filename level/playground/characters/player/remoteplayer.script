@@ -12,20 +12,19 @@ local function animWalk( self )
 	if not self.animating then
 		self.animating = true
 
-		local name = "walkdown" .. self.animNo
+		local name = "walkdown"
 		if math.abs( self.dir.x ) > math.abs( self.dir.y ) then 
 			-- x-axis movement is more significant
-			if self.dir.x > 0 then name = "walkright" .. self.animNo end
-			if self.dir.x < 0 then name = "walkleft" .. self.animNo end
+			if self.dir.x > 0 then name = "walkright" end
+			if self.dir.x < 0 then name = "walkleft" end
 		else
 			-- y-axis movement is more significant
-			if self.dir.y > 0 then name = "walkup" .. self.animNo end
-			if self.dir.y < 0 then name = "walkdown" .. self.animNo end
+			if self.dir.y > 0 then name = "walkup" end
+			if self.dir.y < 0 then name = "walkdown" end
 		end
 
 		sprite.play_flipbook( "#sprite", name, function( id, tileNo ) 
 			self.animating = false
-			self.animNo = 1 - self.animNo
 		end )
 
 	end
@@ -37,14 +36,13 @@ local function animStand( self )
 		self.animating = true
 		
 		local name = "standdown"
-		if self.dir.x > 0 then name = "standright" end
-		if self.dir.x < 0 then name = "standleft" end
 		if self.dir.y > 0 then name = "standup" end
 		if self.dir.y < 0 then name = "standdown" end
-
+		if self.dir.x > 0 then name = "standright" end
+		if self.dir.x < 0 then name = "standleft" end
+		
 		sprite.play_flipbook( "#sprite", name, function( id, tileNo ) 
 			self.animating = false
-			self.animNo = 1 - self.animNo
 		end )
 	end
 end
@@ -55,7 +53,6 @@ function init( self )
 	self.dir = vmath.vector3()
 	self.oldPos = go.get_position()
 	
-	self.animNo = 1
 	self.animating = false
 
 	msg.post( ".", MSG_ON_FIRST_TICK )
