@@ -65,13 +65,16 @@ function update( self, dt )
 	-- movement has occurred from the outside:
 	-- auto sync of gameobject by nexus client
 	if self.pos ~= self.oldPos then
+		-- positiopn has changed, calculate direction 
+		-- and speed of movement for proper animation 
 		self.dir = self.pos - self.oldPos 
-		-- self.moving = true
 		animWalk( self )
-
 		self.oldPos = self.pos
 	else
 		if self.animating then 
+			-- no network message has arrived (latency), but  
+			-- animation is still playing: probably supposed to 
+			-- continue motion in previous direction and same speed
 			self.pos = self.pos + self.dir
 		end
 	end
