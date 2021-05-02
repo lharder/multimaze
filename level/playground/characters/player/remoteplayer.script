@@ -66,13 +66,14 @@ function update( self, dt )
 	-- auto sync of gameobject by nexus client
 	if self.pos ~= self.oldPos then
 		self.dir = self.pos - self.oldPos 
-		self.moving = true
+		-- self.moving = true
 		animWalk( self )
 
 		self.oldPos = self.pos
 	else
-		if self.moving then animStand( self ) end
-		self.moving = false
+		if self.animating then 
+			self.pos = self.pos + self.dir
+		end
 	end
 end
 
