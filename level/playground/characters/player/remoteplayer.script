@@ -75,7 +75,10 @@ function update( self, dt )
 			-- no network message has arrived (latency), but  
 			-- animation is still playing: probably supposed to 
 			-- continue motion in previous direction and same speed
-			self.pos = self.pos + self.dir
+			-- however, speed depends on frame rate to network latency
+			-- relation, hard to assess...
+			self.pos = self.pos + 0.1 * self.dir
+			go.set_position( self.pos )
 		end
 	end
 end
