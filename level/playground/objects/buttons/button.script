@@ -1,3 +1,5 @@
+local Events = require( "nexus.events" )
+
 local MSG_INTERACT = hash( "interact" )
 local MSG_SET_PROPS = hash( "setProps" )
 
