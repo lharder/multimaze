@@ -74,25 +74,29 @@ function Tilemap:render()
 			for i, obj in ipairs( layer.objects ) do
 				
 				if obj.type == TYPE_DOOR then 
-					self:createObject( "/factories#doorfactory", vmath.vector3( 
+					local cid = self:createObject( "/factories#doorfactory", vmath.vector3( 
 						obj.x + self.map.tilewidth, 
 						yMax - obj.y + self.map.tileheight - 12, 
 						0.3 
 					), obj )
+					if obj.name then GAME.client.registry:set( obj.name, cid ) end
 					
 				elseif obj.type == TYPE_TERMINAL then
-					self:createObject( "/factories#terminalfactory", vmath.vector3( 
+					local cid = self:createObject( "/factories#terminalfactory", vmath.vector3( 
 						obj.x + self.map.tilewidth - 32, 
 						yMax - obj.y + self.map.tileheight - 36, 
 						0.3
 					), obj )
-
+					if obj.name then GAME.client.registry:set( obj.name, cid ) end
+					
 				elseif obj.type == TYPE_BUTTON then
-					self:createObject( "/factories#buttonfactory", vmath.vector3( 
+					local cid = self:createObject( "/factories#buttonfactory", vmath.vector3( 
 						obj.x + self.map.tilewidth - 32, 
 						yMax - obj.y + self.map.tileheight - 36, 
 						0.3 
 					), obj )
+					if obj.name then GAME.client.registry:set( obj.name, cid ) end
+					
 				end
 			end
 			

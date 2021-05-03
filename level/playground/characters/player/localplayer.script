@@ -89,7 +89,14 @@ local function vcontrol( self, action )
 			self.cooldown = socket.gettime() + .5
 			
 			if self.interactWith then 
+				-- act locally and ...
 				msg.post( self.interactWith, MSG_INTERACT )
+
+				-- ...inform other clients
+				local gid = GAME.client.registry:getGlobalId( self.interactWith )
+				local evt = Events.newObjectInteract( gid )
+				GAME.client:sendToOtherClients( evt )
+				
 			else
 				shoot( self )
 			end

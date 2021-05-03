@@ -6,12 +6,14 @@ Events.CREATE_PLAYER 		= 1
 Events.CREATE_ROBOT			= 2
 Events.MOVE_TO 				= 3
 Events.POSITION_REACHED 	= 4
+Events.OBJECT_INTERACT 		= 5
 
 Events.names = {}
 Events.names[ 1 ] = "CREATE_PLAYER"
 Events.names[ 2 ] = "CREATE_ROBOT"
 Events.names[ 3 ] = "MOVE_TO"
 Events.names[ 4 ] = "POSITION_REACHED"
+Events.names[ 5 ] = "OBJECT_INTERACT"
 
 
 function Events.newCreatePlayer( gid, pos, speed, name, isLocalHero )
@@ -52,6 +54,13 @@ end
 function Events.newPositionReached( gid, pos )
 	local env = Envelope.new( Events.POSITION_REACHED, gid )
 	env:putVector3( "pos", pos )
+	return env
+end
+
+
+function Events.newObjectInteract( gid, param )
+	local env = Envelope.new( Events.OBJECT_INTERACT, gid )
+	if param then env:putVector3( "param", param ) end
 	return env
 end
 

@@ -9,6 +9,8 @@ local function press( self )
 	if self.animTime < socket.gettime() then
 		self.animTime = socket.gettime() + 1
 		
+		self.on = not self.on
+
 		local suffix = "Off"
 		if self.on then suffix = "On" end
 		
@@ -24,14 +26,7 @@ local function press( self )
 end
 
 
--- methods ----------------------------
-function init( self )
-	go.set_scale( .6 )
-	self.animTime = 0
-end
-
-
-function setup( self, params ) 
+local function setup( self, params ) 
 	if params.properties.color then
 		self.color = params.properties.color
 		sprite.play_flipbook( "#sprite", self.color .. "fix" )
@@ -41,12 +36,29 @@ function setup( self, params )
 end
 
 
-function on_message( self, message_id, message, sender )
-	if message_id == MSG_INTERACT then
-		self.on = not self.on
+local function parse( self, message ) 
+	if message.meta.type == Events.OBJECT_INTERACT then
 		press( self )
-		
-	elseif message_id == MSG_SET_PROPS then
+	end
+end
+
+
+-- methods ----------------------------
+function init( self )
+	go.set_scale( .6 )
+	self.animTime = 0
+end
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == MSG_SET_PROPS then
 		setup( self, message )
+
+	elseif message_id == MSG_INTERACT then
+		press( self )
+
+	elseif message_id == GAME.MSG_EXEC_CMD then 
+		parse( self, message )
+		
 	end
 end
