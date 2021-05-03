@@ -47,7 +47,7 @@ end
 
 -- methods ----------------------------
 function init( self )
-	go.set_scale( .6 )
+	go.set_scale( .8 )
 	self.animTime = 0
 end
 
