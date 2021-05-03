@@ -26,15 +26,19 @@ local CMD_RIGHT = hash( "key_rsuper" )
 
 local function shoot( self )
 	local pos = go.get_position() + self.dir * 30
-	factory.create( "/factories#laserfactory", pos, nil, { speed = 900, dir = self.dir }, .5 )
+	local id = factory.create( "/factories#laserfactory", pos, nil, { speed = 600, dir = self.dir }, .5 )
+
+	-- inform other clients
+	local shotGid = sprintf( "%s-%d-%d", self.gid, socket.gettime(), math.random( 0, 999999 ) )
+	local evt = Events.newCreateShot( self.gid, shotGid )
+	GAME.client:sendToOtherClients( evt )
 end
 
 
 local function interact( self )
-	-- act locally and ...
 	msg.post( self.interactWith, MSG_INTERACT )
 
-	-- ...inform other clients
+	-- inform other clients
 	local gid = GAME.client.registry:getGlobalId( self.interactWith )
 	local evt = Events.newObjectInteract( gid )
 	GAME.client:sendToOtherClients( evt )
@@ -53,7 +57,7 @@ local function animWalk( self )
 			
 		else
 			self.animating = true 
-			if math.abs( self.dir.x ) > math.abs( self.dir.y ) then 
+			if math.abs( self.dir.x ) >= math.abs( self.dir.y ) then 
 				-- x-axis movement is more significant
 				if self.dir.x > 0 then name = "walkright" end
 				if self.dir.x < 0 then name = "walkleft" end
@@ -105,6 +109,11 @@ local function vcontrol( self, action )
 			end
 		end
 	end
+end
+
+
+local function parse( self, message )
+	
 end
 
 

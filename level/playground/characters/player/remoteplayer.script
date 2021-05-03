@@ -8,6 +8,12 @@ go.property( "isLocalHero", false )
 local MSG_ON_FIRST_TICK = hash( "firsttick" )
 
 
+local function shoot( self )
+	local pos = go.get_position() + self.dir * 30
+	factory.create( "/factories#laserfactory", pos, nil, { speed = 600, dir = self.dir }, .5 )
+end
+
+
 local function animWalk( self )
 	if not self.animating then
 		self.animating = true
@@ -46,6 +52,14 @@ local function animStand( self )
 		end )
 	end
 end
+
+
+local function parse( self, message )
+	if message.meta.type == Events.CREATE_SHOT then 
+		shoot( self )
+	end
+end
+
 
 
 -- methods ---------------------
@@ -89,6 +103,10 @@ function on_message( self, message_id, message, sender )
 		-- get my global id, does not work on init()
 		-- cannot pass in string params on factory.create...
 		self.gid = GAME.client.registry:getGlobalId( go.get_id() )
+		
+	elseif message_id == GAME.MSG_EXEC_CMD then 
+		parse( self, message )
+		
 	end
 end
 

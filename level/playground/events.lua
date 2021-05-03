@@ -7,6 +7,7 @@ Events.CREATE_ROBOT			= 2
 Events.MOVE_TO 				= 3
 Events.POSITION_REACHED 	= 4
 Events.OBJECT_INTERACT 		= 5
+Events.CREATE_SHOT			= 6
 
 Events.names = {}
 Events.names[ 1 ] = "CREATE_PLAYER"
@@ -14,6 +15,7 @@ Events.names[ 2 ] = "CREATE_ROBOT"
 Events.names[ 3 ] = "MOVE_TO"
 Events.names[ 4 ] = "POSITION_REACHED"
 Events.names[ 5 ] = "OBJECT_INTERACT"
+Events.names[ 6 ] = "CREATE_SHOT"
 
 
 function Events.newCreatePlayer( gid, pos, speed, name, isLocalHero )
@@ -61,6 +63,14 @@ end
 function Events.newObjectInteract( gid, param )
 	local env = Envelope.new( Events.OBJECT_INTERACT, gid )
 	if param then env:putVector3( "param", param ) end
+	return env
+end
+
+
+function Events.newCreateShot( parentGid, gid )
+	local env = Envelope.new( Events.CREATE_SHOT, parentGid )
+	env:putString( "factory", "playground:/factories#laserfactory" )
+	env:putString( "gid", gid )
 	return env
 end
 
