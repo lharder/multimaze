@@ -35,8 +35,9 @@ function on_message( self, message_id, message, sender )
 
 	elseif message_id == MSG_SET_PROPS then
 		self.name 	= message.name
-		self.open 	= message.open
-		self.locked = message.locked
-		
+		self.open 	= message.properties.open
+		self.locked = message.properties.locked
+
+		pprint( self.name .. ": " .. tostring( self.open ) )
 	end
 end

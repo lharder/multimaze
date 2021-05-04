@@ -21,8 +21,8 @@ local function press( self )
 		end )
 		
 		for i, name in ipairs( self.listeners ) do
-			-- pprint( "message to " .. name .. " (" .. MAP.objects[ name ] .. ")" )
-			msg.post( MAP.objects[ name ], MSG_INTERACT, {} )
+			-- pprint( "message to " .. name .. " (" .. MAP.objsByName[ name ] .. ")" )
+			msg.post( MAP.objsByName[ name ], MSG_INTERACT, {} )
 		end
 	end
 end

@@ -3,7 +3,7 @@ return {
   luaversion = "5.1",
   tiledversion = "1.4.3",
   orientation = "orthogonal",
-  renderorder = "right-down",
+  renderorder = "right-up",
   width = 32,
   height = 32,
   tilewidth = 64,
@@ -222,12 +222,15 @@ return {
           shape = "rectangle",
           x = 1600,
           y = 640,
-          width = 64,
-          height = 64,
+          width = 128,
+          height = 128,
           rotation = 0,
           gid = 9,
           visible = true,
-          properties = {}
+          properties = {
+            ["locked"] = false,
+            ["open"] = false
+          }
         },
         {
           id = 18,
@@ -236,12 +239,13 @@ return {
           shape = "rectangle",
           x = 1088,
           y = 1408,
-          width = 64,
-          height = 64,
+          width = 128,
+          height = 128,
           rotation = 0,
           gid = 9,
           visible = true,
           properties = {
+            ["locked"] = false,
             ["open"] = true
           }
         },
@@ -252,12 +256,15 @@ return {
           shape = "rectangle",
           x = 384,
           y = 1408,
-          width = 64,
-          height = 64,
+          width = 128,
+          height = 128,
           rotation = 0,
           gid = 9,
           visible = true,
-          properties = {}
+          properties = {
+            ["locked"] = false,
+            ["open"] = false
+          }
         },
         {
           id = 20,
@@ -334,12 +341,13 @@ return {
           shape = "rectangle",
           x = 384,
           y = 1792,
-          width = 64,
-          height = 64,
+          width = 128,
+          height = 128,
           rotation = 0,
           gid = 9,
           visible = true,
           properties = {
+            ["locked"] = false,
             ["open"] = false
           }
         }
