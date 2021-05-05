@@ -26,12 +26,17 @@ local CMD_RIGHT = hash( "key_rsuper" )
 
 local function shoot( self )
 	local pos = go.get_position() + self.dir * 30
-	local id = factory.create( "/factories#locallaserfactory", pos, nil, { speed = 600, dir = self.dir }, .5 )
+	local cid = factory.create( "/factories#locallaserfactory", pos, nil, { speed = 600, dir = self.dir }, .5 )
 
-	-- inform other clients
+	-- make id globally available
 	local shotGid = sprintf( "%s-%d-%d", self.gid, socket.gettime(), math.random( 0, 999999 ) )
+	GAME.client.registry:set( shotGid, cid )
+	
+	-- inform other clients
 	local evt = Events.newCreateShot( self.gid, shotGid )
 	GAME.client:sendToOtherClients( evt )
+
+	-- keep remote shots in sync
 	GAME:sync( shotGid )
 end
 
