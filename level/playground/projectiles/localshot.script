@@ -18,6 +18,8 @@ function init( self )
 	local angle = math.atan2( -1 * self.dir.x, self.dir.y )
 	local rotation = vmath.quat_rotation_z( angle )	
 	go.set_rotation( rotation )
+
+	pprint( "local shot" )
 end
 
 

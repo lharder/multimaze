@@ -57,7 +57,8 @@ end
 local function parse( self, message )
 	if message.meta.type == Events.CREATE_SHOT then 
 		local pos = go.get_position() + self.dir * 30
-		factory.create( "/factories#remotelaserfactory", pos, nil, { speed = 600, dir = self.dir }, .5 )
+		local cid = factory.create( "/factories#remotelaserfactory", pos, nil, { speed = 600, dir = self.dir }, .5 )
+		GAME.client.registry:set( message.attrs.gid, cid )
 	end
 end
 
