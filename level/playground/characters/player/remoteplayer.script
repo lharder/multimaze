@@ -10,7 +10,7 @@ local MSG_ON_FIRST_TICK = hash( "firsttick" )
 
 local function shoot( self )
 	local pos = go.get_position() + self.dir * 30
-	factory.create( "/factories#locallaserfactory", pos, nil, { speed = 600, dir = self.dir }, .5 )
+	factory.create( "/factories#locallaserfactory", pos, nil, { speed = 400, dir = self.dir }, .5 )
 end
 
 

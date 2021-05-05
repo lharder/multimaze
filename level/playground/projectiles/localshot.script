@@ -17,17 +17,14 @@ function init( self )
 	self.pos = go.get_position()
 
 	local angle = math.atan2( -1 * self.dir.x, self.dir.y )
-	local rotation = vmath.quat_rotation_z( angle )	
-	go.set_rotation( rotation )
-
-	pprint( "local shot" )
+	self.rotation = vmath.quat_rotation_z( angle )	
+	go.set_rotation( self.rotation )
 end
 
 
 function update( self, dt )
 	self.oldPos = self.pos 
 	
-	self.rotation = go.get_rotation()
 	self.distance = self.speed * dt
 	self.velocity = vmath.rotate( self.rotation, vmath.vector3( 0, self.distance, 0 ) )
 	self.pos = go.get_position() + self.velocity
