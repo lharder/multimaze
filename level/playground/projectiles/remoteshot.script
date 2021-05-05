@@ -6,6 +6,7 @@ go.property( "dir", vmath.vector3() )
 local function explode( self )
 	self.exploding = true
 	local exploID = factory.create( "/factories#smallexplofactory", go.get_position() )
+	GAME.client.registry:remove( go.get_id() )
 	go.delete()
 end
 
