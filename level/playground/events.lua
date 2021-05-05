@@ -69,7 +69,7 @@ end
 
 function Events.newCreateShot( parentGid, gid )
 	local env = Envelope.new( Events.CREATE_SHOT, parentGid )
-	env:putString( "factory", "playground:/factories#laserfactory" )
+	env:putString( "factory", "playground:/factories#remotelaserfactory" )
 	env:putString( "gid", gid )
 	return env
 end

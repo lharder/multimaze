@@ -1,6 +1,6 @@
 components {
   id: "script"
-  component: "/level/playground/projectiles/shot.script"
+  component: "/level/playground/projectiles/localshot.script"
   position {
     x: 0.0
     y: 0.0

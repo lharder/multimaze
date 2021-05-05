@@ -37,7 +37,6 @@ function on_message( self, message_id, message, sender )
 		self.name 	= message.name
 		self.open 	= message.properties.open
 		self.locked = message.properties.locked
-
-		pprint( self.name .. ": " .. tostring( self.open ) )
+		-- pprint( self.name .. ": " .. tostring( self.open ) )
 	end
 end

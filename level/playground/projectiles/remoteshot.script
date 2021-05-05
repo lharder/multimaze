@@ -1,0 +1,22 @@
+go.property( "speed", 100 )
+go.property( "dir", vmath.vector3() )
+
+
+-- methods --------------------
+function init( self )
+	self.ttl = .9
+	self.step = vmath.vector3()
+	self.pos = go.get_position()
+
+	local angle = math.atan2( -1 * self.dir.x, self.dir.y )
+	local rotation = vmath.quat_rotation_z( angle )	
+	go.set_rotation( rotation )
+end
+
+
+function update( self, dt )
+	self.ttl = self.ttl - dt
+	if self.ttl < 0 then
+		explode( self )
+	end
+end
