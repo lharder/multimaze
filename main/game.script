@@ -1,9 +1,7 @@
 require( "deflibs.defold" )
 local Envelope = require( "nexus.envelope" )
-local Defmap = require( "nexus.defmap" )
 
 local lua = require( "deflibs.lualib" )
-local Map = require( "nexus.map" )
 local Game = require( "nexus.game" )
 local Host = require( "nexus.host" )
 
