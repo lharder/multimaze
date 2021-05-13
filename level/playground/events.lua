@@ -60,9 +60,8 @@ function Events.newPositionReached( gid, pos )
 end
 
 
-function Events.newObjectInteract( gid, param )
+function Events.newObjectInteract( gid )
 	local env = Envelope.new( Events.OBJECT_INTERACT, gid )
-	if param then env:putVector3( "param", param ) end
 	return env
 end
 
