@@ -67,10 +67,11 @@ function Events.newObjectInteract( gid, param )
 end
 
 
-function Events.newCreateShot( parentGid, gid )
+function Events.newCreateShot( parentGid, gid, dir )
 	local env = Envelope.new( Events.CREATE_SHOT, parentGid )
 	env:putString( "factory", "playground:/factories#remotelaserfactory" )
 	env:putString( "gid", gid )
+	env:putVector3( "dir", dir )
 	return env
 end
 

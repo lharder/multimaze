@@ -88,8 +88,7 @@ end
 
 
 function init( self )
-	-- GAME:start( "192.168.178.24", 10 )
-	GAME:start( "192.168.178.24", 12 )
+	GAME:start( "192.168.178.24", 15 )
 
 	-- create serverside objects to run the game
 	if GAME:isServer() then

@@ -29,11 +29,11 @@ local function shoot( self )
 	local cid = factory.create( "/factories#locallaserfactory", pos, nil, { speed = 400, dir = self.dir }, .5 )
 
 	-- make id globally available
-	local shotGid = sprintf( "%s-%d-%d", self.gid, socket.gettime(), math.random( 0, 999999 ) )
+	local shotGid = sprintf( "%s-%d", self.gid, math.random( 0, 999999 ) )
 	GAME.client.registry:set( shotGid, cid )
 	
 	-- inform other clients
-	local evt = Events.newCreateShot( self.gid, shotGid )
+	local evt = Events.newCreateShot( self.gid, shotGid, self.dir )
 	GAME.client:sendToOtherClients( evt )
 
 	-- keep remote shots in sync
