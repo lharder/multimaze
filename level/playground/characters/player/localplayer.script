@@ -106,7 +106,7 @@ local function vcontrol( self, action )
 		if action.released then self.buttons[ action.id ] = false end	
 		
 		if self.cooldown < socket.gettime() then
-			self.cooldown = socket.gettime() + .5
+			self.cooldown = socket.gettime() + .2
 			
 			if self.interactWith then 
 				interact( self )

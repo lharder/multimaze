@@ -8,6 +8,7 @@ Events.MOVE_TO 				= 3
 Events.POSITION_REACHED 	= 4
 Events.OBJECT_INTERACT 		= 5
 Events.CREATE_SHOT			= 6
+Events.DELETE_OBJECT		= 7
 
 Events.names = {}
 Events.names[ 1 ] = "CREATE_PLAYER"
@@ -16,6 +17,7 @@ Events.names[ 3 ] = "MOVE_TO"
 Events.names[ 4 ] = "POSITION_REACHED"
 Events.names[ 5 ] = "OBJECT_INTERACT"
 Events.names[ 6 ] = "CREATE_SHOT"
+Events.names[ 7 ] = "DELETE_OBJECT"
 
 
 function Events.newCreatePlayer( gid, pos, speed, name, isLocalHero )
@@ -71,6 +73,13 @@ function Events.newCreateShot( parentGid, gid, dir )
 	env:putString( "factory", "playground:/factories#remotelaserfactory" )
 	env:putString( "gid", gid )
 	env:putVector3( "dir", dir )
+	return env
+end
+
+
+function Events.newDeleteObject( gid )
+	local env = Envelope.new( Events.DELETE_OBJECT, gid )
+	env:putString( "gid", gid )
 	return env
 end
 

@@ -1,6 +1,7 @@
 go.property( "speed", 100 )
 go.property( "dir", vmath.vector3() )
 
+local Events = require( "level.playground.events" )
 
 
 local function explode( self )
@@ -9,6 +10,14 @@ local function explode( self )
 	GAME.client.registry:remove( go.get_id() )
 	go.delete()
 end
+
+
+local function parse( self, message )
+	if message.meta.type == Events.DELETE_OBJECT then 
+		explode( self )
+	end
+end
+
 
 
 -- methods --------------------
@@ -24,7 +33,7 @@ end
 
 
 function update( self, dt )
-	self.distance = self.speed * dt * 0.1
+	self.distance = self.speed * dt
 	self.velocity = vmath.rotate( self.rotation, vmath.vector3( 0, self.distance, 0 ) )
 	self.pos = go.get_position() + self.velocity
 	go.set_position( self.pos )
@@ -34,3 +43,13 @@ function update( self, dt )
 		explode( self )
 	end
 end
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == GAME.MSG_EXEC_CMD then 
+		parse( self, message )
+	end
+end
+
+
+

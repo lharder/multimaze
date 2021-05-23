@@ -5,15 +5,6 @@ go.property( "speed", 0 )
 go.property( "isLocalHero", false )
 
 
-local MSG_ON_FIRST_TICK = hash( "firsttick" )
-
-
-local function shoot( self )
-	local pos = go.get_position() + self.dir * 30
-	factory.create( "/factories#locallaserfactory", pos, nil, { speed = 400, dir = self.dir }, .5 )
-end
-
-
 local function animWalk( self )
 	if not self.animating then
 		self.animating = true
@@ -70,8 +61,6 @@ function init( self )
 	self.oldPos = go.get_position()
 	
 	self.animating = false
-
-	msg.post( ".", MSG_ON_FIRST_TICK )
 end
 
 
@@ -86,29 +75,12 @@ function update( self, dt )
 		self.dir = self.pos - self.oldPos 
 		animWalk( self )
 		self.oldPos = self.pos
-	else
-		--[[
-		if self.animating then 
-			-- no network message has arrived (latency), but  
-			-- animation is still playing: probably supposed to 
-			-- continue motion in previous direction and same speed
-			-- however, speed depends on frame rate to network latency
-			-- relation, hard to assess...
-			self.pos = self.pos + 0.1 * self.dir
-			go.set_position( self.pos )
-		end
-		--]]
 	end
 end
 
 
 function on_message( self, message_id, message, sender )
-	if message_id == MSG_ON_FIRST_TICK then 
-		-- get my global id, does not work on init()
-		-- cannot pass in string params on factory.create...
-		self.gid = GAME.client.registry:getGlobalId( go.get_id() )
-		
-	elseif message_id == GAME.MSG_EXEC_CMD then 
+	if message_id == GAME.MSG_EXEC_CMD then 
 		parse( self, message )
 		
 	end

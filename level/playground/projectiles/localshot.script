@@ -1,8 +1,14 @@
 go.property( "speed", 100 )
 go.property( "dir", vmath.vector3() )
 
+local Events = require( "level.playground.events" )
+
 
 local function explode( self )
+	local gid = GAME.client.registry:getGlobalId( go.get_id() )
+	local evt = Events.newDeleteObject( gid )
+	GAME.client:sendToOtherClients( evt )
+	
 	self.exploding = true
 	local exploID = factory.create( "/factories#smallexplofactory", go.get_position() )
 	GAME.client.registry:remove( go.get_id() )
