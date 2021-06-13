@@ -1,4 +1,4 @@
-image: "/assets/gui/safe.png"
+image: "/assets/objects/safe/safe.png"
 tile_width: 64
 tile_height: 64
 tile_margin: 0
