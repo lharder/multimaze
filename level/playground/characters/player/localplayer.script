@@ -14,6 +14,7 @@ local MSG_STICK 			= hash( "stick" )
 local MSG_BUTTON 			= hash( "button" )
 
 local GROUP_BUTTON = hash( "button" )
+local GROUP_TREASURE = hash( "treasure" )
 
 
 local LEFT = hash( "key_left" )
@@ -106,7 +107,7 @@ local function vcontrol( self, action )
 		if action.released then self.buttons[ action.id ] = false end	
 		
 		if self.cooldown < socket.gettime() then
-			self.cooldown = socket.gettime() + .2
+			self.cooldown = socket.gettime() + .3
 			
 			if self.interactWith then 
 				interact( self )
@@ -219,7 +220,8 @@ function on_message( self, message_id, message, sender )
 		self.gid = GAME.client.registry:getGlobalId( go.get_id() )
 
 	elseif message_id == MSG_TRIGGER_COLLISION then
-		if message.other_group == GROUP_BUTTON then
+		if( message.other_group == GROUP_BUTTON ) or 
+		  ( message.other_group == GROUP_TREASURE ) then
 			if message.enter then
 				self.interactWith = message.other_id
 			else

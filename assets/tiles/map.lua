@@ -9,7 +9,7 @@ return {
   tilewidth = 64,
   tileheight = 64,
   nextlayerid = 7,
-  nextobjectid = 25,
+  nextobjectid = 30,
   properties = {},
   tilesets = {
     {
@@ -349,6 +349,42 @@ return {
           properties = {
             ["locked"] = false,
             ["open"] = false
+          }
+        },
+        {
+          id = 26,
+          name = "safe01",
+          type = "safe",
+          shape = "rectangle",
+          x = 1600,
+          y = 160,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          gid = 21,
+          visible = true,
+          properties = {
+            ["item"] = 1,
+            ["locked"] = true,
+            ["type"] = 1
+          }
+        },
+        {
+          id = 29,
+          name = "safe02",
+          type = "safe",
+          shape = "rectangle",
+          x = 192,
+          y = 1440,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          gid = 21,
+          visible = true,
+          properties = {
+            ["item"] = 1,
+            ["locked"] = true,
+            ["type"] = 1
           }
         }
       }

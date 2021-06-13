@@ -5,6 +5,7 @@ local lua = require( "deflibs.lualib" )
 local TYPE_DOOR = "door"
 local TYPE_TERMINAL = "terminal"
 local TYPE_BUTTON = "button"
+local TYPE_SAFE = "safe"
 
 local MSG_SET_PROPS = hash( "setProps" )
 
@@ -75,11 +76,12 @@ function Tilemap:isPassable( xPix, yPix )
 		local xGrid, yGrid = self:pixToGrid( xPix, yPix )
 		local id = self.objsByPos[ xGrid .. "-" .. yGrid ]
 		if id ~= nil then
-			local fn = go.get
+			-- there is an object, not passable by default
+			isOk = false
+
+			-- possibly the object is "open"?
 			local open = goGetProperty( msg.url( nil, id, "script" ), "open" )
-			if open ~= nil then
-				isOk = isOk and open 
-			end
+			if open ~= nil then isOk = open end
 		end
 	end
 	
@@ -123,7 +125,15 @@ function Tilemap:render()
 						0.3 
 					), obj )
 					if obj.name then GAME.client.registry:set( obj.name, cid ) end
-					
+
+				elseif obj.type == TYPE_SAFE then 
+					local cid = self:createObject( "/factories#safefactory", vmath.vector3( 
+						obj.x + self.map.tilewidth - 32, 
+						yMax - obj.y + self.map.tileheight - 36, 
+						0.3 
+					), obj )
+					if obj.name then GAME.client.registry:set( obj.name, cid ) end
+				
 				end
 			end
 			
