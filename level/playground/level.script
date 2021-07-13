@@ -11,7 +11,8 @@ local MSG_ON_FIRST_TICK = hash( "firsttick" )
 
 local function createVirtualCtrl( self ) 
 	msg.post( "vcontroller", "register_analog", { id = "stick", radius = 60 } )
-	msg.post( "vcontroller", "register_button", { id = "button" } )
+	msg.post( "vcontroller", "register_button", { id = "action" } )
+	msg.post( "vcontroller", "register_button", { id = "jump" } )
 end
 
 

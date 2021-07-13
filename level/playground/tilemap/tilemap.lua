@@ -1,5 +1,6 @@
 require( "deflibs.defold" )
 
+local Tilemap = require( "level.jumprun.tilemap.tilemap" )
 local lua = require( "deflibs.lualib" )
 
 local TYPE_DOOR = "door"

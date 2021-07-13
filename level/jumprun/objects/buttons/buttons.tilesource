@@ -1,0 +1,119 @@
+image: "/assets/buttons/buttons.png"
+tile_width: 64
+tile_height: 64
+tile_margin: 0
+tile_spacing: 0
+collision: ""
+material_tag: "tile"
+collision_groups: "default"
+animations {
+  id: "blueOff"
+  start_tile: 9
+  end_tile: 12
+  playback: PLAYBACK_ONCE_BACKWARD
+  fps: 10
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "blueOn"
+  start_tile: 9
+  end_tile: 12
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 10
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "bluefix"
+  start_tile: 9
+  end_tile: 9
+  playback: PLAYBACK_NONE
+  fps: 30
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "bluetap"
+  start_tile: 9
+  end_tile: 12
+  playback: PLAYBACK_LOOP_PINGPONG
+  fps: 10
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "greenOff"
+  start_tile: 5
+  end_tile: 8
+  playback: PLAYBACK_ONCE_BACKWARD
+  fps: 10
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "greenOn"
+  start_tile: 5
+  end_tile: 8
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 10
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "greenfix"
+  start_tile: 5
+  end_tile: 5
+  playback: PLAYBACK_NONE
+  fps: 30
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "greentap"
+  start_tile: 5
+  end_tile: 8
+  playback: PLAYBACK_LOOP_PINGPONG
+  fps: 10
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "redOff"
+  start_tile: 1
+  end_tile: 4
+  playback: PLAYBACK_ONCE_BACKWARD
+  fps: 10
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "redOn"
+  start_tile: 1
+  end_tile: 4
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 10
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "redfix"
+  start_tile: 1
+  end_tile: 1
+  playback: PLAYBACK_NONE
+  fps: 30
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "redtap"
+  start_tile: 1
+  end_tile: 4
+  playback: PLAYBACK_LOOP_PINGPONG
+  fps: 10
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+extrude_borders: 2
+inner_padding: 0
+sprite_trim_mode: SPRITE_TRIM_MODE_OFF

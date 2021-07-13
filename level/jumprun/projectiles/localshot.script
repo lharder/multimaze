@@ -1,0 +1,46 @@
+go.property( "speed", 100 )
+go.property( "dir", vmath.vector3() )
+
+local Events = require( "level.jumprun.events" )
+
+
+local function explode( self )
+	local gid = GAME.client.registry:getGlobalId( go.get_id() )
+	local evt = Events.newDeleteObject( gid )
+	GAME.client:sendToOtherClients( evt )
+	
+	self.exploding = true
+	local exploID = factory.create( "/factories#smallexplofactory", go.get_position() )
+	GAME.client.registry:remove( go.get_id() )
+	go.delete()
+end
+
+
+-- methods --------------------
+function init( self )
+	self.ttl = .9
+	self.step = vmath.vector3()
+	self.pos = go.get_position()
+
+	local angle = math.atan2( -1 * self.dir.x, self.dir.y )
+	self.rotation = vmath.quat_rotation_z( angle )	
+	go.set_rotation( self.rotation )
+end
+
+
+function update( self, dt )
+	self.oldPos = self.pos 
+	
+	self.distance = self.speed * dt
+	self.velocity = vmath.rotate( self.rotation, vmath.vector3( 0, self.distance, 0 ) )
+	self.pos = go.get_position() + self.velocity
+
+	self.step.x = self.oldPos.x + self.dir.x * 32
+	self.step.y = self.oldPos.y - 16 + self.dir.y * 32
+	go.set_position( self.pos )
+
+	self.ttl = self.ttl - dt
+	if self.ttl < 0 then
+		explode( self )
+	end
+end

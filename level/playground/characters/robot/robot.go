@@ -1,6 +1,6 @@
 components {
   id: "robot"
-  component: "/level/playground/characters/robot/robot.script"
+  component: "/level/jumprun/characters/robot/robot.script"
   position {
     x: 0.0
     y: 0.0

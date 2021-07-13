@@ -11,7 +11,7 @@ local MSG_ON_FIRST_TICK 	= hash( "firsttick" )
 local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
 local MSG_INTERACT 			= hash( "interact" )
 local MSG_STICK 			= hash( "stick" )
-local MSG_BUTTON 			= hash( "button" )
+local MSG_BTN_ACTION 		= hash( "action" )
 
 local GROUP_BUTTON = hash( "button" )
 local GROUP_TREASURE = hash( "treasure" )
@@ -102,7 +102,7 @@ local function vcontrol( self, action )
 		end		
 		animWalk( self )
 
-	elseif action.id == MSG_BUTTON then
+	elseif action.id == MSG_BTN_ACTION then
 		if action.pressed then self.buttons[ action.id ] = true end	
 		if action.released then self.buttons[ action.id ] = false end	
 		

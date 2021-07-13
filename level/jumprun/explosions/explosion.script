@@ -1,0 +1,7 @@
+
+
+function init( self )
+	sprite.play_flipbook( "#sprite", "explo", function() 
+		go.delete()  
+	end )
+end

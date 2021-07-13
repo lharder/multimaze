@@ -48,7 +48,7 @@ local function enterPwd( self, isOk )
 	
 	-- after typing, exec action
 	timer.delay( 1, false, function() 
-		open( self )
+		if isOk then open( self ) end
 	end)
 end
 

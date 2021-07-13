@@ -56,7 +56,7 @@ function broadcast( self, callsign )
 			
 			match:propose( function() 
 				pprint( "All selected players confirmed, let's rock!!!" )
-				msg.post( "main:/screenmaster", "load", { level = "/playground" } )
+				msg.post( "main:/screenmaster", "load", { level = "/jumprun" } )
 			end )
 		end, 
 		"Start" 

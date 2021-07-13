@@ -1,0 +1,42 @@
+local MSG_INTERACT = hash( "interact" )
+local MSG_SET_PROPS = hash( "setProps" )
+
+go.property( "open", false )
+go.property( "locked", false )
+
+
+function init( self ) 
+	go.set_scale( vmath.vector3( 1, .70, 1 ) )
+	if self.open then 
+		sprite.play_flipbook( "#sprite", "opened" )
+	else
+		sprite.play_flipbook( "#sprite", "closed" )
+	end
+end
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == MSG_INTERACT and not self.animating then
+		if not self.locked then 
+			if self.open then 
+				self.animating = true
+				sprite.play_flipbook( "#sprite", "close", function() 
+					self.open = false
+					self.animating = false
+				end )
+			else
+				self.animating = true
+				sprite.play_flipbook( "#sprite", "open", function() 
+					self.open = true
+					self.animating = false
+				end )
+			end
+		end
+
+	elseif message_id == MSG_SET_PROPS then
+		self.name 	= message.name
+		self.open 	= message.properties.open
+		self.locked = message.properties.locked
+		-- pprint( self.name .. ": " .. tostring( self.open ) )
+	end
+end

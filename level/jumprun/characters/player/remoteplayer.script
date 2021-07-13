@@ -1,0 +1,90 @@
+local Events = require( "level.jumprun.events" )
+local lua = require( "deflibs.lualib" )
+
+go.property( "speed", 0 )
+go.property( "isLocalHero", false )
+
+
+local function animWalk( self )
+	if not self.animating then
+		self.animating = true
+
+		local name = "walkdown"
+		if math.abs( self.dir.x ) > math.abs( self.dir.y ) then 
+			-- x-axis movement is more significant
+			if self.dir.x > 0 then name = "walkright" end
+			if self.dir.x < 0 then name = "walkleft" end
+		else
+			-- y-axis movement is more significant
+			if self.dir.y > 0 then name = "walkup" end
+			if self.dir.y < 0 then name = "walkdown" end
+		end
+
+		sprite.play_flipbook( "#sprite", name, function( id, tileNo ) 
+			self.animating = false
+		end )
+
+	end
+end
+
+
+local function animStand( self )
+	if not self.animating then
+		self.animating = true
+		
+		local name = "standdown"
+		if self.dir.y > 0 then name = "standup" end
+		if self.dir.y < 0 then name = "standdown" end
+		if self.dir.x > 0 then name = "standright" end
+		if self.dir.x < 0 then name = "standleft" end
+		
+		sprite.play_flipbook( "#sprite", name, function( id, tileNo ) 
+			self.animating = false
+		end )
+	end
+end
+
+
+local function parse( self, message )
+	if message.meta.type == Events.CREATE_SHOT then 
+		local pos = go.get_position() + message.attrs.dir * 30
+		local cid = factory.create( "/factories#remotelaserfactory", pos, nil, { speed = 600, dir = self.dir }, .5 )
+		GAME.client.registry:set( message.attrs.gid, cid )
+	end
+end
+
+
+
+-- methods ---------------------
+function init( self )
+	self.dir = vmath.vector3()
+	self.oldPos = go.get_position()
+	
+	self.animating = false
+end
+
+
+function update( self, dt )
+	self.pos = go.get_position()
+
+	-- movement has occurred from the outside:
+	-- auto sync of gameobject by nexus client
+	if self.pos ~= self.oldPos then
+		-- positiopn has changed, calculate direction 
+		-- and speed of movement for proper animation 
+		self.dir = self.pos - self.oldPos 
+		animWalk( self )
+		self.oldPos = self.pos
+	end
+end
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == GAME.MSG_EXEC_CMD then 
+		parse( self, message )
+		
+	end
+end
+
+
+
