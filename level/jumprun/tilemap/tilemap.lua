@@ -132,7 +132,7 @@ function Tilemap:render()
 				elseif obj.type == TYPE_SAFE then 
 					local cid = self:createObject( "/factories#safefactory", vmath.vector3( 
 						obj.x + self.map.tilewidth - 32, 
-						yMax - obj.y + self.map.tileheight - 36, 
+						yMax - obj.y + self.map.tileheight - 32, 
 						0.3 
 					), obj )
 					if obj.name then GAME.client.registry:set( obj.name, cid ) end

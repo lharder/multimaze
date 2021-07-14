@@ -1,0 +1,29 @@
+require( "deflibs.defold" )
+
+go.property( "angle", vmath.vector3() )
+go.property( "isLocalHero", false )
+
+local camera = require( "orthographic.camera" )
+
+
+function init( self )
+	self.offset = vmath.vector3()
+	self.scrWidth, self.scrHeight = camera.get_window_size() 
+	self.scrPartWidth = self.scrWidth / 6
+	self.scrPartHeight = self.scrHeight / 6
+	
+end
+
+
+function update( self, dt )
+	if self.angle then
+		self.offset.x = self.angle.x * self.scrPartWidth
+		self.offset.y = self.angle.y * self.scrPartHeight
+		msg.post( CAMERA_ID, "follow_offset", { 
+			offset = self.offset
+		})
+	end
+end
+
+
+

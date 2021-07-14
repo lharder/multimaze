@@ -1,6 +1,6 @@
 components {
   id: "playercam"
-  component: "/level/playground/characters/player/playercam.script"
+  component: "/level/jumprun/characters/player/playercam.script"
   position {
     x: 0.0
     y: 0.0

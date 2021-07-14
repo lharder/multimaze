@@ -204,7 +204,7 @@ embedded_instances {
   "  }\n"
   "}\n"
   "embedded_components {\n"
-  "  id: \"remoteplayerfactory\"\n"
+  "  id: \"remoteherofactory\"\n"
   "  type: \"factory\"\n"
   "  data: \"prototype: \\\"/level/jumprun/characters/player/remoteplayer.go\\\"\\n"
   "load_dynamically: false\\n"
