@@ -1,3 +1,33 @@
-function init(self)
+go.property( "solved", false )
 
+local MSG_INTERACT = hash( "interact" )
+
+
+local function startTurning( self )
+	local t = timer.delay( .6, true, function() 
+		if self.index <= #self.angles then 
+			local angle = self.angles[ self.index ]
+			go.animate( ".", "euler.z", go.PLAYBACK_ONCE_FORWARD, angle, go.EASING_OUTBOUNCE, .5, 0, function() 
+				self.index = self.index + 1
+			end )
+		end
+	end )
 end
+
+
+function init( self )
+	local pos = go.get_position()
+	pos.y = pos.y + 60
+	go.set_position( pos )
+	
+	self.angles = { 150, -10, 120, -130 , 0 }
+	self.index = 1
+end
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == MSG_INTERACT then
+		startTurning( self )
+	end
+end
+

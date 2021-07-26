@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <tileset firstgid="1" source="jumpruntiles01.json"/>
+ <object name="monster05" type="npc" gid="28" width="64" height="64">
+  <properties>
+   <property name="faction" type="int" value="1"/>
+   <property name="factory" value="monster05factory"/>
+  </properties>
+ </object>
+</template>

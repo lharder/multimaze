@@ -6,7 +6,10 @@ go.property( "locked", false )
 
 
 function init( self ) 
+	local pos = go.get_position()
+	go.set_position( vmath.vector3( pos.x + 31, pos.y + 10, pos.z ) )
 	go.set_scale( vmath.vector3( 1, .70, 1 ) )
+	
 	if self.open then 
 		sprite.play_flipbook( "#sprite", "opened" )
 	else

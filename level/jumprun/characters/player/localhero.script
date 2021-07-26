@@ -224,6 +224,14 @@ function on_input( self, action_id, action )
 end
 
 
+function startDropping( self )
+	-- fall down
+	self.jumpTicks = 0
+	self.dir.y = -1
+	self.ySpeed = 250
+end
+
+
 function update( self, dt )
 	self.oldPos = go.get_position()
 	self.pos = go.get_position()
@@ -232,6 +240,12 @@ function update( self, dt )
 	self.below = self.oldPos.y - 40
 	
 	if self.jumpTicks > 0 then 
+		-- check if jump has left absolute outer boundaries
+		if not MAP:isInBounds( self.pos.x, self.pos.y ) then 
+			-- self.pos.y = self.oldPos.y
+			startDropping( self )
+		end
+		
 		-- currently jumping
 		self.dir.y = 1
 		self.ySpeed = calcYSpeed( self.jumpTicks )
@@ -239,22 +253,20 @@ function update( self, dt )
 		if self.jumpTicks < 0 then self.jumpTicks = 0 end
 
 	else
+		-- standing on solid ground?
 		if MAP:isPassable( self.oldPos.x, self.below ) then 
-			-- fall down
-			self.dir.y = -1
-			self.ySpeed = 250
+			startDropping( self )
 		else
 			self.ySpeed = 0
 		end
 	end
 
 	if not MAP:isPassable( self.pos.x, self.pos.y - 20 ) and 
-	   self.jumpTicks == 0 then 
+		   self.jumpTicks == 0 then 
 		-- standing in(!) an obstacle: may happen after 
 		-- jumps that have not reached the top of a platform.
 		-- In that case: fall down again
-		self.dir.y = -1
-		self.ySpeed = 250
+		startDropping( self )
 	end
 
 	if not MAP:isPassable( self.side, self.oldPos.y ) then 

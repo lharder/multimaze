@@ -14,16 +14,21 @@ local function createVirtualCtrl( self )
 	msg.post( "vcontroller", "register_button", { id = "jump" } )
 end
 
-
-local function createPlayer( factoryUrl, pos, speed, txtCaption, isLocalHero )
-	local id = factory.create( factoryUrl, pos, nil, { 
-		speed = speed,  
-		isLocalHero = isLocalHero 
+-- factoryUrl, pos, speed, txtCaption, isLocalHero
+local function createPlayer( attrs )
+	local id = factory.create( attrs.factory, attrs.pos, nil, { 
+		speed = attrs.speed,  
+		isLocalHero = attrs.isLocalHero 
 	}, 1.2 )
-	label.set_text( msg.url( nil, id, "caption" ), txtCaption )
+	label.set_text( msg.url( nil, id, "caption" ), attrs.name )
+
+	GAME.client.registry:set( attrs.gid, id )
 	
-	if isLocalHero then 
+	if attrs.isLocalHero then 
 		PLAYER_ID = id
+
+		-- sync this object's pos/rot to all other clients
+		GAME:sync( attrs.gid ) 
 		
 		-- important: user input only from the one per host / right client!
 		msg.post( PLAYER_ID, "acquire_input_focus" ) 
@@ -43,30 +48,30 @@ local function createPlayer( factoryUrl, pos, speed, txtCaption, isLocalHero )
 end
 
 
-local function createMap()
-	local tiled = require( "assets.tiles.room01" )
-	MAP = Tilemap.new( "/playground#tilemap", tiled )
-	MAP:render()
+local function createSyncedEntity( attrs )
+	local id = factory.create( attrs.factory, attrs.pos, nil, { 
+		speed = attrs.speed,
+		dir = attrs.dir,  
+		isLocalHero = attrs.isLocalHero
+	}, .25 )
+	GAME.client.registry:set( attrs.gid, id )
+	
+	if attrs.isLocalHero then 
+		GAME:sync( attrs.gid ) 
+	end
+
+	return id
 end
+
 
 
 -- client reacts to incoming server events
 local function parse( message )
 	if message.meta.type == Events.CREATE_PLAYER then
-		local id = createPlayer( 
-			message.attrs.factory, 
-			message.attrs.pos, 
-			message.attrs.speed, 
-			message.attrs.name,
-			message.attrs.isLocalHero 
-		)
-		GAME.client.registry:set( message.attrs.gid, id )
-
-		-- auto sync pos and rot of player (after global registry!)
-		if message.attrs.isLocalHero then 
-			GAME:sync( message.attrs.gid ) 
-		end
+		createPlayer( message.attrs )
 		
+	elseif message.meta.type == Events.CREATE_SYNCED_ENTITY then
+		createSyncedEntity( message.attrs )
 	end
 end
 
@@ -74,6 +79,12 @@ end
 function init( self )
 	GAME:start( "192.168.178.24", 15 )
 
+	createVirtualCtrl()
+
+	-- load map
+	local tiled = require( "assets.tiles.room01" )
+	MAP = Tilemap.new( "/playground#tilemap", tiled )
+	
 	-- create serverside objects to run the game
 	if GAME:isServer() then
 		
@@ -111,11 +122,14 @@ function init( self )
 				j = i + 1
 			end
 
+			-- create map for Server
+			MAP:render( true )
 		end )
+	else
+		
+		-- create map for Clients
+		MAP:render( false )
 	end
-
-	createVirtualCtrl()
-	createMap()
 end
 
 

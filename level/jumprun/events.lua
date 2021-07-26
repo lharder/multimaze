@@ -9,6 +9,7 @@ Events.POSITION_REACHED 	= 4
 Events.OBJECT_INTERACT 		= 5
 Events.CREATE_SHOT			= 6
 Events.DELETE_OBJECT		= 7
+Events.CREATE_SYNCED_ENTITY	= 8
 
 Events.names = {}
 Events.names[ 1 ] = "CREATE_PLAYER"
@@ -18,6 +19,7 @@ Events.names[ 4 ] = "POSITION_REACHED"
 Events.names[ 5 ] = "OBJECT_INTERACT"
 Events.names[ 6 ] = "CREATE_SHOT"
 Events.names[ 7 ] = "DELETE_OBJECT"
+Events.names[ 8 ] = "CREATE_SYNCED_ENTITY"
 
 
 function Events.newCreatePlayer( gid, pos, speed, name, isLocalHero )
@@ -82,6 +84,20 @@ function Events.newDeleteObject( gid )
 	env:putString( "gid", gid )
 	return env
 end
+
+
+
+function Events.newCreateSyncedEntity( gid, pos, isLocalHero, speed, dir )
+	local env = Envelope.new( Events.CREATE_SYNCED_ENTITY, "playground:/level", false )
+	env:putString( "factory", "playground:/factories#monster05factory" )
+	env:putString( "gid", gid )
+	env:putVector3( "pos", pos )
+	env:putVector3( "dir", dir )
+	env:putNumber( "speed", speed )
+	env:putBool( "isLocalHero", isLocalHero )
+	return env
+end
+
 
 
 function Events.getName( evt )

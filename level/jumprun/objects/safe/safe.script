@@ -3,14 +3,17 @@ local MSG_TRIGGER_COLLISION 	= hash( "trigger_response" )
 local MSG_SET_PROPS 			= hash( "setProps" )
 
 go.property( "locked", true )
-go.property( "type", 0 )
+go.property( "variant", 0 )
 go.property( "item", 0 )
 
 
 -- helpers -------------------
-local function newPwdUI( self, isOk )
+local function newChallenge( self, isOk )
+	local url = "/factories#passwordfactory"
+	if self.variant == 1 then url = "/factories#codewheelfactory" end
+	
 	local pos = go.get_position()
-	local id = factory.create( "/factories#passwordfactory", pos, nil, {
+	local id = factory.create( url, pos, nil, {
 		solved = isOk or false
 	})
 
@@ -18,9 +21,9 @@ local function newPwdUI( self, isOk )
 end
 
 
-local function removePwdUI( self )
-	go.delete( self.pwdObj )
-	self.pwdObj = nil
+local function removeChallenge( self )
+	go.delete( self.challengeObj )
+	self.challengeObj = nil
 end
 
 
@@ -32,22 +35,25 @@ local function open( self )
 			self.animating = false
 			self.locked = false
 			sprite.play_flipbook( "#sprite", "opened" )
-			removePwdUI( self )
+			removeChallenge( self )
 		end )
 	end
 end
 
 
-local function enterPwd( self, isOk ) 
-	-- set pwd challenge as solved or not
-	local url = msg.url( nil, self.pwdObj, "script" )
+local function animateAttempt( self, isOk ) 
+	-- set challenge as solved or not
+	local url = msg.url( nil, self.challengeObj, "script" )
 	go.set( url, "solved", isOk or false )
 	
-	-- inform pwd UI to type
-	msg.post( self.pwdObj, MSG_INTERACT )
+	-- inform pwd UI to type / codewheel to turn
+	msg.post( self.challengeObj, MSG_INTERACT )
 	
-	-- after typing, exec action
-	timer.delay( 1, false, function() 
+	-- after typing / turning, exec action
+	local duration = 1
+	if self.variant == 1 then duration = 4 end 
+	
+	timer.delay( duration, false, function() 
 		if isOk then open( self ) end
 	end )
 end
@@ -55,25 +61,26 @@ end
 
 -- methods --------------------
 function init( self )
+	
 end
 
 
 function on_message( self, message_id, message, sender )
 	if message_id == MSG_INTERACT then
-		if self.pwdObj then enterPwd( self, true ) end
+		if self.challengeObj then animateAttempt( self, true ) end
 
 	elseif message_id == MSG_TRIGGER_COLLISION then
 		if message.enter then
-			if self.locked then self.pwdObj = newPwdUI( self ) end
+			if self.locked then self.challengeObj = newChallenge( self ) end
 		else
-			if self.pwdObj then removePwdUI( self ) end
+			if self.challengeObj then removeChallenge( self ) end
 		end	
 
 	elseif message_id == MSG_SET_PROPS then
-		self.name 	= message.name
-		self.locked = message.properties.locked
-		self.type 	= message.properties.type
-		self.item 	= message.properties.item
+		self.name 	 = message.name
+		self.locked  = message.properties.locked
+		self.variant = message.properties.variant
+		self.item 	 = message.properties.item
 	end
 end
 

@@ -32,6 +32,10 @@ function Tilemap.new( urlTilemap, map )
 	this.url = urlTilemap
 	this.objsByName = {}
 	this.objsByPos = {}
+
+	map.xMaxPix = map.width * map.tilewidth
+	map.yMaxPix = ( map.height - 2 ) * map.tileheight
+	-- pprint( "MaxPix x: " .. map.xMaxPix .. ", y: " ..map.yMaxPix )
 	
 	-- make layers available by their names
 	local layers = {}
@@ -54,23 +58,31 @@ function Tilemap:pixToGrid( xPix, yPix )
 end
 
 
-function Tilemap:getTile( xPix, yPix, layername )
+function Tilemap:getTileValue( xPix, yPix, layername )
 	if layername == nil then layername = "walls" end
 
 	local xGrid, yGrid = self:pixToGrid( xPix, yPix )
 	local index = lua.round( xGrid + self.map.width * yGrid )
 
-	-- pprint( "#" .. index .. " (" .. xGrid .. "/" .. yGrid .. "): " .. self.map.layers[ "walls" ].data[ index ]  )
-	return Tile.new( self.map.layers[ layername ].data[ index ] )
+	-- pprint( "#" .. index .. " (" .. xGrid .. "/" .. yGrid .. "): " .. self.map.layers[ layername ].data[ index ]  )
+	-- return Tile.new( self.map.layers[ layername ].data[ index ] )
+	return self.map.layers[ layername ].data[ index ]
+end
+
+
+function Tilemap:isInBounds( xPix, yPix )
+	return (( xPix > 0 ) and ( xPix < self.map.xMaxPix ) and
+			( yPix > 0 ) and ( yPix < self.map.yMaxPix ))
 end
 
 
 function Tilemap:isPassable( xPix, yPix )
-	local isOk = false
+	-- level coordinates' boundaries
+	if not self:isInBounds( xPix, yPix ) then return false end
 
 	-- check if a wall is in the way
-	isOk = self:getTile( xPix, yPix ).value == 0
-
+	if self:getTileValue( xPix, yPix ) > 0 then return false end
+	
 	-- check if a blocking object is in the way?
 	-- Currently, objects never block passage!
 	--[[
@@ -88,11 +100,11 @@ function Tilemap:isPassable( xPix, yPix )
 	end
 	--]]
 	
-	return isOk
+	return true
 end
 
 
-function Tilemap:render()
+function Tilemap:render( isServer )
 	local tileNo
 	local tile
 	local obj 
@@ -104,7 +116,18 @@ function Tilemap:render()
 		-- object layer -----------------------------
 		if layer.type == "objectgroup" then 
 			for i, obj in ipairs( layer.objects ) do
+
+				local facUrl = "/factories#" .. obj.properties[ "factory" ]
+				pprint( obj.name .. ", " .. facUrl )
+				local cid = self:createObject( facUrl, vmath.vector3( 
+					obj.x + 32, 
+					yMax - obj.y + 32,
+					0.3 
+				), obj )
+				if obj.name then GAME.client.registry:set( obj.name, cid ) end
+			
 				
+				--[[
 				if obj.type == TYPE_DOOR then 
 					local cid = self:createObject( "/factories#doorfactory", vmath.vector3( 
 						obj.x  + self.map.tilewidth, 
@@ -138,6 +161,7 @@ function Tilemap:render()
 					if obj.name then GAME.client.registry:set( obj.name, cid ) end
 				
 				end
+				--]]
 			end
 			
 		else	
