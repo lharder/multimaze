@@ -101,6 +101,15 @@ function on_message( self, message_id, message, sender )
 	if message_id == MSG_SCREEN_LOADED then
 		-- receive the player's callsign from the previous screen
 		-- use it to start broadcasting and searching for peers
-		if message ~= nil then broadcast( self, message.callsign ) end
+		if message ~= nil then 
+			broadcast( self, message.callsign ) 
+
+			-- in case no network available: add local player
+			local port = GAME.CLIENT_PORT
+			if GAME:isServer() then port = Game.SERVER_PORT end
+			local host = Host.new( GAME.getLocalhostIP(), port, message.callsign )
+			GAME:addHost( host )
+			display( self )
+		end
 	end
 end

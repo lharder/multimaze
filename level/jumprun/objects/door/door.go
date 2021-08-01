@@ -63,7 +63,7 @@ embedded_components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/level/playground/objects/door/door.atlas\"\n"
+  data: "tile_set: \"/level/jumprun/objects/door/door.atlas\"\n"
   "default_animation: \"closed\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

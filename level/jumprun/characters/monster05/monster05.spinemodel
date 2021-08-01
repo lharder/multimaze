@@ -1,5 +1,0 @@
-spine_scene: "/level/jumprun/characters/monster05/monster05.spinescene"
-default_animation: "Walk"
-skin: ""
-blend_mode: BLEND_MODE_ALPHA
-material: "/builtins/materials/spine.material"

@@ -1,6 +1,6 @@
 components {
   id: "script"
-  component: "/level/playground/objects/password/password.script"
+  component: "/level/jumprun/objects/password/password.script"
   position {
     x: 0.0
     y: 0.0

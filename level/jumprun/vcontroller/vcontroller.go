@@ -1,6 +1,6 @@
 components {
   id: "vcontroller"
-  component: "/level/playground/vcontroller/vcontroller.gui"
+  component: "/level/jumprun/vcontroller/vcontroller.gui"
   position {
     x: 0.0
     y: 0.0

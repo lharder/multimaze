@@ -16,7 +16,7 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/level/playground/objects/safe/codewheel.atlas\"\n"
+  data: "tile_set: \"/level/jumprun/objects/safe/codewheel.atlas\"\n"
   "default_animation: \"codewheel\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

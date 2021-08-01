@@ -16,7 +16,7 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/level/playground/explosions/smallexplosion.tilesource\"\n"
+  data: "tile_set: \"/level/jumprun/explosions/smallexplosion.tilesource\"\n"
   "default_animation: \"explo\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

@@ -9,7 +9,7 @@ textures {
 }
 textures {
   name: "portraits"
-  texture: "/level/playground/characters/player/portraits.tilesource"
+  texture: "/level/setup/portraits.tilesource"
 }
 background_color {
   x: 0.0

@@ -16,7 +16,7 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/level/playground/objects/buttons/buttons.tilesource\"\n"
+  data: "tile_set: \"/level/jumprun/objects/buttons/buttons.tilesource\"\n"
   "default_animation: \"greenOff\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

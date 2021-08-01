@@ -2,11 +2,6 @@ require( "deflibs.defold" )
 
 local lua = require( "deflibs.lualib" )
 
-local TYPE_DOOR = "door"
-local TYPE_TERMINAL = "terminal"
-local TYPE_BUTTON = "button"
-local TYPE_SAFE = "safe"
-
 local MSG_SET_PROPS = hash( "setProps" )
 
 
@@ -118,7 +113,7 @@ function Tilemap:render( isServer )
 			for i, obj in ipairs( layer.objects ) do
 
 				local facUrl = "/factories#" .. obj.properties[ "factory" ]
-				pprint( obj.name .. ", " .. facUrl )
+				-- pprint( obj.name .. ", " .. facUrl )
 				local cid = self:createObject( facUrl, vmath.vector3( 
 					obj.x + 32, 
 					yMax - obj.y + 32,
@@ -127,41 +122,6 @@ function Tilemap:render( isServer )
 				if obj.name then GAME.client.registry:set( obj.name, cid ) end
 			
 				
-				--[[
-				if obj.type == TYPE_DOOR then 
-					local cid = self:createObject( "/factories#doorfactory", vmath.vector3( 
-						obj.x  + self.map.tilewidth, 
-						yMax - obj.y + 40,
-						0.3 
-					), obj )
-					if obj.name then GAME.client.registry:set( obj.name, cid ) end
-					
-				elseif obj.type == TYPE_TERMINAL then
-					local cid = self:createObject( "/factories#terminalfactory", vmath.vector3( 
-						obj.x + self.map.tilewidth - 32, 
-						yMax - obj.y + self.map.tileheight - 36, 
-						0.3
-					), obj )
-					if obj.name then GAME.client.registry:set( obj.name, cid ) end
-					
-				elseif obj.type == TYPE_BUTTON then
-					local cid = self:createObject( "/factories#buttonfactory", vmath.vector3( 
-						obj.x + self.map.tilewidth - 32, 
-						yMax - obj.y + self.map.tileheight - 36, 
-						0.3 
-					), obj )
-					if obj.name then GAME.client.registry:set( obj.name, cid ) end
-
-				elseif obj.type == TYPE_SAFE then 
-					local cid = self:createObject( "/factories#safefactory", vmath.vector3( 
-						obj.x + self.map.tilewidth - 32, 
-						yMax - obj.y + self.map.tileheight - 32, 
-						0.3 
-					), obj )
-					if obj.name then GAME.client.registry:set( obj.name, cid ) end
-				
-				end
-				--]]
 			end
 			
 		else	

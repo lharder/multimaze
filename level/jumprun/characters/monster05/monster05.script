@@ -5,20 +5,22 @@ go.property( "isLocalHero", false )
 
 
 local function turnRight()
-	go.set_rotation( vmath.quat_rotation_y( math.rad( 180 ) ), "#spinemodel" )
+	-- go.set_rotation( vmath.quat_rotation_y( math.rad( 180 ) ), "#spinemodel" )
+	sprite.set_hflip( "#sprite", true )
 end
 
 local function turnLeft()
-	go.set_rotation( vmath.quat_rotation_y( math.rad( 0 ) ), "#spinemodel" )
+	-- go.set_rotation( vmath.quat_rotation_y( math.rad( 0 ) ), "#spinemodel" )
+	sprite.set_hflip( "#sprite", false )
 end
 
 
 
 function init( self )
-	go.set_scale( .25 )
+	go.set_scale( .5 )
 	
 	local pos = go.get_position()
-	go.set_position( vmath.vector3( pos.x, pos.y - 48, pos.z ) )
+	go.set_position( vmath.vector3( pos.x, pos.y, pos.z ) )
 	
 	turnRight()
 	timer.delay( 3, true, function() 

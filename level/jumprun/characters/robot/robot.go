@@ -1,6 +1,6 @@
 components {
   id: "robot"
-  component: "/level/playground/characters/robot/robot.script"
+  component: "/level/jumprun/characters/robot/robot.script"
   position {
     x: 0.0
     y: 0.0
@@ -70,7 +70,7 @@ embedded_components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/level/playground/characters/robot/robot.tilesource\"\n"
+  data: "tile_set: \"/level/jumprun/characters/robot/robot.tilesource\"\n"
   "default_animation: \"standdown\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

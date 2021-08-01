@@ -14,13 +14,12 @@ components {
   }
 }
 embedded_components {
-  id: "spinemodel"
-  type: "spinemodel"
-  data: "spine_scene: \"/level/jumprun/characters/monster05/monster05.spinescene\"\n"
-  "default_animation: \"Idle\"\n"
-  "skin: \"\"\n"
+  id: "sprite"
+  type: "sprite"
+  data: "tile_set: \"/level/jumprun/characters/monster05/monster05.atlas\"\n"
+  "default_animation: \"idle\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
-  "material: \"/builtins/materials/spine.material\"\n"
   ""
   position {
     x: 0.0

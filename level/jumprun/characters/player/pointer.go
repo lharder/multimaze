@@ -16,7 +16,7 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/level/playground/characters/player/pointer.atlas\"\n"
+  data: "tile_set: \"/level/jumprun/characters/player/pointer.atlas\"\n"
   "default_animation: \"pointer\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
