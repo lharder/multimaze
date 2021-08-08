@@ -32,19 +32,20 @@ local animname = "standdown"
 
 
 local function shoot( self )
+	local speed = 500
 	local pos = go.get_position() + self.angle * 30
-	local cid = factory.create( "/factories#locallaserfactory", pos, nil, { speed = 400, dir = self.angle }, .5 )
+	local maxPos = pos + ( self.angle * speed )
+	local cid = factory.create( "/factories#locallaserfactory", pos, nil, { 
+		speed = speed,  angle = self.angle,  maxPos = maxPos 
+	}, .5 )
 
 	-- make id globally available
 	local shotGid = sprintf( "%s-%d", self.gid, math.random( 0, 999999 ) )
 	GAME.client.registry:set( shotGid, cid )
 	
 	-- inform other clients
-	local evt = Events.newCreateShot( self.gid, shotGid, self.angle )
+	local evt = Events.newCreateShot( self.gid, shotGid, self.angle, maxPos )
 	GAME.client:sendToOtherClients( evt )
-
-	-- keep remote shots in sync
-	GAME:sync( shotGid )
 end
 
 
@@ -111,7 +112,7 @@ local function vcontrol( self, action )
 				-- horizontal firing is default, 
 				-- clamp to exactly 0 when close
 				self.angle.x = action.x
-				if math.abs( action.y ) < .4 then 
+				if math.abs( action.y ) < .2 then 
 					self.angle.y = 0 
 				else
 					self.angle.y = action.y
@@ -206,7 +207,7 @@ function on_input( self, action_id, action )
 	
 	if action_id == CMD_LEFT or action_id == CMD_RIGHT then
 		if self.cooldown < socket.gettime() then
-			self.cooldown = socket.gettime() + .5
+			self.cooldown = socket.gettime() + .3
 			
 			if self.interactWith then 
 				interact( self )
@@ -297,8 +298,8 @@ function on_message( self, message_id, message, sender )
 			end
 		end
 
-	elseif message_id == GAME.MSG_EXEC_CMD then 
-		parse( self, message )
+	-- elseif message_id == GAME.MSG_EXEC_CMD then 
+	-- parse( self, message )
 
 	elseif 	( message_id == vcontroller.ANALOG ) or 
 			( message_id == vcontroller.BUTTON ) then 

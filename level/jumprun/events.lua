@@ -70,11 +70,12 @@ function Events.newObjectInteract( gid )
 end
 
 
-function Events.newCreateShot( parentGid, gid, dir )
+function Events.newCreateShot( parentGid, gid, angle, maxPos )
 	local env = Envelope.new( Events.CREATE_SHOT, parentGid )
-	env:putString( "factory", "jumprun:/factories#remotelaserfactory" )
+	env:putString( "factory", "jumprun:/factories#locallaserfactory" )
 	env:putString( "gid", gid )
-	env:putVector3( "dir", dir )
+	env:putVector3( "angle", angle )
+	env:putVector3( "maxPos", maxPos )
 	return env
 end
 
