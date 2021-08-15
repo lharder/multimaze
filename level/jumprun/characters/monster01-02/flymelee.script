@@ -56,12 +56,14 @@ local function updateDrone( self, dt )
 end
 
 
-local function setup( message ) 
-	-- make globally available and start syncing
-	local gid = message.name
-	local cid = go.get_id()
-	GAME.client.registry:set( gid, cid )
-	GAME:sync( gid ) 
+local function setup( self, message ) 
+	if self.isLocalHero then 
+		-- make globally available and start syncing
+		local gid = message.name
+		local cid = go.get_id()
+		GAME.client.registry:set( gid, cid )
+		GAME:sync( gid ) 
+	end
 end
 
 
@@ -92,7 +94,7 @@ end
 
 function on_message( self, message_id, message, sender )
 	if message_id == MSG_SET_PROPS then
-		setup( message )
+		setup( self, message )
 	end
 end
 

@@ -30,7 +30,7 @@ function Tilemap.new( urlTilemap, map )
 
 	this.map = map
 	this.url = urlTilemap
-	this.objsByName = {}
+	-- this.objsByName = {}
 	this.objsByPos = {}
 	
 	map.xMaxPix = map.width * map.tilewidth
@@ -146,7 +146,12 @@ function Tilemap:render( isServer )
 					yMax - obj.y + 32,
 					0.3 
 				), obj )
-				if obj.name then GAME.client.registry:set( obj.name, cid ) end
+
+				--[[
+				if obj.name then 
+					GAME.client.registry:set( obj.name, cid ) 
+				end
+				--]]
 			end
 			
 		else	
@@ -174,17 +179,16 @@ end
 
 
 function Tilemap:createObject( url, pos, obj )
-	
-	local props = { 
-		isLocalHero = self.isLocalHero,
-		gid = hash( obj.name ) 
-	}
-	local id = factory.create( url, pos, nil, props )
+	local id = factory.create( url, pos, nil, { 
+		isLocalHero = self.isLocalHero 
+	})
 
 	local name = obj.name 
 	if name == "" then name = id end
 	
-	self.objsByName[ name ] = id
+	GAME.client.registry:set( name, id ) 
+	
+	-- self.objsByName[ name ] = id
 	msg.post( id, MSG_SET_PROPS, obj )
 
 	local yMax = self.map.height * self.map.tileheight
@@ -205,10 +209,11 @@ end
 
 -- returns the gameobject ID for 
 -- a map object with a given name
+--[[
 function Tilemap:getObjId( name )
 	return self.objsByName[ name ]
 end
-
+--]]
 
 return Tilemap
 
