@@ -1,0 +1,125 @@
+local lua = require( "deflibs.lualib" )
+
+go.property( "dir", vmath.vector3( 1, 0, 0 ) )
+go.property( "speed", 200 )
+go.property( "isLocalHero", false )
+
+local MSG_SET_PROPS = hash( "setProps" )
+
+
+local function animate( self )
+	if self.speed > 0 then self.animname = "walk" end
+	if self.hunting then self.animname = "attack" end
+	sprite.play_flipbook( "#sprite", self.animname )
+end
+
+
+local function turn( self, xDir )
+	sprite.set_hflip( "#sprite", xDir == 1 )
+	self.dir.x = xDir
+end
+
+
+local function hunt( self, isHunting )
+	self.hunting = isHunting
+	if self.pos.x < self.playerPos.y then 
+		turn( self, 1 )
+	else
+		turn( self, -1 )
+	end
+	animate( self )
+end
+
+
+local function updateBrain( self, dt ) 
+	if PLAYER_ID ~= "" then 
+
+		if not self.isHunting then 
+			-- run sideways, turn at obstacle
+			self.pos = go.get_position()
+			self.side = self.pos.x + ( self.dir.x * 24 ) + ( self.dir.x * self.speed * dt )
+			self.below = self.pos.y - 40
+			if( MAP:isPassable( self.side, self.pos.y ) and
+			( not MAP:isPassable( self.side, self.below ) ) ) then 
+				self.pos.x = self.pos.x + ( self.dir.x * self.speed * dt )
+			else
+				self.dir.x = -self.dir.x
+				turn( self, self.dir.x )
+				animate( self )
+			end
+		end
+
+		-- react to player somewhere next to monster: hunt him
+		self.playerPos = go.get_position( PLAYER_ID )
+		if lua.approximates( self.pos.y, self.playerPos.y, 10 ) then
+			if MAP:isWalkable( self.pos.x, self.pos.y, self.playerPos.x ) then
+				if not self.hunting then 
+					hunt( self, true ) 
+				end
+
+				if lua.approximates( self.pos.x, self.playerPos.x, 60 ) then 
+					self.dir.x = 0
+				else
+					if self.pos.x < self.playerPos.x then
+						turn( self, 1 )
+					else
+						turn( self, -1 )
+					end
+				end
+			end
+		elseif self.hunting then 
+			hunt( self, false ) 
+		end
+
+		-- adjust position
+		go.set_position( self.pos )
+	end
+end
+
+
+local function updateDrone( self, dt ) 
+	pprint( "nix..." )
+end
+
+
+local function setup( message ) 
+	-- make globally available and start syncing
+	local gid = message.name
+	local cid = go.get_id()
+	GAME.client.registry:set( gid, cid )
+	GAME:sync( gid ) 
+end
+
+
+-- lifecycle methods ---------------------------
+function init( self )
+	go.set_scale( .5 )
+	
+	local pos = go.get_position()
+	go.set_position( vmath.vector3( pos.x, pos.y, .4 ) )
+
+	self.hunting = false
+	turn( self, self.dir.x )
+	animate( self )
+	
+	if self.isLocalHero then 
+		self.updateFunc = updateBrain
+	else
+		self.updateFunc = updateDrone
+	end
+end
+
+
+function update( self, dt ) 
+	self.updateFunc( self, dt )
+end
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == MSG_SET_PROPS then
+		setup( message )
+	end
+end
+
+
+

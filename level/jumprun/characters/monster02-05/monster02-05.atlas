@@ -1,31 +1,31 @@
 animations {
   id: "idle"
   images {
-    image: "/assets/characters/monster05/monster05_Idle_0.png"
+    image: "/assets/characters/monster02-05/monster05_Idle_0.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Idle_1.png"
+    image: "/assets/characters/monster02-05/monster05_Idle_1.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Idle_2.png"
+    image: "/assets/characters/monster02-05/monster05_Idle_2.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Idle_3.png"
+    image: "/assets/characters/monster02-05/monster05_Idle_3.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Idle_4.png"
+    image: "/assets/characters/monster02-05/monster05_Idle_4.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Idle_5.png"
+    image: "/assets/characters/monster02-05/monster05_Idle_5.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Idle_6.png"
+    image: "/assets/characters/monster02-05/monster05_Idle_6.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
@@ -36,23 +36,23 @@ animations {
 animations {
   id: "jump"
   images {
-    image: "/assets/characters/monster05/monster05_Jump_0.png"
+    image: "/assets/characters/monster02-05/monster05_Jump_0.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Jump_1.png"
+    image: "/assets/characters/monster02-05/monster05_Jump_1.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Jump_2.png"
+    image: "/assets/characters/monster02-05/monster05_Jump_2.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Jump_3.png"
+    image: "/assets/characters/monster02-05/monster05_Jump_3.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Jump_4.png"
+    image: "/assets/characters/monster02-05/monster05_Jump_4.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_PINGPONG
@@ -63,39 +63,39 @@ animations {
 animations {
   id: "attack"
   images {
-    image: "/assets/characters/monster05/monster05_Attack_0.png"
+    image: "/assets/characters/monster02-05/monster05_Attack_0.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Attack_1.png"
+    image: "/assets/characters/monster02-05/monster05_Attack_1.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Attack_2.png"
+    image: "/assets/characters/monster02-05/monster05_Attack_2.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Attack_3.png"
+    image: "/assets/characters/monster02-05/monster05_Attack_3.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Attack_4.png"
+    image: "/assets/characters/monster02-05/monster05_Attack_4.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Attack_5.png"
+    image: "/assets/characters/monster02-05/monster05_Attack_5.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Attack_6.png"
+    image: "/assets/characters/monster02-05/monster05_Attack_6.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Attack_7.png"
+    image: "/assets/characters/monster02-05/monster05_Attack_7.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Attack_8.png"
+    image: "/assets/characters/monster02-05/monster05_Attack_8.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
@@ -106,27 +106,27 @@ animations {
 animations {
   id: "walk"
   images {
-    image: "/assets/characters/monster05/monster05_Walk_0.png"
+    image: "/assets/characters/monster02-05/monster05_Walk_0.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Walk_1.png"
+    image: "/assets/characters/monster02-05/monster05_Walk_1.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Walk_2.png"
+    image: "/assets/characters/monster02-05/monster05_Walk_2.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Walk_3.png"
+    image: "/assets/characters/monster02-05/monster05_Walk_3.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/characters/monster05/monster05_Walk_4.png"
+    image: "/assets/characters/monster02-05/monster05_Walk_4.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
-  fps: 10
+  fps: 15
   flip_horizontal: 0
   flip_vertical: 0
 }

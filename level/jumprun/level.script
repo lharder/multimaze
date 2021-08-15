@@ -14,7 +14,7 @@ local function createVirtualCtrl( self )
 	msg.post( "vcontroller", "register_button", { id = "jump" } )
 end
 
--- factoryUrl, pos, speed, txtCaption, isLocalHero
+
 local function createPlayer( attrs )
 	local id = factory.create( attrs.factory, attrs.pos, nil, { 
 		speed = attrs.speed,  
@@ -84,7 +84,7 @@ function init( self )
 	-- load map
 	local tiled = require( "assets.tiles.room01" )
 	MAP = Tilemap.new( "/playground#tilemap", tiled )
-	
+
 	-- create serverside objects to run the game
 	if GAME:isServer() then
 		

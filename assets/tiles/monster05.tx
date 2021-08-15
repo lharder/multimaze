@@ -4,7 +4,7 @@
  <object name="monster05" type="npc" gid="28" width="64" height="64">
   <properties>
    <property name="faction" type="int" value="1"/>
-   <property name="factory" value="monster05factory"/>
+   <property name="factory" value="monster02-05factory"/>
   </properties>
  </object>
 </template>

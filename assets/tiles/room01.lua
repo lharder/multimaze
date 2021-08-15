@@ -9,7 +9,7 @@ return {
   tilewidth = 64,
   tileheight = 64,
   nextlayerid = 6,
-  nextobjectid = 44,
+  nextobjectid = 45,
   properties = {},
   tilesets = {
     {
@@ -194,7 +194,7 @@ return {
       draworder = "topdown",
       id = 4,
       name = "objects",
-      visible = false,
+      visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
@@ -442,8 +442,8 @@ return {
           name = "enemy01",
           type = "npc",
           shape = "rectangle",
-          x = 896,
-          y = 320,
+          x = 768,
+          y = 1152,
           width = 64,
           height = 64,
           rotation = 0,
@@ -451,7 +451,7 @@ return {
           visible = true,
           properties = {
             ["faction"] = 1,
-            ["factory"] = "monster05factory"
+            ["factory"] = "monster09-05factory"
           }
         },
         {
@@ -459,8 +459,8 @@ return {
           name = "enemy02",
           type = "npc",
           shape = "rectangle",
-          x = 576,
-          y = 384,
+          x = 768,
+          y = 512,
           width = 64,
           height = 64,
           rotation = 0,
@@ -468,7 +468,24 @@ return {
           visible = true,
           properties = {
             ["faction"] = 1,
-            ["factory"] = "monster05factory"
+            ["factory"] = "monster01-02factory"
+          }
+        },
+        {
+          id = 44,
+          name = "enemy03",
+          type = "npc",
+          shape = "rectangle",
+          x = 704,
+          y = 832,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          gid = 28,
+          visible = true,
+          properties = {
+            ["faction"] = 1,
+            ["factory"] = "monster02-05factory"
           }
         }
       }

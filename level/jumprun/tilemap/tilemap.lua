@@ -4,6 +4,11 @@ local lua = require( "deflibs.lualib" )
 
 local MSG_SET_PROPS = hash( "setProps" )
 
+local function drawLine( from, to )
+	msg.post( "@render:", "draw_line", { start_point = from, end_point = to, color = vmath.vector4( 0,1,0,1 ) } )
+end
+
+
 
 -- Tile -----------------------------------
 local Tile = {}
@@ -27,7 +32,7 @@ function Tilemap.new( urlTilemap, map )
 	this.url = urlTilemap
 	this.objsByName = {}
 	this.objsByPos = {}
-
+	
 	map.xMaxPix = map.width * map.tilewidth
 	map.yMaxPix = ( map.height - 2 ) * map.tileheight
 	-- pprint( "MaxPix x: " .. map.xMaxPix .. ", y: " ..map.yMaxPix )
@@ -48,7 +53,7 @@ function Tilemap:pixToGrid( xPix, yPix )
 	yPix = yPix + self.map.tileheight / 2
 	local xGrid = lua.round( xPix / self.map.tilewidth )
 	local yGrid = self.map.height - lua.round( yPix / self.map.tileheight )
-
+	
 	return xGrid, yGrid
 end
 
@@ -71,6 +76,27 @@ function Tilemap:isInBounds( xPix, yPix )
 end
 
 
+-- Checks if a direct walk from x1 to x2 is possible:
+-- no obstacle on yPos allowed, solid ground underneath required
+function Tilemap:isWalkable( xPixFrom, yPix, xPixTo )
+	local walkable = true
+	local min = math.min( xPixFrom, xPixTo )
+	local max = math.max( xPixFrom, xPixTo )
+	for xPix = min, max, 64 do 
+		-- local free = self:isPassable( xPix, yPix )
+		-- local solid = not self:isPassable( xPix, yPix - 40 )
+		-- if( not free ) or ( not solid ) then 
+		if(	not self:isPassable( xPix, yPix ) or 
+		  ( self:isPassable( xPix, yPix - 40 ) ) ) then
+			walkable = false 
+		end
+	end
+	
+	return walkable
+end
+
+
+-- Checks if a given position on the map is passable
 function Tilemap:isPassable( xPix, yPix )
 	-- level coordinates' boundaries
 	if not self:isInBounds( xPix, yPix ) then return false end
@@ -111,7 +137,8 @@ function Tilemap:render( isServer )
 		-- object layer -----------------------------
 		if layer.type == "objectgroup" then 
 			for i, obj in ipairs( layer.objects ) do
-
+				
+				self.isLocalHero = isServer
 				local facUrl = "/factories#" .. obj.properties[ "factory" ]
 				-- pprint( obj.name .. ", " .. facUrl )
 				local cid = self:createObject( facUrl, vmath.vector3( 
@@ -120,8 +147,6 @@ function Tilemap:render( isServer )
 					0.3 
 				), obj )
 				if obj.name then GAME.client.registry:set( obj.name, cid ) end
-			
-				
 			end
 			
 		else	
@@ -149,7 +174,13 @@ end
 
 
 function Tilemap:createObject( url, pos, obj )
-	local id = factory.create( url, pos )
+	
+	local props = { 
+		isLocalHero = self.isLocalHero,
+		gid = hash( obj.name ) 
+	}
+	local id = factory.create( url, pos, nil, props )
+
 	local name = obj.name 
 	if name == "" then name = id end
 	

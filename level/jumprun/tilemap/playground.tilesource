@@ -6,6 +6,7 @@ tile_spacing: 0
 collision: ""
 material_tag: "tile"
 collision_groups: "default"
+collision_groups: "wall"
 extrude_borders: 2
 inner_padding: 0
 sprite_trim_mode: SPRITE_TRIM_MODE_OFF

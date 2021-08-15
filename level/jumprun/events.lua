@@ -90,7 +90,7 @@ end
 
 function Events.newCreateSyncedEntity( gid, pos, isLocalHero, speed, dir )
 	local env = Envelope.new( Events.CREATE_SYNCED_ENTITY, "playground:/level", false )
-	env:putString( "factory", "playground:/factories#monster05factory" )
+	env:putString( "factory", "playground:/factories#monster02-05factory" )
 	env:putString( "gid", gid )
 	env:putVector3( "pos", pos )
 	env:putVector3( "dir", dir )
