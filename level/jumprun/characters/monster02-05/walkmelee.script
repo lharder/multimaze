@@ -83,7 +83,6 @@ local function updateDrone( self, dt )
 		self.pos = go.get_position()
 		if self.oldPos.x < self.pos.x then self.dir.x = 1 else self.dir.x = -1 end
 		turn( self, self.dir.x )
-		animate( self )
 		
 		-- react to player somewhere next to monster: hunt him
 		self.playerPos = go.get_position( PLAYER_ID )
@@ -105,6 +104,7 @@ local function updateDrone( self, dt )
 			end
 		elseif self.hunting then 
 			hunt( self, false ) 
+			animate(  self )
 		end
 
 		-- adjust position

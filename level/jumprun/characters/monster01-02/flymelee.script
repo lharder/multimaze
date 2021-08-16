@@ -52,7 +52,7 @@ end
 
 
 local function updateDrone( self, dt )
-	pprint( "nix..." )
+	pprint( "nix...." )
 end
 
 
