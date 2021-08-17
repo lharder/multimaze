@@ -9,6 +9,7 @@ local Host = require( "nexus.host" )
 GAME = Game.new( "MultiMaze" )
 CAMERA_ID = "/camera"
 PLAYER_ID = ""
+PLAYERS = {}
 MAP = {}
 
 -------------------------------------

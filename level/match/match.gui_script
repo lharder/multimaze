@@ -55,6 +55,10 @@ function broadcast( self, callsign )
 			pprint( match:toString() )
 			
 			match:propose( function() 
+				-- make callsigns available globally
+				-- they are used as gid for each player
+				PLAYERS = callsigns
+				
 				pprint( "All selected players confirmed, let's rock!!!" )
 				msg.post( "main:/screenmaster", "load", { level = "/jumprun" } )
 			end )

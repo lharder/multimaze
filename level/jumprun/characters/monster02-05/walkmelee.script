@@ -1,4 +1,5 @@
 local lua = require( "deflibs.lualib" )
+local Registry = require( "nexus.registry" )
 
 go.property( "dir", vmath.vector3( 1, 0, 0 ) )
 go.property( "speed", 200 )
@@ -58,25 +59,27 @@ end
 
 
 function update( self, dt ) 
-	if PLAYER_ID ~= "" then 
-
-		if not self.isHunting then 
-			-- run sideways, turn at obstacle
-			self.pos = go.get_position()
-			self.side = self.pos.x + ( self.dir.x * 24 ) + ( self.dir.x * self.speed * dt )
-			self.below = self.pos.y - 40
-			if( MAP:isPassable( self.side, self.pos.y ) and
-			( not MAP:isPassable( self.side, self.below ) ) ) then 
-				self.pos.x = self.pos.x + ( self.dir.x * self.speed * dt )
-			else
-				self.dir.x = -self.dir.x
-				turn( self, self.dir.x )
-				animate( self )
-			end
+	if not self.isHunting then 
+		-- run sideways, turn at obstacle
+		self.pos = go.get_position()
+		self.side = self.pos.x + ( self.dir.x * 24 ) + ( self.dir.x * self.speed * dt )
+		self.below = self.pos.y - 40
+		if( MAP:isPassable( self.side, self.pos.y ) and
+		( not MAP:isPassable( self.side, self.below ) ) ) then 
+			self.pos.x = self.pos.x + ( self.dir.x * self.speed * dt )
+		else
+			self.dir.x = -self.dir.x
+			turn( self, self.dir.x )
+			animate( self )
 		end
+	end
 
-		-- react to player somewhere next to monster: hunt him
-		self.playerPos = go.get_position( PLAYER_ID )
+	-- react to a player somewhere next to monster: hunt him
+	for i, gid in pairs( PLAYERS ) do
+		self.playerPos = go.get_position( 
+			GAME.client.registry:getClientId( gid ) 
+		)
+		
 		if lua.approximates( self.pos.y, self.playerPos.y, 10 ) then
 			if MAP:isWalkable( self.pos.x, self.pos.y, self.playerPos.x ) then
 				if not self.hunting then 
@@ -96,10 +99,10 @@ function update( self, dt )
 		elseif self.hunting then 
 			hunt( self, false ) 
 		end
-
-		-- adjust position
-		go.set_position( self.pos )
 	end
+	
+	-- adjust position
+	go.set_position( self.pos )
 end
 
 
