@@ -82,8 +82,12 @@ function update( self, dt )
 		
 		if lua.approximates( self.pos.y, self.playerPos.y, 10 ) then
 			if MAP:isWalkable( self.pos.x, self.pos.y, self.playerPos.x ) then
+				
 				if not self.hunting then 
 					hunt( self, true ) 
+					
+					-- always attack only one player:
+					break 
 				end
 
 				if lua.approximates( self.pos.x, self.playerPos.x, 60 ) then 
