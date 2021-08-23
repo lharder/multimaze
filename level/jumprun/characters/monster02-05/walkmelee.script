@@ -83,8 +83,7 @@ function update( self, dt )
 				if lua.approximates( self.pos.y, self.playerPos.y, 10 ) then
 					if MAP:isWalkable( self.pos.x, self.pos.y, self.playerPos.x ) then
 						hunt( self, self.playerCid ) 
-						pprint( "Hunting " .. self.playerCid )
-					
+						
 						-- always attack only one player:
 						-- stop after finding one at proper position
 						break 
@@ -95,7 +94,10 @@ function update( self, dt )
 		
 	else
 		self.pos = go.get_position()
-		self.pos.x = self.pos.x + ( self.dir.x * self.speed * dt )
+		if( MAP:isPassable( self.side, self.pos.y ) and
+		  ( not MAP:isPassable( self.side, self.below ) ) ) then 
+			self.pos.x = self.pos.x + ( self.dir.x * self.speed * dt )
+		end
 		
 		-- follow target that has been identified already
 		self.playerPos = go.get_position( self.playerCid )
