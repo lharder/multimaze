@@ -21,8 +21,8 @@ local function turn( self, xDir )
 end
 
 
-local function hunt( self, isHunting )
-	self.hunting = isHunting
+local function hunt( self, cid )
+	self.hunting = cid
 	if self.pos.x < self.playerPos.y then 
 		turn( self, 1 )
 	else
@@ -51,7 +51,7 @@ function init( self )
 	go.set_position( vmath.vector3( self.pos.x, self.pos.y, .4 ) )
 	
 	self.pos = go.get_position()
-	self.hunting = false
+	self.hunting = nil
 	
 	turn( self, self.dir.x )
 	animate( self )
@@ -59,50 +59,59 @@ end
 
 
 function update( self, dt ) 
-	if not self.isHunting then 
+	if self.hunting == nil then
 		-- run sideways, turn at obstacle
 		self.pos = go.get_position()
 		self.side = self.pos.x + ( self.dir.x * 24 ) + ( self.dir.x * self.speed * dt )
 		self.below = self.pos.y - 40
 		if( MAP:isPassable( self.side, self.pos.y ) and
-		( not MAP:isPassable( self.side, self.below ) ) ) then 
+		  ( not MAP:isPassable( self.side, self.below ) ) ) then 
 			self.pos.x = self.pos.x + ( self.dir.x * self.speed * dt )
 		else
 			self.dir.x = -self.dir.x
 			turn( self, self.dir.x )
 			animate( self )
 		end
-	end
+	 
+		-- no target yet - find one :o)
+		for i, gid in pairs( PLAYERS ) do
+			self.playerCid = GAME.client.registry:getClientId( gid ) 
+			
+			if self.playerCid ~= nil then 
+				self.playerPos = go.get_position( self.playerCid )	
 
-	-- react to a player somewhere next to monster: hunt him
-	for i, gid in pairs( PLAYERS ) do
-		self.playerPos = go.get_position( 
-			GAME.client.registry:getClientId( gid ) 
-		)
-		
-		if lua.approximates( self.pos.y, self.playerPos.y, 10 ) then
-			if MAP:isWalkable( self.pos.x, self.pos.y, self.playerPos.x ) then
-				
-				if not self.hunting then 
-					hunt( self, true ) 
-					pprint( "hunting " .. gid )
+				if lua.approximates( self.pos.y, self.playerPos.y, 10 ) then
+					if MAP:isWalkable( self.pos.x, self.pos.y, self.playerPos.x ) then
+						hunt( self, self.playerCid ) 
+						pprint( "Hunting " .. self.playerCid )
 					
-					-- always attack only one player:
-					break 
-				end
-
-				if lua.approximates( self.pos.x, self.playerPos.x, 60 ) then 
-					self.dir.x = 0
-				else
-					if self.pos.x < self.playerPos.x then
-						turn( self, 1 )
-					else
-						turn( self, -1 )
+						-- always attack only one player:
+						-- stop after finding one at proper position
+						break 
 					end
 				end
 			end
-		elseif self.hunting then 
-			hunt( self, false ) 
+		end
+		
+	else
+		self.pos = go.get_position()
+		self.pos.x = self.pos.x + ( self.dir.x * self.speed * dt )
+		
+		-- follow target that has been identified already
+		self.playerPos = go.get_position( self.playerCid )
+		if lua.approximates( self.pos.x, self.playerPos.x, 30 ) then 
+			self.dir.x = 0
+		else
+			if self.pos.x < self.playerPos.x then
+				turn( self, 1 )
+			else
+				turn( self, -1 )
+			end
+		end
+
+		if not ( ( lua.approximates( self.pos.y, self.playerPos.y, 10 ) ) and
+		   ( MAP:isWalkable( self.pos.x, self.pos.y, self.playerPos.x ) ) ) then
+			hunt( self, nil ) 
 		end
 	end
 	

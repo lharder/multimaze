@@ -9,7 +9,7 @@ return {
   tilewidth = 64,
   tileheight = 64,
   nextlayerid = 6,
-  nextobjectid = 45,
+  nextobjectid = 48,
   properties = {},
   tilesets = {
     {
@@ -146,7 +146,7 @@ return {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         15, 0, 0, 0, 31, 0, 30, 0, 0, 0, 0, 0, 31, 0, 0, 0, 30, 0, 31, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 73, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -486,6 +486,54 @@ return {
           properties = {
             ["faction"] = 1,
             ["factory"] = "monster02-05factory"
+          }
+        },
+        {
+          id = 45,
+          name = "guitar",
+          type = "neon",
+          shape = "rectangle",
+          x = 320,
+          y = 1024,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["factory"] = "neonfactory",
+            ["type"] = 1
+          }
+        },
+        {
+          id = 46,
+          name = "cocktail",
+          type = "neon",
+          shape = "rectangle",
+          x = 896,
+          y = 960,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["factory"] = "neonfactory",
+            ["type"] = 2
+          }
+        },
+        {
+          id = 47,
+          name = "joypad",
+          type = "neon",
+          shape = "rectangle",
+          x = 960,
+          y = 512,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["factory"] = "neonfactory",
+            ["type"] = 9
           }
         }
       }

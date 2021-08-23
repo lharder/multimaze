@@ -1,0 +1,21 @@
+go.property( type, 1 )
+
+local MSG_SET_PROPS = hash( "setProps" )
+
+
+function init( self )
+	local delay = math.random( 0, 1 )
+	timer.delay( delay, false, function() 
+		go.animate( "#sprite", "tint.w", go.PLAYBACK_LOOP_PINGPONG, 0.6, go.EASING_INOUTQUAD, 1.0 )  
+	end )
+	go.set_scale( 1.8 )
+end
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == MSG_SET_PROPS then
+		self.type = message.properties.type
+		sprite.play_flipbook( "#sprite", "" .. self.type )
+	end
+end
+

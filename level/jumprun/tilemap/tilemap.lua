@@ -30,7 +30,7 @@ function Tilemap.new( urlTilemap, map )
 
 	this.map = map
 	this.url = urlTilemap
-	-- this.objsByName = {}
+	this.objsByName = {}
 	this.objsByPos = {}
 	
 	map.xMaxPix = map.width * map.tilewidth
@@ -188,7 +188,7 @@ function Tilemap:createObject( url, pos, obj )
 	
 	GAME.client.registry:set( name, id ) 
 	
-	-- self.objsByName[ name ] = id
+	self.objsByName[ name ] = id
 	msg.post( id, MSG_SET_PROPS, obj )
 
 	local yMax = self.map.height * self.map.tileheight
@@ -209,11 +209,9 @@ end
 
 -- returns the gameobject ID for 
 -- a map object with a given name
---[[
 function Tilemap:getObjId( name )
 	return self.objsByName[ name ]
 end
---]]
 
 return Tilemap
 
