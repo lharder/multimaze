@@ -102,9 +102,17 @@ local function vcontrol( self, action )
 		if action.released then
 			self.xSpeed = 0
 		else
-			if( math.abs( action.x ) > 0 ) then 
-				self.xSpeed = self.maxSpeed
-				self.dir.x = action.x
+			-- if player points upwards, do not move sideways:
+			-- allow for player to aim and shoot above and below. 
+			-- only move sideways when y movement is  little
+			if( math.abs( action.y ) < 0.6 ) then 
+				if( math.abs( action.x ) > 0 ) then 
+					self.xSpeed = self.maxSpeed
+					self.dir.x = action.x
+				end
+			else
+				-- no sideways movement
+				self.dir.x = 0
 			end
 
 			if( math.abs( action.y ) > 0 ) then 

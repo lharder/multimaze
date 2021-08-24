@@ -1,6 +1,6 @@
 components {
-  id: "explosion"
-  component: "/level/jumprun/explosions/explosion.script"
+  id: "firebolt"
+  component: "/level/jumprun/fx/firebolt/firebolt.script"
   position {
     x: 0.0
     y: 0.0
@@ -16,8 +16,8 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/level/jumprun/explosions/smallexplosion.tilesource\"\n"
-  "default_animation: \"explo\"\n"
+  data: "tile_set: \"/level/jumprun/fx/firebolt/firebolt.atlas\"\n"
+  "default_animation: \"default\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   ""
