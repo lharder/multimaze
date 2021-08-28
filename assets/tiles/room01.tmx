@@ -214,19 +214,19 @@
   <object id="45" name="guitar" type="neon" x="320" y="1024" width="64" height="64">
    <properties>
     <property name="factory" value="neonfactory"/>
-    <property name="type" type="int" value="1"/>
+    <property name="variant" type="int" value="1"/>
    </properties>
   </object>
   <object id="46" name="cocktail" type="neon" x="896" y="960" width="64" height="64">
    <properties>
     <property name="factory" value="neonfactory"/>
-    <property name="type" type="int" value="2"/>
+    <property name="variant" type="int" value="2"/>
    </properties>
   </object>
   <object id="47" name="joypad" type="neon" x="960" y="512" width="64" height="64">
    <properties>
     <property name="factory" value="neonfactory"/>
-    <property name="type" type="int" value="9"/>
+    <property name="variant" type="int" value="9"/>
    </properties>
   </object>
  </objectgroup>

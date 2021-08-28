@@ -501,7 +501,7 @@ return {
           visible = true,
           properties = {
             ["factory"] = "neonfactory",
-            ["type"] = 1
+            ["variant"] = 1
           }
         },
         {
@@ -517,7 +517,7 @@ return {
           visible = true,
           properties = {
             ["factory"] = "neonfactory",
-            ["type"] = 2
+            ["variant"] = 2
           }
         },
         {
@@ -533,7 +533,7 @@ return {
           visible = true,
           properties = {
             ["factory"] = "neonfactory",
-            ["type"] = 9
+            ["variant"] = 9
           }
         }
       }

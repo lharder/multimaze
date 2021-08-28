@@ -1,4 +1,5 @@
-go.property( type, 1 )
+go.property( "variant", 1 )
+
 
 local MSG_SET_PROPS = hash( "setProps" )
 
@@ -14,8 +15,8 @@ end
 
 function on_message( self, message_id, message, sender )
 	if message_id == MSG_SET_PROPS then
-		self.type = message.properties.type
-		sprite.play_flipbook( "#sprite", "" .. self.type )
+		self.variant = message.properties.variant
+		sprite.play_flipbook( "#sprite", "" .. self.variant )
 	end
 end
 

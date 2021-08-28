@@ -49,8 +49,8 @@ end
 
 
 function Tilemap:pixToGrid( xPix, yPix )
-	xPix = xPix + self.map.tilewidth / 2
-	yPix = yPix + self.map.tileheight / 2
+	xPix = xPix + 32 -- self.map.tilewidth / 2
+	yPix = yPix + 32 -- self.map.tileheight / 2
 	local xGrid = lua.round( xPix / self.map.tilewidth )
 	local yGrid = self.map.height - lua.round( yPix / self.map.tileheight )
 	
