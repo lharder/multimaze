@@ -60,7 +60,7 @@ function broadcast( self, callsign )
 				PLAYERS = callsigns
 				
 				pprint( "All selected players confirmed, let's rock!!!" )
-				msg.post( "main:/screenmaster", "load", { level = "/jumprun" } )
+				msg.post( "main:/screenmaster", "load", { level = "/playground" } )
 			end )
 		end, 
 		"Start" 

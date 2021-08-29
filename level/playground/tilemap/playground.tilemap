@@ -1,0 +1,51 @@
+tile_set: "/level/playground/tilemap/playground.tilesource"
+layers {
+  id: "background"
+  z: 0.0
+  is_visible: 1
+  cell {
+    x: 0
+    y: 0
+    tile: 0
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 31
+    y: 0
+    tile: 0
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 0
+    y: 31
+    tile: 0
+    h_flip: 0
+    v_flip: 0
+  }
+  cell {
+    x: 31
+    y: 31
+    tile: 0
+    h_flip: 0
+    v_flip: 0
+  }
+}
+layers {
+  id: "walls"
+  z: 0.1
+  is_visible: 1
+}
+layers {
+  id: "things"
+  z: 0.2
+  is_visible: 1
+}
+layers {
+  id: "foreground"
+  z: 0.6
+  is_visible: 1
+}
+material: "/builtins/materials/tile_map.material"
+blend_mode: BLEND_MODE_ALPHA

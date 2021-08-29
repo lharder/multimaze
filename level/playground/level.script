@@ -1,0 +1,161 @@
+local Events = require( "level.playground.events" )
+local Server = require( "nexus.server" )
+local lua = require( "deflibs.lualib" )
+local vctrl = require( "in.onscreen" )
+local Tilemap = require( "level.playground.tilemap.tilemap" )
+
+local MSG_ON_FIRST_TICK = hash( "firsttick" )
+
+
+
+local function createVirtualCtrl( self ) 
+	msg.post( "vcontroller", "register_analog", { id = "stick", radius = 60 } )
+	msg.post( "vcontroller", "register_button", { id = "action" } )
+	msg.post( "vcontroller", "register_button", { id = "jump" } )
+end
+
+
+local function createPlayer( attrs )
+	local id = factory.create( attrs.factory, attrs.pos, nil, { 
+		speed = attrs.speed,  
+		isLocalHero = attrs.isLocalHero 
+	}, 1.2 )
+	label.set_text( msg.url( nil, id, "caption" ), attrs.name )
+
+	GAME.client.registry:set( attrs.gid, id )
+	
+	if attrs.isLocalHero then 
+		PLAYER_ID = id
+
+		-- sync this object's pos/rot to all other clients
+		GAME:sync( attrs.gid ) 
+		
+		-- important: user input only from the one per host / right client!
+		msg.post( PLAYER_ID, "acquire_input_focus" ) 
+		msg.post( "@render:", "use_fixed_fit_projection", { near = -1, far = 1 } )
+
+		-- camera follows the local hero!
+		msg.post( CAMERA_ID, "follow", {
+			target = PLAYER_ID, 
+			lerp = .03, 
+			horizontal = true, 
+			vertical = true, 
+			immediate = false
+		})
+	end
+
+	return id
+end
+
+
+local function createSyncedEntity( attrs )
+	local id = factory.create( attrs.factory, attrs.pos, nil, { 
+		speed = attrs.speed,
+		dir = attrs.dir,  
+		isLocalHero = attrs.isLocalHero
+	}, .25 )
+	GAME.client.registry:set( attrs.gid, id )
+	
+	if attrs.isLocalHero then 
+		GAME:sync( attrs.gid ) 
+	end
+
+	return id
+end
+
+
+
+-- client reacts to incoming server events
+local function parse( message )
+	if message.meta.type == Events.CREATE_PLAYER then
+		createPlayer( message.attrs )
+		
+	elseif message.meta.type == Events.CREATE_SYNCED_ENTITY then
+		createSyncedEntity( message.attrs )
+	end
+end
+
+
+function init( self )
+	GAME:start( "192.168.178.24", 15 )
+
+	createVirtualCtrl()
+
+	-- load map
+	local tiled = require( "assets.tiles.room01" )
+	MAP = Tilemap.new( "/playground#tilemap", tiled )
+
+	--[[
+	pprint( "index(  0,  0): " .. MAP:getTileValue(  0 * 64,  0 * 64 ) )
+	pprint( "index(  0, 19): " .. MAP:getTileValue(  0 * 64, 19 * 64 ) )
+	pprint( "index( 19, 19): " .. MAP:getTileValue( 19 * 64, 19 * 64 ) )
+	pprint( "index( 19,  0): " .. MAP:getTileValue( 19 * 64,  0 * 64 ) )
+	--]]
+	
+	-- create serverside objects to run the game
+	if GAME:isServer() then
+		
+		timer.delay( .5, false, function() 
+			pprint( "Create level objects!" )
+
+			-- one player for each playing host
+			local j
+			local startPositions = { 
+				{ x = 100,  y = 150,  z = .5 },
+				{ x = 800,  y = 600,  z = .5 },
+				{ x = 800,  y = 100,  z = .5 },
+				{ x = 100,  y = 600,  z = .5 }
+			}
+			for i, callsign in pairs( GAME.match.proposal ) do
+				if i > #startPositions then i = 1 end
+				local pos = startPositions[ i ]
+				local speed = 180
+
+				-- create one local hero on every game host / client ------------
+				-- who receives and transmits input from his player to all other hosts 
+				local evtLocalHero = Events.newCreatePlayer( 
+					callsign, vmath.vector3( pos.x, pos.y, pos.z ), speed, callsign, true 
+				)
+				local host = GAME.hosts:get( callsign )
+				GAME.server:send( host.ip, evtLocalHero )
+
+				-- for all other hosts, this hero is only a drone to 
+				-- be controlled by somebody somewhere else
+				local evtRemoteHero = Events.newCreatePlayer( 
+					callsign, vmath.vector3( pos.x, pos.y, pos.z ), speed, callsign, false 
+				)
+				GAME.server:sendToClientsExcept( host.ip, evtRemoteHero )
+
+				j = i + 1
+			end
+
+			-- create map for Server
+			MAP:setup( true )
+		end )
+	else
+		
+		-- create map for Clients
+		MAP:setup( false )
+	end
+end
+
+
+function on_message( self, message_id, message, sender )
+	-- receive and react to serverside events
+	if message_id == GAME.MSG_EXEC_CMD then
+		parse( message )
+	end
+end
+
+
+function update( self, dt )
+	if GAME:isServer() then 
+		GAME.server:update( dt )
+	end
+	if GAME.client then 
+		GAME.client:update( dt )
+	end
+end
+
+
+

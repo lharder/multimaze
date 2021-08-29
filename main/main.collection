@@ -132,11 +132,11 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "jumprun"
+  id: "playground"
   data: "embedded_components {\n"
   "  id: \"proxy\"\n"
   "  type: \"collectionproxy\"\n"
-  "  data: \"collection: \\\"/level/jumprun/playground.collection\\\"\\n"
+  "  data: \"collection: \\\"/level/playground/playground.collection\\\"\\n"
   "exclude: false\\n"
   "\"\n"
   "  position {\n"
