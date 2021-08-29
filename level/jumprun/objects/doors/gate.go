@@ -1,6 +1,6 @@
 components {
   id: "script"
-  component: "/level/jumprun/objects/door/door.script"
+  component: "/level/jumprun/objects/doors/gate.script"
   position {
     x: 0.0
     y: 0.0
@@ -41,7 +41,7 @@ embedded_components {
   "    count: 3\n"
   "  }\n"
   "  data: 64.0\n"
-  "  data: 100.0\n"
+  "  data: 64.0\n"
   "  data: 10.0\n"
   "}\n"
   "linear_damping: 0.0\n"
@@ -64,7 +64,7 @@ embedded_components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/level/jumprun/objects/door/door.atlas\"\n"
+  data: "tile_set: \"/level/jumprun/objects/doors/gate.atlas\"\n"
   "default_animation: \"closed\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

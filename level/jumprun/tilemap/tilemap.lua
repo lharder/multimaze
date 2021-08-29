@@ -52,7 +52,7 @@ function Tilemap:pixToGrid( xPix, yPix )
 	xPix = xPix + 32 -- self.map.tilewidth / 2
 	yPix = yPix + 32 -- self.map.tileheight / 2
 	local xGrid = lua.round( xPix / self.map.tilewidth )
-	local yGrid = self.map.height - lua.round( yPix / self.map.tileheight )
+	local yGrid = self.map.height - lua.round( yPix / self.map.tileheight ) 
 	
 	return xGrid, yGrid
 end
@@ -62,7 +62,7 @@ function Tilemap:getTileValue( xPix, yPix, layername )
 	if layername == nil then layername = "walls" end
 
 	local xGrid, yGrid = self:pixToGrid( xPix, yPix )
-	local index = lua.round( xGrid + self.map.width * yGrid )
+	local index = lua.round( xGrid + self.map.width * yGrid ) 
 
 	-- pprint( "#" .. index .. " (" .. xGrid .. "/" .. yGrid .. "): " .. self.map.layers[ layername ].data[ index ]  )
 	-- return Tile.new( self.map.layers[ layername ].data[ index ] )
@@ -125,7 +125,7 @@ function Tilemap:isPassable( xPix, yPix )
 end
 
 
-function Tilemap:render( isServer )
+function Tilemap:setup( isServer )
 	local tileNo
 	local tile
 	local obj 
@@ -146,12 +146,6 @@ function Tilemap:render( isServer )
 					yMax - obj.y + 32,
 					0.3 
 				), obj )
-
-				--[[
-				if obj.name then 
-					GAME.client.registry:set( obj.name, cid ) 
-				end
-				--]]
 			end
 			
 		else	
@@ -160,7 +154,7 @@ function Tilemap:render( isServer )
 			local i = 1 
 			local x = 1 
 			local y = layer.height
-			while i < layer.height * layer.width do 
+			while i <= layer.height * layer.width do 
 				tileNo = layer.data[ i ] 
 				tile = self.map.tilesets[ 1 ].tiles[ tileNo + 1 ]
 				tilemap.set_tile( self.url, layer.name, x, y, tileNo )

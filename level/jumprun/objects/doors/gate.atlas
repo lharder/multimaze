@@ -5,31 +5,31 @@ images {
 animations {
   id: "open"
   images {
-    image: "/assets/objects/door/slide-001.png"
+    image: "/assets/objects/doors/slide-001.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-002.png"
+    image: "/assets/objects/doors/slide-002.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-003.png"
+    image: "/assets/objects/doors/slide-003.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-004.png"
+    image: "/assets/objects/doors/slide-004.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-005.png"
+    image: "/assets/objects/doors/slide-005.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-006.png"
+    image: "/assets/objects/doors/slide-006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-007.png"
+    image: "/assets/objects/doors/slide-007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_ONCE_FORWARD
@@ -40,31 +40,31 @@ animations {
 animations {
   id: "close"
   images {
-    image: "/assets/objects/door/slide-001.png"
+    image: "/assets/objects/doors/slide-001.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-002.png"
+    image: "/assets/objects/doors/slide-002.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-003.png"
+    image: "/assets/objects/doors/slide-003.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-004.png"
+    image: "/assets/objects/doors/slide-004.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-005.png"
+    image: "/assets/objects/doors/slide-005.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-006.png"
+    image: "/assets/objects/doors/slide-006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/objects/door/slide-007.png"
+    image: "/assets/objects/doors/slide-007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_ONCE_BACKWARD
@@ -75,7 +75,7 @@ animations {
 animations {
   id: "opened"
   images {
-    image: "/assets/objects/door/slide-007.png"
+    image: "/assets/objects/doors/slide-007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
@@ -86,7 +86,7 @@ animations {
 animations {
   id: "closed"
   images {
-    image: "/assets/objects/door/slide-001.png"
+    image: "/assets/objects/doors/slide-001.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD

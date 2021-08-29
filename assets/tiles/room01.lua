@@ -213,7 +213,7 @@ return {
           gid = 58,
           visible = true,
           properties = {
-            ["factory"] = "doorfactory",
+            ["factory"] = "door01factory",
             ["locked"] = false,
             ["open"] = false,
             ["variant"] = 1
@@ -232,7 +232,7 @@ return {
           gid = 58,
           visible = true,
           properties = {
-            ["factory"] = "doorfactory",
+            ["factory"] = "door01factory",
             ["locked"] = false,
             ["open"] = false,
             ["variant"] = 1
@@ -251,7 +251,7 @@ return {
           gid = 58,
           visible = true,
           properties = {
-            ["factory"] = "doorfactory",
+            ["factory"] = "door01factory",
             ["locked"] = false,
             ["open"] = false,
             ["variant"] = 1
