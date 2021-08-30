@@ -65,8 +65,7 @@ end
 
 
 function Events.newObjectInteract( gid )
-	local env = Envelope.new( Events.OBJECT_INTERACT, gid )
-	return env
+	return Envelope.new( Events.OBJECT_INTERACT, gid )
 end
 
 

@@ -173,6 +173,7 @@ end
 
 
 function Tilemap:createObject( url, pos, obj )
+	pprint( url )
 	local id = factory.create( url, pos, nil, { 
 		isLocalHero = self.isLocalHero 
 	})

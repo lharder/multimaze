@@ -17,5 +17,11 @@ MAP = {}
 function init( self )
 	lua.randomize()
 	msg.post( "main:/screenmaster", "load", { level = "setup" } ) 
+
+	--[[
+	local Room = require( "level.playground.roommanager.room" )
+	local room = Room.new( "room001.lua", "bright", "nice", "cheap", "cool" )
+	pprint( room:isMatch( "cheap", "cool", "bright", "nice" ) )
+	--]]
 end
 

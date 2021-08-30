@@ -1,4 +1,12 @@
 { "columns":16,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"",
+         "target":"."
+        }
+    },
  "image":"jumpruntiles01.png",
  "imageheight":1024,
  "imagewidth":1024,

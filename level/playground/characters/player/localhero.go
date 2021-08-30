@@ -93,6 +93,7 @@ embedded_components {
   "group: \"player\"\n"
   "mask: \"button\"\n"
   "mask: \"treasure\"\n"
+  "mask: \"door\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
