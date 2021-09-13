@@ -125,7 +125,7 @@ function Tilemap:isPassable( xPix, yPix )
 end
 
 
-function Tilemap:setup( isServer )
+function Tilemap:setup()
 	local tileNo
 	local tile
 	local obj 
@@ -138,7 +138,6 @@ function Tilemap:setup( isServer )
 		if layer.type == "objectgroup" then 
 			for i, obj in ipairs( layer.objects ) do
 				
-				self.isLocalHero = isServer
 				local facUrl = "/factories#" .. obj.properties[ "factory" ]
 				-- pprint( obj.name .. ", " .. facUrl )
 				local cid = self:createObject( facUrl, vmath.vector3( 
@@ -173,9 +172,8 @@ end
 
 
 function Tilemap:createObject( url, pos, obj )
-	pprint( url )
+	-- pprint( "Tilemap:createObject(): " .. url )
 	local id = factory.create( url, pos, nil, { 
-		isLocalHero = self.isLocalHero 
 	})
 
 	local name = obj.name 

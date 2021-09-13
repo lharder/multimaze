@@ -58,6 +58,9 @@ function broadcast( self, callsign )
 				-- make callsigns available globally
 				-- they are used as gid for each player
 				PLAYERS = callsigns
+
+				-- stop searching, start playing...
+				GAME:start( "192.168.178.24", 15 )
 				
 				pprint( "All selected players confirmed, let's rock!!!" )
 				msg.post( "main:/screenmaster", "load", { level = "/playground" } )

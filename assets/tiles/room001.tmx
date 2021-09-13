@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="48">
  <editorsettings>
-  <export target="room001.lua" format="lua"/>
+  <export format="lua"/>
  </editorsettings>
  <tileset firstgid="1" source="jumpruntiles01.json"/>
  <layer id="1" name="background" width="20" height="20">
@@ -106,6 +106,7 @@
     <property name="factory" value="door01factory"/>
     <property name="locked" type="bool" value="false"/>
     <property name="open" type="bool" value="false"/>
+    <property name="room" value="dungeon"/>
     <property name="variant" type="int" value="1"/>
    </properties>
   </object>
@@ -122,6 +123,7 @@
     <property name="factory" value="door01factory"/>
     <property name="locked" type="bool" value="false"/>
     <property name="open" type="bool" value="false"/>
+    <property name="room" value="dungeon"/>
     <property name="variant" type="int" value="1"/>
    </properties>
   </object>

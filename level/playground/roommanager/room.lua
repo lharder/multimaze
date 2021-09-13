@@ -1,26 +1,22 @@
 local Set = require( "deflibs.set" )
 
-
 local Room = {}
 Room.__index = Room
 
 
-function Room.new( filename, ... )
+function Room.new( data, ... )
 	local this = {}
 	setmetatable( this, Room )
 
-	this.filename = filename
-	this.data = nil
+	-- set by roommanager
+	this.id = ""			
+	
+	this.data = data
 	this.used = 0
-
+	
 	this.tags = Set.new({ ... })
 
 	return this
-end
-
-
-function Room:load()
-	this.data = require( "assets.tiles." .. filename )
 end
 
 

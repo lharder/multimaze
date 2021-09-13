@@ -1,4 +1,6 @@
 require( "deflibs.defold" )
+
+local Roommanager = require( "level.playground.roommanager.roommanager" )
 local Envelope = require( "nexus.envelope" )
 
 local lua = require( "deflibs.lualib" )
@@ -11,6 +13,7 @@ CAMERA_ID = "/camera"
 PLAYER_ID = ""
 PLAYERS = {}
 MAP = {}
+ROOMMANAGER = Roommanager.new()
 
 -------------------------------------
 
@@ -19,9 +22,11 @@ function init( self )
 	msg.post( "main:/screenmaster", "load", { level = "setup" } ) 
 
 	--[[
-	local Room = require( "level.playground.roommanager.room" )
-	local room = Room.new( "room001.lua", "bright", "nice", "cheap", "cool" )
-	pprint( room:isMatch( "cheap", "cool", "bright", "nice" ) )
+	local roomMgr = Roommanager.new()
+	roomMgr:select( "bright", "nice" ) 
+	roomMgr:select( "bright", "nice" ) 
+	roomMgr:select( "bright", "nice" ) 
+	roomMgr:select( "bright", "nice" ) 
 	--]]
 end
 

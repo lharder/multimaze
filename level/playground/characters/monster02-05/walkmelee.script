@@ -3,7 +3,6 @@ local Registry = require( "nexus.registry" )
 
 go.property( "dir", vmath.vector3( 1, 0, 0 ) )
 go.property( "speed", 200 )
-go.property( "isLocalHero", false )
 
 local MSG_SET_PROPS = hash( "setProps" )
 
@@ -33,7 +32,7 @@ end
 
 
 local function setup( self, message ) 
-	if self.isLocalHero then 
+	if GAME:isServer() then
 		-- make globally available and start syncing
 		local gid = message.name
 		local cid = go.get_id()
