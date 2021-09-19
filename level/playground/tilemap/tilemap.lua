@@ -24,25 +24,26 @@ end
 local Tilemap = {}
 Tilemap.__index = Tilemap
 
-function Tilemap.new( urlTilemap, map )
+function Tilemap.new( urlTilemap, room )
 	local this = {}
 	setmetatable( this, Tilemap )
 
-	this.map = map
+	this.map = room.data
 	this.url = urlTilemap
 	this.objsByName = {}
 	this.objsByPos = {}
+	this.spawnpoints = {}
 	
-	map.xMaxPix = map.width * map.tilewidth
-	map.yMaxPix = ( map.height - 2 ) * map.tileheight
-	-- pprint( "MaxPix x: " .. map.xMaxPix .. ", y: " ..map.yMaxPix )
+	this.map.xMaxPix = this.map.width * this.map.tilewidth
+	this.map.yMaxPix = ( this.map.height - 2 ) * this.map.tileheight
+	-- pprint( "MaxPix x: " .. this.map.xMaxPix .. ", y: " .. this.map.yMaxPix )
 	
 	-- make layers available by their names
 	local layers = {}
-	for i, layer in pairs( map.layers ) do
-		layers[ layer.name ] = map.layers[ i ]
+	for i, layer in pairs( this.map.layers ) do
+		layers[ layer.name ] = this.map.layers[ i ]
 	end
-	map.layers = layers
+	this.map.layers = layers
 
 	return this
 end
@@ -137,14 +138,22 @@ function Tilemap:setup()
 		-- object layer -----------------------------
 		if layer.type == "objectgroup" then 
 			for i, obj in ipairs( layer.objects ) do
-				
-				local facUrl = "/factories#" .. obj.properties[ "factory" ]
-				-- pprint( obj.name .. ", " .. facUrl )
-				local cid = self:createObject( facUrl, vmath.vector3( 
-					obj.x + 32, 
-					yMax - obj.y + 32,
-					0.3 
-				), obj )
+
+				if obj.type == "spawnpoint" then 
+					obj.x, obj.y = self:pixToGrid( obj.x, obj.y )
+					obj.x = obj.x * self.map.tilewidth
+					obj.y = ( obj.y + 1 ) * self.map.tileheight 
+					self.spawnpoints[ obj.name ] = obj
+					
+				else
+					local facUrl = "/factories#" .. obj.properties[ "factory" ]
+					-- pprint( obj.name .. ", " .. facUrl )
+					local cid = self:createObject( facUrl, vmath.vector3( 
+						obj.x + 32, 
+						yMax - obj.y + 32,
+						0.3 
+					), obj )
+				end
 			end
 			
 		else	
@@ -166,8 +175,7 @@ function Tilemap:setup()
 				i = i + 1
 			end
 		end
-		
-	end
+	end	
 end
 
 

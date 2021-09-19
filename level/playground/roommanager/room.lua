@@ -9,7 +9,7 @@ function Room.new( data, ... )
 	setmetatable( this, Room )
 
 	-- set by roommanager
-	this.id = ""			
+	this.key = ""			
 	
 	this.data = data
 	this.used = 0

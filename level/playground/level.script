@@ -6,6 +6,7 @@ local vctrl = require( "in.onscreen" )
 local Tilemap = require( "level.playground.tilemap.tilemap" )
 
 local MSG_ON_FIRST_TICK = hash( "firsttick" )
+local MSG_SCREEN_LOADED = hash( "screenmaster:loaded" ) 
 
 
 
@@ -66,25 +67,24 @@ end
 
 
 
-local function setupPlayers( roomId )
+local function setupPlayers( room )
 	if GAME:isServer() then 
 		-- create serverside objects to run the game
 		timer.delay( .5, false, function() 
 			pprint( "Create level objects!" )
 
 			-- one player for each playing host
-			local j
-			local startPositions = { 
-				{ x = 100,  y = 180,  z = .5 },
-				{ x = 800,  y = 600,  z = .5 },
-				{ x = 800,  y = 100,  z = .5 },
-				{ x = 100,  y = 600,  z = .5 }
-			}
 			for i, callsign in pairs( GAME.match.proposal ) do
-				if i > #startPositions then i = 1 end
-				local pos = startPositions[ i ]
 				local speed = 180
+				local pos = { x = 100,  y = 180,  z = .5 }
 
+				local spawnpoint = MAP.spawnpoints[ "player0" .. i ]
+				if spawnpoint == nil then 
+					pprint( "Unable to find spawnpoint in map: player0" .. i ) 
+				else 
+					pos = vmath.vector3( spawnpoint.x, spawnpoint.y, .5 ) 
+				end 
+				
 				-- create one local hero on every game host / client ------------
 				-- who receives and transmits input from his player to all other hosts 
 				local evtLocalHero = Events.newCreatePlayer( 
@@ -99,8 +99,6 @@ local function setupPlayers( roomId )
 					callsign, vmath.vector3( pos.x, pos.y, pos.z ), speed, callsign, false 
 				)
 				GAME.server:sendToClientsExcept( host.ip, evtRemoteHero )
-
-				j = i + 1
 			end
 		end )
 	end
@@ -108,17 +106,19 @@ end
 
 
 
-function setupRoom( id ) 
+function setupRoom( roomid, roomkey ) 
 	local room = ROOMMANAGER:get( id )
-	if room == nil then return end
-	pprint( "Loaded room " .. room.id )
+	if room == nil then 
+		room = ROOMMANAGER:room( roomkey )
+		ROOMMANAGER:put( roomid, room )
+	end
+	pprint( "Loaded room " .. roomid )
 
 	-- map is needed for players' start positions
-	MAP = Tilemap.new( "/playground#tilemap", room.data )
-	setupPlayers( room.id ) 
-
-	-- start map, create objects
+	MAP = Tilemap.new( "/playground#tilemap", room )
 	MAP:setup()
+
+	setupPlayers( room ) 
 end
 
 
@@ -132,7 +132,7 @@ local function parse( message )
 		createSyncedEntity( message.attrs )
 
 	elseif message.meta.type == Events.SELECT_ROOM then
-		setupRoom( message.attrs.id )
+		setupRoom( message.attrs.roomid, message.attrs.roomkey )
 		
 	end
 end
@@ -141,19 +141,7 @@ end
 
 function init( self )
 	createVirtualCtrl()
-
-	if GAME:isServer() then 
-		-- server: select a room by (multiple) given tags
-		local room = ROOMMANAGER:select( "start", "dungeon" )
-		if room == nil then 
-			pprint( "Unable to load room by given tags!" )
-			return 
-		end
-
-		-- broadcast selected room to all clients to set it up
-		local evt = Events.newSelectRoom( room.id )
-		GAME.server:sendToClients( evt )
-	end
+	
 end
 
 
@@ -162,6 +150,29 @@ function on_message( self, message_id, message, sender )
 	if message_id == GAME.MSG_EXEC_CMD then
 		parse( message )
 
+	elseif message_id == MSG_SCREEN_LOADED then
+		-- Only the server makes the selection for a new room:
+		-- one of those fitting the given room tags will be selected.
+		-- All clients will then receive that room's class and
+		-- the id under which it is to be addressed from now on
+		if GAME:isServer() then 
+
+			local room = ROOMMANAGER:get( message.roomid )
+			if room == nil then
+				room = ROOMMANAGER:select( message.tags )
+				ROOMMANAGER:put( message.roomid, room )
+			end
+			if room == nil then 
+				pprint( "Error: unable to load room by given tags!" )
+				return
+			end
+			
+			-- broadcast the specifically selected room to all clients to set it up. On the
+			-- clients, however, this room id does not exist yet, but it must not be randomly
+			-- selected (as on the server with tags). So, send the room class's key along.
+			GAME.server:sendToClients( Events.newSelectRoom( message.roomid, message.roomkey ) )
+		end
+		
 	end
 end
 

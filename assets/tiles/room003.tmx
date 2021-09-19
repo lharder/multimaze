@@ -74,7 +74,8 @@
     <property name="factory" value="door01factory"/>
     <property name="locked" type="bool" value="false"/>
     <property name="open" type="bool" value="false"/>
-    <property name="room" value="dungeon,medium"/>
+    <property name="roomid" value="001"/>
+    <property name="roomtags" value="start"/>
     <property name="variant" type="int" value="0"/>
    </properties>
   </object>
@@ -90,17 +91,18 @@
     <property name="factory" value="door01factory"/>
     <property name="locked" type="bool" value="false"/>
     <property name="open" type="bool" value="false"/>
-    <property name="room" value="dungeon,medium"/>
+    <property name="roomid" value="002"/>
+    <property name="roomtags" value="dungeon"/>
     <property name="variant" type="int" value="0"/>
    </properties>
   </object>
-  <object id="6" type="spawnpoint" x="96" y="608">
+  <object id="6" name="player01" type="spawnpoint" x="96" y="608">
    <properties>
     <property name="factory" value="localherofactory"/>
    </properties>
    <point/>
   </object>
-  <object id="7" type="spawnpoint" x="224" y="608">
+  <object id="7" name="player02" type="spawnpoint" x="224" y="608">
    <properties>
     <property name="factory" value="remoteherofactory"/>
    </properties>

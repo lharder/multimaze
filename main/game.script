@@ -1,7 +1,6 @@
 require( "deflibs.defold" )
 
 local Roommanager = require( "level.playground.roommanager.roommanager" )
-local Envelope = require( "nexus.envelope" )
 
 local lua = require( "deflibs.lualib" )
 local Game = require( "nexus.game" )
@@ -19,14 +18,7 @@ ROOMMANAGER = Roommanager.new()
 
 function init( self )
 	lua.randomize()
-	msg.post( "main:/screenmaster", "load", { level = "setup" } ) 
 
-	--[[
-	local roomMgr = Roommanager.new()
-	roomMgr:select( "bright", "nice" ) 
-	roomMgr:select( "bright", "nice" ) 
-	roomMgr:select( "bright", "nice" ) 
-	roomMgr:select( "bright", "nice" ) 
-	--]]
+	msg.post( "main:/screenmaster", "load", { level = "setup" } ) 
 end
 

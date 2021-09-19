@@ -43,7 +43,7 @@ scale_along_z: 0
 embedded_instances {
   id: "level"
   data: "components {\n"
-  "  id: \"level\"\n"
+  "  id: \"script\"\n"
   "  component: \"/level/playground/level.script\"\n"
   "  position {\n"
   "    x: 0.0\n"

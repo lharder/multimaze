@@ -17,15 +17,19 @@ function Roommanager.new()
 	local this = {}
 	setmetatable( this, Roommanager )
 
+	-- room definitions: may show up in several instances each!
 	this.rooms = {}
-	this.rooms[ "start" ] = Room.new( require( "assets.tiles.room001" ), "start" ) 
-	this.rooms[ "dungeon01" ] = Room.new( require( "assets.tiles.room002" ), "dungeon", "medium" ) 
-	this.rooms[ "dungeon02" ] = Room.new( require( "assets.tiles.room003" ), "dungeon", "small" ) 
+	this.rooms[ "start" ] 		= Room.new( require( "assets.tiles.room001" ), "start" ) 
+	this.rooms[ "dungeon01" ] 	= Room.new( require( "assets.tiles.room002" ), "dungeon", "medium" ) 
+	this.rooms[ "dungeon02" ] 	= Room.new( require( "assets.tiles.room003" ), "dungeon", "small" ) 
 
 	-- add room keys as ids
-	for id, room in pairs( this.rooms ) do 
-		room.id = id
+	for key, room in pairs( this.rooms ) do 
+		room.key = key
 	end
+	
+	-- rooms as randomly selected and defined for a specific game
+	this.constellation = {}
 	
 	return this
 end
@@ -65,8 +69,23 @@ function Roommanager.select( self, ... )
 end
 
 
+-- returns an instance of a room in a specific game constellation
+-- Every room as created in Tiled has a unique "key" (analog of the 
+-- "class" of a room). There can be multiple instances of such a room 
+-- in a constellation for a specific game with random combination of 
+-- rooms. Roommanager:get( id ) returns the instance with a given id
 function Roommanager:get( id )
-	return self.rooms[ id ]
+	return self.constellation[ id ]
+end 
+
+
+function Roommanager:put( id, room )
+	self.constellation[ id ] = room
+end 
+
+
+function Roommanager:room( key )
+	return self.rooms[ key ]
 end 
 
 

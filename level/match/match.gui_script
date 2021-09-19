@@ -63,7 +63,9 @@ function broadcast( self, callsign )
 				GAME:start( "192.168.178.24", 15 )
 				
 				pprint( "All selected players confirmed, let's rock!!!" )
-				msg.post( "main:/screenmaster", "load", { level = "/playground" } )
+				local messages = {}
+				messages[ "playground:/level" ] = { roomid = "001",  roomkey = "start", roomtags = "start" }
+				msg.post( "main:/screenmaster", "load", { level = "/playground", messages = messages } )
 			end )
 		end, 
 		"Start" 

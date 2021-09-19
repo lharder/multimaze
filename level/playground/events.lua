@@ -65,9 +65,10 @@ function Events.newDeleteObject( gid )
 end
 
 
-function Events.newSelectRoom( roomId )
+function Events.newSelectRoom( roomid, roomkey )
 	local env = Envelope.new( Events.SELECT_ROOM, "playground:/level" )
-	env:putString( "id", roomId )
+	env:putString( "roomid", roomid )
+	env:putString( "roomkey", roomkey )
 	return env
 end
 

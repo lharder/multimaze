@@ -1,3 +1,5 @@
+local Events = require( "level.playground.events" )
+
 local MSG_INTERACT 			= hash( "interact" )
 local MSG_REMOTE_TRIGGER	= hash( "remoteTrigger" )
 local MSG_SET_PROPS 		= hash( "setProps" )
@@ -20,6 +22,17 @@ function init( self )
 end
 
 
+function animPlayerExit( playerId )
+	local url = msg.url( nil, playerId, "sprite" )
+	go.animate( url, "tint", go.PLAYBACK_ONCE_FORWARD, vmath.vector4( 1, 1, 1, 0 ), go.EASING_LINEAR, 1, 0, function() 
+		go.animate( url, "tint", go.PLAYBACK_ONCE_FORWARD, vmath.vector4( 1, 1, 1, 1 ), go.EASING_LINEAR, 1 ) 
+		go.animate( url, "scale", go.PLAYBACK_ONCE_FORWARD, 1, go.EASING_LINEAR, 1 )
+	end )
+	go.animate( url, "scale", go.PLAYBACK_ONCE_FORWARD, .3, go.EASING_LINEAR, 1 )
+	go.animate( playerId, "position.x", go.PLAYBACK_ONCE_FORWARD, go.get_position().x, go.EASING_LINEAR, 1 )
+end
+
+
 function on_message( self, message_id, message, sender )
 	if message_id == MSG_REMOTE_TRIGGER and not self.animating then
 		if not self.locked then 
@@ -39,21 +52,17 @@ function on_message( self, message_id, message, sender )
 		end
 
 	elseif message_id == MSG_SET_PROPS then
-		self.name 	= message.name
-		self.open 	= message.properties.open
-		self.locked = message.properties.locked
+		self.name 		= message.name
+		self.open 		= message.properties.open
+		self.locked 	= message.properties.locked
+		self.roomid 	= message.properties.roomid
+		self.roomtags 	= message.properties.roomtags
 		-- pprint( self.name .. ": " .. tostring( self.open ) )
 
 	elseif message_id == MSG_INTERACT then
 		if self.open then
-			local url = msg.url( nil, message.player, "sprite" )
-			go.animate( url, "tint", go.PLAYBACK_ONCE_FORWARD, vmath.vector4( 1, 1, 1, 0 ), go.EASING_LINEAR, 1, 0, function() 
-				go.animate( url, "tint", go.PLAYBACK_ONCE_FORWARD, vmath.vector4( 1, 1, 1, 1 ), go.EASING_LINEAR, 1 ) 
-				go.animate( url, "scale", go.PLAYBACK_ONCE_FORWARD, 1, go.EASING_LINEAR, 1 )
-			end )
-			go.animate( url, "scale", go.PLAYBACK_ONCE_FORWARD, .3, go.EASING_LINEAR, 1 )
-			go.animate( message.player, "position.x", go.PLAYBACK_ONCE_FORWARD, go.get_position().x, go.EASING_LINEAR, 1 )
-			
+			animPlayerExit( message.player )
+
 		else
 			pprint( "no entry for ".. message.player )
 		end

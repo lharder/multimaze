@@ -9,7 +9,7 @@ return {
   tilewidth = 64,
   tileheight = 64,
   nextlayerid = 6,
-  nextobjectid = 8,
+  nextobjectid = 10,
   properties = {},
   tilesets = {
     {
@@ -256,7 +256,8 @@ return {
             ["factory"] = "door01factory",
             ["locked"] = false,
             ["open"] = false,
-            ["room"] = "dungeon",
+            ["roomid"] = "001",
+            ["roomtags"] = "start",
             ["variant"] = 0
           }
         },
@@ -276,7 +277,8 @@ return {
             ["factory"] = "door01factory",
             ["locked"] = false,
             ["open"] = false,
-            ["room"] = "dungeon",
+            ["roomid"] = "003",
+            ["roomtags"] = "dungeon,small",
             ["variant"] = 0
           }
         },
@@ -296,6 +298,36 @@ return {
             ["color"] = "green",
             ["factory"] = "buttonfactory",
             ["listeners"] = "doorExit"
+          }
+        },
+        {
+          id = 8,
+          name = "player01",
+          type = "spawnpoint",
+          shape = "point",
+          x = 96,
+          y = 864,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["factory"] = "localherofactory"
+          }
+        },
+        {
+          id = 9,
+          name = "player02",
+          type = "spawnpoint",
+          shape = "point",
+          x = 224,
+          y = 864,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["factory"] = "remoteherofactory"
           }
         }
       }
