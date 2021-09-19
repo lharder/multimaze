@@ -14,6 +14,19 @@ PLAYERS = {}
 MAP = {}
 ROOMMANAGER = Roommanager.new()
 
+
+function loadRoom( roomid, roomtags )
+	if GAME:isServer() then
+		GAME.client.syncObjs = {}
+
+		-- only the server's player can make everybody leave the room: that
+		-- requires that all other players are close, though ("readyToInteract")
+		local messages = {}
+		messages[ "playground:/level" ] = { roomid = roomid, roomtags = roomtags }
+		msg.post( "main:/screenmaster", "load", { level = "/playground", messages = messages } )
+	end
+end
+
 -------------------------------------
 
 function init( self )

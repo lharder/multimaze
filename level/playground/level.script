@@ -141,7 +141,6 @@ end
 
 function init( self )
 	createVirtualCtrl()
-	
 end
 
 
@@ -170,7 +169,9 @@ function on_message( self, message_id, message, sender )
 			-- broadcast the specifically selected room to all clients to set it up. On the
 			-- clients, however, this room id does not exist yet, but it must not be randomly
 			-- selected (as on the server with tags). So, send the room class's key along.
-			GAME.server:sendToClients( Events.newSelectRoom( message.roomid, message.roomkey ) )
+			GAME.server:sendToClients( 
+				Events.newSelectRoom( message.roomid, room.key ) 
+			)
 		end
 		
 	end

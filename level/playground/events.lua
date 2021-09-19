@@ -2,20 +2,22 @@ local Envelope = require( "nexus.envelope" )
 
 local Events = {}
 
-Events.CREATE_PLAYER 		= 1
-Events.MOVE_TO 				= 2
-Events.OBJECT_INTERACT 		= 3
-Events.CREATE_SHOT			= 4
-Events.DELETE_OBJECT		= 5
-Events.SELECT_ROOM			= 6
+Events.CREATE_PLAYER 			= 1
+Events.MOVE_TO 					= 2
+Events.OBJECT_READY_TO_INTERACT = 3
+Events.OBJECT_INTERACT 			= 4
+Events.CREATE_SHOT				= 5
+Events.DELETE_OBJECT			= 6
+Events.SELECT_ROOM				= 7
 
 Events.names = {}
 Events.names[ 1 ] = "CREATE_PLAYER"
 Events.names[ 2 ] = "MOVE_TO"
-Events.names[ 3 ] = "OBJECT_INTERACT"
-Events.names[ 4 ] = "CREATE_SHOT"
-Events.names[ 5 ] = "DELETE_OBJECT"
-Events.names[ 6 ] = "SELECT_ROOM"
+Events.names[ 3 ] = "OBJECT_READY_TO_INTERACT"
+Events.names[ 4 ] = "OBJECT_INTERACT"
+Events.names[ 5 ] = "CREATE_SHOT"
+Events.names[ 6 ] = "DELETE_OBJECT"
+Events.names[ 7 ] = "SELECT_ROOM"
 
 
 function Events.newCreatePlayer( gid, pos, speed, name, isLocalHero )
@@ -45,6 +47,13 @@ end
 
 function Events.newObjectInteract( gid )
 	return Envelope.new( Events.OBJECT_INTERACT, gid )
+end
+
+
+function Events.newObjectReadyToInteract( gid, isReady )
+	local env = Envelope.new( Events.OBJECT_READY_TO_INTERACT, gid )
+	env:putBool( "isReady", isReady )
+	return env
 end
 
 

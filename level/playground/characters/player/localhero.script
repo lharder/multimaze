@@ -11,6 +11,7 @@ go.property( "isLocalHero", false )
 local MSG_ON_FIRST_TICK 	= hash( "firsttick" )
 local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
 local MSG_INTERACT 			= hash( "interact" )
+local MSG_READY_TO_INTERACT = hash( "readyToInteract" )
 local MSG_STICK 			= hash( "stick" )
 local MSG_BTN_ACTION 		= hash( "action" )
 local MSG_BTN_JUMP	 		= hash( "jump" )
@@ -54,6 +55,18 @@ local function interact( self )
 	-- inform other clients
 	local gid = GAME.client.registry:getGlobalId( self.interactWith )
 	local evt = Events.newObjectInteract( gid )
+	GAME.client:sendToOtherClients( evt )
+end
+
+
+local function readyToInteract( self, isReady )
+	msg.post( self.interactWith, MSG_READY_TO_INTERACT, { 
+		player = go.get_id(), isReady = isReady 
+	})
+
+	-- inform other clients
+	local gid = GAME.client.registry:getGlobalId( self.interactWith )
+	local evt = Events.newObjectReadyToInteract( gid, isReady )
 	GAME.client:sendToOtherClients( evt )
 end
 
@@ -309,8 +322,11 @@ function on_message( self, message_id, message, sender )
 		  ( message.other_group == GROUP_DOOR ) then
 			if message.enter then
 				self.interactWith = message.other_id
+				if message.other_group == GROUP_DOOR then readyToInteract( self, true ) end
 			else
+				if message.other_group == GROUP_DOOR then readyToInteract( self, false ) end
 				self.interactWith = nil
+				
 			end
 		end
 
