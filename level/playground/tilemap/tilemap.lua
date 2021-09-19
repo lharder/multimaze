@@ -140,10 +140,13 @@ function Tilemap:setup()
 			for i, obj in ipairs( layer.objects ) do
 
 				if obj.type == "spawnpoint" then 
-					obj.x, obj.y = self:pixToGrid( obj.x, obj.y )
-					obj.x = obj.x * self.map.tilewidth
-					obj.y = ( obj.y + 1 ) * self.map.tileheight 
-					self.spawnpoints[ obj.name ] = obj
+					-- must not change the original!
+					local spawnpoint = lua.deepcopy( obj )
+					
+					spawnpoint.x, spawnpoint.y = self:pixToGrid( obj.x, obj.y )
+					spawnpoint.x = spawnpoint.x * self.map.tilewidth
+					spawnpoint.y = ( spawnpoint.y + 1 ) * self.map.tileheight 
+					self.spawnpoints[ obj.name ] = spawnpoint
 					
 				else
 					local facUrl = "/factories#" .. obj.properties[ "factory" ]

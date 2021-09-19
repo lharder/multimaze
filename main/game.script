@@ -15,6 +15,9 @@ MAP = {}
 ROOMMANAGER = Roommanager.new()
 
 
+-- globally available function: load a new room in the playground.
+-- Unload the entire level to get rid of all objects, stop syncing.
+-- Then reload playground with a new room and recreate all objects.
 function loadRoom( roomid, roomtags )
 	if GAME:isServer() then
 		GAME.client.syncObjs = {}

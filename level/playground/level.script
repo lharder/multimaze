@@ -83,8 +83,9 @@ local function setupPlayers( room )
 					pprint( "Unable to find spawnpoint in map: player0" .. i ) 
 				else 
 					pos = vmath.vector3( spawnpoint.x, spawnpoint.y, .5 ) 
+					pprint( "Spawnpoint found: " .. tostring( pos ) .. " (player0" .. i .. ")" )
 				end 
-				
+			
 				-- create one local hero on every game host / client ------------
 				-- who receives and transmits input from his player to all other hosts 
 				local evtLocalHero = Events.newCreatePlayer( 
@@ -112,7 +113,7 @@ function setupRoom( roomid, roomkey )
 		room = ROOMMANAGER:room( roomkey )
 		ROOMMANAGER:put( roomid, room )
 	end
-	pprint( "Loaded room " .. roomid )
+	pprint( "Loaded room " .. roomid .. " (" .. roomkey .. ")" )
 
 	-- map is needed for players' start positions
 	MAP = Tilemap.new( "/playground#tilemap", room )
@@ -158,7 +159,7 @@ function on_message( self, message_id, message, sender )
 
 			local room = ROOMMANAGER:get( message.roomid )
 			if room == nil then
-				room = ROOMMANAGER:select( message.tags )
+				room = ROOMMANAGER:select( unpack( message.roomtags:split( "," ) ) )
 				ROOMMANAGER:put( message.roomid, room )
 			end
 			if room == nil then 

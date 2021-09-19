@@ -36,12 +36,10 @@ end
 
 
 function Roommanager.select( self, ... )
-	local needed = Set.new( { ... } )
-
 	-- select a room with the given tags
 	local hits = {}
 	for id, room in pairs( self.rooms ) do 
-		if room:isMatch( needed.tags ) then 
+		if room:isMatch( ... ) then 
 			table.insert( hits, room )
 		end
 	end

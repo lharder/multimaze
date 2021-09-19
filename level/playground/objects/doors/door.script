@@ -72,10 +72,9 @@ function on_message( self, message_id, message, sender )
 	elseif message_id == MSG_INTERACT then
 		if self.open then
 			if self.cntPlayersNear == #GAME.match.proposal then 
-				animPlayerExit( self, message.player )
-				
+				animPlayerExit( self, message.player )		
 			else
-				pprint( "Are you nuts? Can't leave anyone behind!" )
+				pprint( "No way! Can't leave 'm behind!" )
 			end
 			
 		else
