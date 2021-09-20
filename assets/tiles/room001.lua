@@ -238,7 +238,7 @@ return {
             ["locked"] = false,
             ["open"] = false,
             ["roomid"] = "002",
-            ["roomtags"] = "dungeon,large",
+            ["roomtags"] = "dungeon,medium",
             ["variant"] = 1
           }
         },
@@ -296,7 +296,7 @@ return {
           properties = {
             ["color"] = "green",
             ["factory"] = "buttonfactory",
-            ["listeners"] = "door01"
+            ["listeners"] = "door01,door03"
           }
         },
         {

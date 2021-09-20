@@ -108,7 +108,7 @@ end
 
 
 function setupRoom( roomid, roomkey ) 
-	local room = ROOMMANAGER:get( id )
+	local room = ROOMMANAGER:get( roomid )
 	if room == nil then 
 		room = ROOMMANAGER:room( roomkey )
 		ROOMMANAGER:put( roomid, room )
@@ -123,7 +123,6 @@ function setupRoom( roomid, roomkey )
 end
 
 
-
 -- client reacts to incoming server events
 local function parse( message )
 	if message.meta.type == Events.CREATE_PLAYER then
@@ -132,9 +131,6 @@ local function parse( message )
 	elseif message.meta.type == Events.CREATE_SYNCED_ENTITY then
 		createSyncedEntity( message.attrs )
 
-	elseif message.meta.type == Events.SELECT_ROOM then
-		setupRoom( message.attrs.roomid, message.attrs.roomkey )
-		
 	end
 end
 
@@ -146,35 +142,14 @@ end
 
 
 function on_message( self, message_id, message, sender )
-	-- receive and react to serverside events
+	-- receive and react to commands from server/clients
 	if message_id == GAME.MSG_EXEC_CMD then
 		parse( message )
 
 	elseif message_id == MSG_SCREEN_LOADED then
-		-- Only the server makes the selection for a new room:
-		-- one of those fitting the given room tags will be selected.
-		-- All clients will then receive that room's class and
-		-- the id under which it is to be addressed from now on
-		if GAME:isServer() then 
-
-			local room = ROOMMANAGER:get( message.roomid )
-			if room == nil then
-				room = ROOMMANAGER:select( unpack( message.roomtags:split( "," ) ) )
-				ROOMMANAGER:put( message.roomid, room )
-			end
-			if room == nil then 
-				pprint( "Error: unable to load room by given tags!" )
-				return
-			end
-			
-			-- broadcast the specifically selected room to all clients to set it up. On the
-			-- clients, however, this room id does not exist yet, but it must not be randomly
-			-- selected (as on the server with tags). So, send the room class's key along.
-			GAME.server:sendToClients( 
-				Events.newSelectRoom( message.roomid, room.key ) 
-			)
-		end
-		
+		-- right after the screenmaster has loaded 
+		-- this level, load the specified room
+		setupRoom( message.roomid, message.roomkey ) 
 	end
 end
 

@@ -10,7 +10,6 @@ go.property( "locked", false )
 
 
 function init( self ) 
-	
 	local pos = go.get_position()
 	go.set_position( vmath.vector3( pos.x, pos.y + 40, pos.z ) )
 
@@ -21,21 +20,70 @@ function init( self )
 	else
 		sprite.play_flipbook( "#sprite", "closed" )
 	end
+
+	if GAME:isServer() then 
+		-- Allow for clients to create door objects and 
+		-- assign the room to lead to as picked by the server 
+		timer.delay( 2, false, function() 
+			local room = ROOMMANAGER:get( self.roomid )
+			if room == nil then
+				room = ROOMMANAGER:select( unpack( self.roomtags:split( "," ) ) )
+				ROOMMANAGER:put( self.roomid, room )
+			end
+			if room == nil then 
+				pprint( "Error: unable to load room by given tags!" )
+				return
+			end
+
+			-- broadcast the specifically selected room to all clients to set it up
+			-- GlobalID is available in registry 2 secs AFTER init()!
+			local gid = GAME.client.registry:getGlobalId( go.get_id() ) 
+			GAME.server:sendToClients( 
+				Events.newDoorSetRoom( gid, self.roomid, room.key ) 
+			)
+			
+		end )
+	end
 end
 
 
-function animPlayerExit( self, playerId )
+function animPlayerExit( self, playerId, sender )
+	-- if the sender is the local player, then broadcast exit 
+	-- to my alter ego door on the other hosts. If the sender
+	-- is nexus, do NOT send an exit event (again)
+	if sender and sender.path == playerId then 
+		pprint( "Sending door exit event to other clients" )
+		
+		local gid = GAME.client.registry:getGlobalId( go.get_id() ) 
+		local evt = Events.newObjectInteract( gid )
+		GAME.client:sendToOtherClients( 
+			Events.newObjectInteract( gid, self.roomid, self.roomkey ) 
+		)
+	end
+	
 	local url = msg.url( nil, playerId, "sprite" )
 	go.animate( url, "tint", go.PLAYBACK_ONCE_FORWARD, vmath.vector4( 1, 1, 1, 0 ), go.EASING_LINEAR, 1, 0, function() 
-		loadRoom( self.roomid, self.roomtags )
+		loadRoom( self.roomid, self.roomkey )
 	end )
 	go.animate( url, "scale", go.PLAYBACK_ONCE_FORWARD, .3, go.EASING_LINEAR, 1 )
 	go.animate( playerId, "position.x", go.PLAYBACK_ONCE_FORWARD, go.get_position().x, go.EASING_LINEAR, 1 )
 end
 
 
+function parse( self, message )
+	if message.meta.type == Events.DOOR_SET_ROOM then
+		self.roomid 	= message.attrs.roomid
+		self.roomkey 	= message.attrs.roomkey
+	end
+end
+
+
+
 function on_message( self, message_id, message, sender )
-	if message_id == MSG_REMOTE_TRIGGER and not self.animating then
+	if message_id == GAME.MSG_EXEC_CMD then
+		parse( self, message )
+		
+	elseif message_id == MSG_REMOTE_TRIGGER and not self.animating then
 		if not self.locked then 
 			if self.open then 
 				self.animating = true
@@ -72,7 +120,7 @@ function on_message( self, message_id, message, sender )
 	elseif message_id == MSG_INTERACT then
 		if self.open then
 			if self.cntPlayersNear == #GAME.match.proposal then 
-				animPlayerExit( self, message.player )		
+				animPlayerExit( self, message.player, sender )		
 			else
 				pprint( "No way! Can't leave 'm behind!" )
 			end

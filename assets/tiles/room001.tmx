@@ -117,7 +117,7 @@
     <property name="locked" type="bool" value="false"/>
     <property name="open" type="bool" value="false"/>
     <property name="roomid" value="002"/>
-    <property name="roomtags" value="dungeon,large"/>
+    <property name="roomtags" value="dungeon,medium"/>
     <property name="variant" type="int" value="1"/>
    </properties>
   </object>
@@ -142,7 +142,7 @@
    <properties>
     <property name="color" value="green"/>
     <property name="factory" value="buttonfactory"/>
-    <property name="listeners" value="door01"/>
+    <property name="listeners" value="door01,door03"/>
    </properties>
   </object>
   <object id="15" name="safe01" type="safe" gid="25" x="896" y="1152" width="64" height="64">

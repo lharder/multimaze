@@ -8,7 +8,8 @@ Events.OBJECT_READY_TO_INTERACT = 3
 Events.OBJECT_INTERACT 			= 4
 Events.CREATE_SHOT				= 5
 Events.DELETE_OBJECT			= 6
-Events.SELECT_ROOM				= 7
+-- Events.SELECT_ROOM				= 7
+Events.DOOR_SET_ROOM			= 7
 
 Events.names = {}
 Events.names[ 1 ] = "CREATE_PLAYER"
@@ -17,7 +18,7 @@ Events.names[ 3 ] = "OBJECT_READY_TO_INTERACT"
 Events.names[ 4 ] = "OBJECT_INTERACT"
 Events.names[ 5 ] = "CREATE_SHOT"
 Events.names[ 6 ] = "DELETE_OBJECT"
-Events.names[ 7 ] = "SELECT_ROOM"
+Events.names[ 7 ] = "DOOR_SET_ROOM"
 
 
 function Events.newCreatePlayer( gid, pos, speed, name, isLocalHero )
@@ -74,8 +75,8 @@ function Events.newDeleteObject( gid )
 end
 
 
-function Events.newSelectRoom( roomid, roomkey )
-	local env = Envelope.new( Events.SELECT_ROOM, "playground:/level" )
+function Events.newDoorSetRoom( gid, roomid, roomkey )
+	local env = Envelope.new( Events.DOOR_SET_ROOM, gid )
 	env:putString( "roomid", roomid )
 	env:putString( "roomkey", roomkey )
 	return env

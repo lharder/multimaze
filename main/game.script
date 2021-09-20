@@ -14,22 +14,17 @@ PLAYERS = {}
 MAP = {}
 ROOMMANAGER = Roommanager.new()
 
-
--- globally available function: load a new room in the playground.
+-- Globally available function: load a new room in the playground.
 -- Unload the entire level to get rid of all objects, stop syncing.
 -- Then reload playground with a new room and recreate all objects.
-function loadRoom( roomid, roomtags )
-	if GAME:isServer() then
-		GAME.client.syncObjs = {}
+function loadRoom( roomid, roomkey )
+	-- stop syncing objects
+	GAME.client.syncObjs = {}
 
-		-- only the server's player can make everybody leave the room: that
-		-- requires that all other players are close, though ("readyToInteract")
-		local messages = {}
-		messages[ "playground:/level" ] = { roomid = roomid, roomtags = roomtags }
-		msg.post( "main:/screenmaster", "load", { level = "/playground", messages = messages } )
-	end
+	local messages = {}
+	messages[ "playground:/level" ] = { roomid = roomid, roomkey = roomkey }
+	msg.post( "main:/screenmaster", "load", { level = "/playground", messages = messages } )
 end
-
 -------------------------------------
 
 function init( self )
