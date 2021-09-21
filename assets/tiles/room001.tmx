@@ -235,13 +235,13 @@
     <property name="variant" type="int" value="9"/>
    </properties>
   </object>
-  <object id="48" name="player01" type="spawnpoint" x="160" y="1184">
+  <object id="48" name="player01" type="spawnpoint" x="96" y="1184">
    <properties>
     <property name="factory" value="localherofactory"/>
    </properties>
    <point/>
   </object>
-  <object id="49" name="player02" type="spawnpoint" x="288" y="1184">
+  <object id="49" name="player02" type="spawnpoint" x="160" y="1184">
    <properties>
     <property name="factory" value="remoteherofactory"/>
    </properties>
