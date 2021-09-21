@@ -110,9 +110,11 @@ function on_message( self, message_id, message, sender )
 
 	elseif message_id == MSG_READY_TO_INTERACT then
 		if message.isReady then 
+			pprint( "Now close to door: " .. sender )
 			self.cntPlayersNear = self.cntPlayersNear + 1
 			if self.cntPlayersNear > #GAME.match.proposal then self.cntPlayersNear = #GAME.match.proposal end
 		else 
+			pprint( "No longer close to door: " .. sender )
 			self.cntPlayersNear = self.cntPlayersNear - 1
 			if self.cntPlayersNear < 0 then self.cntPlayersNear = 0 end 
 		end
