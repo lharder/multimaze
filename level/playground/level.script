@@ -107,7 +107,7 @@ end
 
 
 
-function setupRoom( roomid, roomkey ) 
+local function setupRoom( roomid, roomkey ) 
 	local room = ROOMMANAGER:get( roomid )
 	if room == nil then 
 		room = ROOMMANAGER:room( roomkey )

@@ -47,7 +47,7 @@ function init( self )
 end
 
 
-function animPlayerExit( self, playerId, sender )
+local function animPlayerExit( self, playerId, sender )
 	-- if the sender is the local player, then broadcast exit 
 	-- to my alter ego door on the other hosts. If the sender
 	-- is nexus, do NOT send an exit event (again)
@@ -70,7 +70,7 @@ function animPlayerExit( self, playerId, sender )
 end
 
 
-function parse( self, message )
+local function parse( self, message )
 	if message.meta.type == Events.DOOR_SET_ROOM then
 		self.roomid 	= message.attrs.roomid
 		self.roomkey 	= message.attrs.roomkey
