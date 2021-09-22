@@ -61,13 +61,15 @@ end
 
 
 local function readyToInteract( self, isReady )
+	local player = GAME.client.registry:getGlobalId( go.get_id() )
 	msg.post( self.interactWith, MSG_READY_TO_INTERACT, { 
-		player = go.get_id(), isReady = isReady 
+		player = player, 
+		isReady = isReady 
 	})
 
 	-- inform other clients
 	local gid = GAME.client.registry:getGlobalId( self.interactWith )
-	local evt = Events.newObjectReadyToInteract( gid, isReady )
+	local evt = Events.newObjectReadyToInteract( gid, player, isReady )
 	GAME.client:sendToOtherClients( evt )
 end
 
