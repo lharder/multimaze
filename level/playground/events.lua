@@ -46,8 +46,10 @@ function Events.newMoveTo( gid, pos )
 end
 
 
-function Events.newObjectInteract( gid )
-	return Envelope.new( Events.OBJECT_INTERACT, gid )
+function Events.newObjectInteract( gid, gidInteractWith )
+	local env = Envelope.new( Events.OBJECT_INTERACT, gid )
+	env:putString( "interactWith", gidInteractWith )
+	return env
 end
 
 

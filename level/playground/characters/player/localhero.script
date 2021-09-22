@@ -54,7 +54,8 @@ local function interact( self )
 
 	-- inform other clients
 	local gid = GAME.client.registry:getGlobalId( self.interactWith )
-	local evt = Events.newObjectInteract( gid )
+	local gidMe = GAME.client.registry:getGlobalId( go.get_id() )
+	local evt = Events.newObjectInteract( gid, gidMe )
 	GAME.client:sendToOtherClients( evt )
 end
 
