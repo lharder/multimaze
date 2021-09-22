@@ -108,7 +108,7 @@ local function parse( self, message )
 		interact( self, cid, nil )
 
 	elseif message.meta.type == Events.OBJECT_READY_TO_INTERACT then
-		readyToInteract( self, message.attrs.isReady )
+		readyToInteract( self, message.attrs )
 		
 	end
 end
