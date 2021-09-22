@@ -73,13 +73,13 @@ local function interact( self, message, sender )
 	local player = GAME.client.registry:getClientId( message.player )
 	if self.open then
 		if self.cntPlayersNear == #GAME.match.proposal then 
-			animPlayerExit( self, player, sender )		
+			animPlayerExit( self, message.player, sender )		
 		else
 			pprint( "No way! Can't leave 'm behind!" )
 		end
 
 	else
-		pprint( "no entry for ".. player )
+		pprint( "no entry for ".. message.player )
 	end
 end
 
@@ -148,7 +148,7 @@ function on_message( self, message_id, message, sender )
 		readyToInteract( self, message, sender )
 		
 	elseif message_id == MSG_INTERACT then
-		interact( self, message.player, sender )
+		interact( self, message, sender )
 		
 	end
 end

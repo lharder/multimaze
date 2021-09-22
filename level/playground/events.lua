@@ -55,7 +55,7 @@ end
 
 function Events.newObjectReadyToInteract( gid, gidInteractWith, isReady )
 	local env = Envelope.new( Events.OBJECT_READY_TO_INTERACT, gid )
-	env.putString( "player", gidInteractWith )
+	env:putString( "player", gidInteractWith )
 	env:putBool( "isReady", isReady )
 	return env
 end
