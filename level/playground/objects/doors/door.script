@@ -50,7 +50,7 @@ end
 local function animPlayerExit( self, playerId, sender )
 	-- if the sender is the local player, then broadcast exit 
 	-- to my alter ego door on the other hosts. If the sender
-	-- is nexus, do NOT send an exit event (again)
+	-- is nil, do NOT send an exit event (again)
 	if sender and sender.path == playerId then 
 		pprint( "Sending door exit event to other clients" )
 		
@@ -69,7 +69,7 @@ local function animPlayerExit( self, playerId, sender )
 end
 
 
-local function interact( self, playerId )
+local function interact( self, playerId, sender )
 	if self.open then
 		if self.cntPlayersNear == #GAME.match.proposal then 
 			animPlayerExit( self, playerId, sender )		
@@ -83,14 +83,31 @@ local function interact( self, playerId )
 end
 
 
+local function readyToInteract( self, message )
+	if message.isReady then 
+		pprint( "Now close to door: " .. message.player )
+		self.cntPlayersNear = self.cntPlayersNear + 1
+		if self.cntPlayersNear > #GAME.match.proposal then self.cntPlayersNear = #GAME.match.proposal end
+	else 
+		pprint( "No longer close to door: " .. message.player )
+		self.cntPlayersNear = self.cntPlayersNear - 1
+		if self.cntPlayersNear < 0 then self.cntPlayersNear = 0 end 
+	end
+end
+	
+
+
 local function parse( self, message )
 	if message.meta.type == Events.DOOR_SET_ROOM then
 		self.roomid 	= message.attrs.roomid
 		self.roomkey 	= message.attrs.roomkey
 
 	elseif message.meta.type == Events.OBJECT_INTERACT then
-		local cid = GAME.client.registry:getClientId(  )
-		interact( self, message.player )
+		local cid = GAME.client.registry:getClientId( message.attrs.interactWith )
+		interact( self, cid, nil )
+
+	elseif message.meta.type == Events.OBJECT_READY_TO_INTERACT then
+		readyToInteract( self, message.attrs.isReady )
 		
 	end
 end
@@ -127,18 +144,10 @@ function on_message( self, message_id, message, sender )
 		-- pprint( self.name .. ": " .. tostring( self.open ) )
 
 	elseif message_id == MSG_READY_TO_INTERACT then
-		if message.isReady then 
-			pprint( "Now close to door: " .. sender )
-			self.cntPlayersNear = self.cntPlayersNear + 1
-			if self.cntPlayersNear > #GAME.match.proposal then self.cntPlayersNear = #GAME.match.proposal end
-		else 
-			pprint( "No longer close to door: " .. sender )
-			self.cntPlayersNear = self.cntPlayersNear - 1
-			if self.cntPlayersNear < 0 then self.cntPlayersNear = 0 end 
-		end
+		readyToInteract( self, message, sender )
 		
 	elseif message_id == MSG_INTERACT then
-		interact( self, message.player )
+		interact( self, message.player, sender )
 		
 	end
 end
