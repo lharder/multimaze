@@ -105,7 +105,7 @@ local function parse( self, message )
 
 	elseif message.meta.type == Events.OBJECT_INTERACT then
 		local cid = GAME.client.registry:getClientId( message.attrs.interactWith )
-		interact( self, cid, nil )
+		interact( self, { player = cid }, nil )
 
 	elseif message.meta.type == Events.OBJECT_READY_TO_INTERACT then
 		readyToInteract( self, message.attrs )
