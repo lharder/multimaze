@@ -170,7 +170,7 @@ return {
       objects = {
         {
           id = 1,
-          name = "exit",
+          name = "door02",
           type = "door",
           shape = "rectangle",
           x = 576,
@@ -183,9 +183,7 @@ return {
           properties = {
             ["factory"] = "door01factory",
             ["locked"] = false,
-            ["open"] = false,
-            ["roomid"] = "001",
-            ["roomtags"] = "start",
+            ["open"] = true,
             ["variant"] = 0
           }
         },
@@ -204,12 +202,12 @@ return {
           properties = {
             ["color"] = "blue",
             ["factory"] = "buttonfactory",
-            ["listeners"] = "exit"
+            ["listeners"] = "door01,door02"
           }
         },
         {
           id = 4,
-          name = "entry",
+          name = "door01",
           type = "door",
           shape = "rectangle",
           x = 128,
@@ -222,9 +220,7 @@ return {
           properties = {
             ["factory"] = "door01factory",
             ["locked"] = false,
-            ["open"] = false,
-            ["roomid"] = "002",
-            ["roomtags"] = "dungeon",
+            ["open"] = true,
             ["variant"] = 0
           }
         },

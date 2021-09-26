@@ -67,7 +67,7 @@ end
 
 
 
-local function setupPlayers( room )
+local function setupPlayers( self, room )
 	if GAME:isServer() then 
 		-- create serverside objects to run the game
 		timer.delay( .5, false, function() 
@@ -78,18 +78,10 @@ local function setupPlayers( room )
 				local speed = 180
 				local pos = { x = 100,  y = 180,  z = .5 }
 
-				local spawnpoint = MAP.spawnpoints[ "player0" .. i ]
-				if spawnpoint == nil then 
-					pprint( "Unable to find spawnpoint in map: player0" .. i ) 
-				else 
-					pos = vmath.vector3( spawnpoint.x, spawnpoint.y, .5 ) 
-					pprint( "Spawnpoint found: " .. tostring( pos ) .. " (player0" .. i .. ")" )
-				end 
-			
 				-- create one local hero on every game host / client ------------
 				-- who receives and transmits input from his player to all other hosts 
 				local evtLocalHero = Events.newCreatePlayer( 
-					callsign, vmath.vector3( pos.x, pos.y, pos.z ), speed, callsign, true 
+					callsign, self.entrypos, speed, callsign, true 
 				)
 				local host = GAME.hosts:get( callsign )
 				GAME.server:send( host.ip, evtLocalHero )
@@ -106,21 +98,25 @@ local function setupPlayers( room )
 end
 
 
-
-local function setupRoom( roomid, roomkey ) 
+local function setupRoom( self, roomid ) 
 	local room = ROOMMANAGER:get( roomid )
-	if room == nil then 
-		room = ROOMMANAGER:room( roomkey )
-		ROOMMANAGER:put( roomid, room )
+	if room then
+		pprint( "Loaded room " .. roomid .. " (" .. room.roomtype.key .. ")" )
 	end
-	pprint( "Loaded room " .. roomid .. " (" .. roomkey .. ")" )
 
 	-- map is needed for players' start positions
 	MAP = Tilemap.new( "/playground#tilemap", room )
 	MAP:setup()
 
-	setupPlayers( room ) 
+	setupPlayers( self, room ) 
 end
+
+
+local function createRoomConfig( model )
+	ROOMMANAGER:deserialize( model )
+	
+end
+
 
 
 -- client reacts to incoming server events
@@ -131,6 +127,9 @@ local function parse( message )
 	elseif message.meta.type == Events.CREATE_SYNCED_ENTITY then
 		createSyncedEntity( message.attrs )
 
+	elseif message.meta.type == Events.NEW_ROOM_CONFIG then
+		createRoomConfig( message.attrs )
+		
 	end
 end
 
@@ -147,9 +146,24 @@ function on_message( self, message_id, message, sender )
 		parse( message )
 
 	elseif message_id == MSG_SCREEN_LOADED then
-		-- right after the screenmaster has loaded 
-		-- this level, load the specified room
-		setupRoom( message.roomid, message.roomkey ) 
+		-- right after the screenmaster has loaded, 
+		-- create the configuration of rooms if necessary
+		if GAME:isServer() and #ROOMMANAGER.rooms == 0 then 
+			ROOMMANAGER:setup()
+			local rooms = ROOMMANAGER:serialize()
+			GAME.server:sendToClients( Events.newRoomConfig( "playground:/level", rooms ) )
+		end	
+		-- load the specified room, but allow for 
+		-- initialization of roommanager on all clients
+		timer.delay( 1, false, function() 
+			-- entry position in this room (usually a door position)
+			self.entrypos = vmath.vector3( message.entrypos.x, message.entrypos.y, message.entrypos.z )
+			
+			-- make current room available for all objects
+			ROOMMANAGER:setCurrent( message.roomid )
+			setupRoom( self, message.roomid ) 
+		end )
+		
 	end
 end
 

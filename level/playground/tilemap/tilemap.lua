@@ -25,10 +25,15 @@ local Tilemap = {}
 Tilemap.__index = Tilemap
 
 function Tilemap.new( urlTilemap, room )
+	if room == nill then 
+		pprint( "Room is nil! Cannot create Tilemap!" ) 
+		return 
+	end
+	
 	local this = {}
 	setmetatable( this, Tilemap )
 
-	this.map = room.data
+	this.map = room.roomtype.data
 	this.url = urlTilemap
 	this.objsByName = {}
 	this.objsByPos = {}
@@ -38,13 +43,6 @@ function Tilemap.new( urlTilemap, room )
 	this.map.yMaxPix = ( this.map.height - 2 ) * this.map.tileheight
 	-- pprint( "MaxPix x: " .. this.map.xMaxPix .. ", y: " .. this.map.yMaxPix )
 	
-	-- make layers available by their names
-	local layers = {}
-	for i, layer in pairs( this.map.layers ) do
-		layers[ layer.name ] = this.map.layers[ i ]
-	end
-	this.map.layers = layers
-
 	return this
 end
 

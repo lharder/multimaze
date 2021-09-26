@@ -14,35 +14,11 @@ function init( self )
 	go.set_position( vmath.vector3( pos.x, pos.y + 40, pos.z ) )
 
 	self.cntPlayersNear = 0
-	
+
 	if self.open then 
 		sprite.play_flipbook( "#sprite", "opened" )
 	else
 		sprite.play_flipbook( "#sprite", "closed" )
-	end
-
-	if GAME:isServer() then 
-		-- Allow for clients to create door objects and 
-		-- assign the room to lead to as picked by the server 
-		timer.delay( 2, false, function() 
-			local room = ROOMMANAGER:get( self.roomid )
-			if room == nil then
-				room = ROOMMANAGER:select( unpack( self.roomtags:split( "," ) ) )
-				ROOMMANAGER:put( self.roomid, room )
-			end
-			if room == nil then 
-				pprint( "Error: unable to load room by given tags!" )
-				return
-			end
-
-			-- broadcast the specifically selected room to all clients to set it up
-			-- GlobalID is available in registry 2 secs AFTER init()!
-			local gid = GAME.client.registry:getGlobalId( go.get_id() ) 
-			GAME.server:sendToClients( 
-				Events.newDoorSetRoom( gid, self.roomid, room.key ) 
-			)
-			
-		end )
 	end
 end
 
@@ -62,7 +38,18 @@ local function animPlayerExit( self, playerId, sender )
 	
 	local url = msg.url( nil, playerId, "sprite" )
 	go.animate( url, "tint", go.PLAYBACK_ONCE_FORWARD, vmath.vector4( 1, 1, 1, 0 ), go.EASING_LINEAR, 1, 0, function() 
-		loadRoom( self.roomid, self.roomkey )
+		local room = ROOMMANAGER:getCurrent()
+		local targetRoomId = room.doors[ self.name ]
+		if targetRoomId == nil then 
+			pprint( "Door without a defined target (" .. room.id .. " / " .. self.name .. ")" )
+		else
+			-- find position of entry door (its gameobject does not yet exist!)
+			-- a bit clumsy, may need refactoring....
+			local targetRoom = ROOMMANAGER:get( targetRoomId ) 
+			local doorinfo = targetRoom:getObjByName( self.name )
+			local yMax = ( targetRoom.roomtype.data.height + 1 ) * targetRoom.roomtype.data.tileheight  
+			loadRoom( targetRoomId, vmath.vector3( doorinfo.x, yMax - doorinfo.y, .5 ) )
+		end
 	end )
 	go.animate( url, "scale", go.PLAYBACK_ONCE_FORWARD, .3, go.EASING_LINEAR, 1 )
 	go.animate( playerId, "position.x", go.PLAYBACK_ONCE_FORWARD, go.get_position().x, go.EASING_LINEAR, 1 )
@@ -99,11 +86,7 @@ end
 
 
 local function parse( self, message )
-	if message.meta.type == Events.DOOR_SET_ROOM then
-		self.roomid 	= message.attrs.roomid
-		self.roomkey 	= message.attrs.roomkey
-
-	elseif message.meta.type == Events.OBJECT_INTERACT then
+	if message.meta.type == Events.OBJECT_INTERACT then
 		local cid = GAME.client.registry:getClientId( message.attrs.interactWith )
 		interact( self, { player = cid }, nil )
 
@@ -140,10 +123,13 @@ function on_message( self, message_id, message, sender )
 		self.name 		= message.name
 		self.open 		= message.properties.open
 		self.locked 	= message.properties.locked
-		self.roomid 	= message.properties.roomid
-		self.roomtags 	= message.properties.roomtags
-		-- pprint( self.name .. ": " .. tostring( self.open ) )
 
+		if self.open then 
+			sprite.play_flipbook( "#sprite", "opened" )
+		else
+			sprite.play_flipbook( "#sprite", "closed" )
+		end
+		
 	elseif message_id == MSG_READY_TO_INTERACT then
 		readyToInteract( self, message, sender )
 		

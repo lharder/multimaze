@@ -1,5 +1,7 @@
 local Set = require( "deflibs.set" )
+local Roomtype = require( "level.playground.roommanager.roomtype" )
 local Room = require( "level.playground.roommanager.room" )
+local Serializable = require( "nexus.serializable" )
 
 
 local Roommanager = {}
@@ -13,34 +15,46 @@ local function sortBy( list, key )
 end
 
 
+local function newRoom( self, ... )
+	local id = #self.rooms + 1
+	local roomtype = self:selectType( ... )
+	local room = Room.new( roomtype, id )
+	table.insert( self.rooms, room )
+
+	return room
+end
+
+
+---------------------------------
 function Roommanager.new()
 	local this = {}
 	setmetatable( this, Roommanager )
 
 	-- room definitions: may show up in several instances each!
-	this.rooms = {}
-	this.rooms[ "start" ] 		= Room.new( require( "assets.tiles.room001" ), "start" ) 
-	this.rooms[ "dungeon01" ] 	= Room.new( require( "assets.tiles.room002" ), "dungeon", "medium" ) 
-	this.rooms[ "dungeon02" ] 	= Room.new( require( "assets.tiles.room003" ), "dungeon", "small" ) 
+	this.roomtypes = {}
+	this.roomtypes[ "start" ] 		= Roomtype.new( require( "assets.tiles.room001" ), "start", "2doors" ) 
+	this.roomtypes[ "dungeon01" ] 	= Roomtype.new( require( "assets.tiles.room002" ), "dungeon", "2doors", "medium" ) 
+	this.roomtypes[ "dungeon02" ] 	= Roomtype.new( require( "assets.tiles.room003" ), "dungeon", "2doors", "small" ) 
 
 	-- add room keys as ids
-	for key, room in pairs( this.rooms ) do 
-		room.key = key
+	for key, roomtype in pairs( this.roomtypes ) do 
+		roomtype.key = key
 	end
 	
 	-- rooms as randomly selected and defined for a specific game
-	this.constellation = {}
+	this.rooms = {}
 	
 	return this
 end
 
 
-function Roommanager.select( self, ... )
+-- select a room type that fits the given tags
+function Roommanager.selectType( self, ... )
 	-- select a room with the given tags
 	local hits = {}
-	for id, room in pairs( self.rooms ) do 
-		if room:isMatch( ... ) then 
-			table.insert( hits, room )
+	for id, roomtype in pairs( self.roomtypes ) do 
+		if roomtype:isMatch( ... ) then 
+			table.insert( hits, roomtype )
 		end
 	end
 	if #hits == 0 then return hits end
@@ -60,31 +74,95 @@ function Roommanager.select( self, ... )
 
 	-- ...select one randomly
 	local selected = math.random( 1, cnt )
-	local room = hits[ selected ]
-	room.used = room.used + 1
+	local roomtype = hits[ selected ]
+	roomtype.used = roomtype.used + 1
 	
-	return room
+	return roomtype
 end
 
 
--- returns an instance of a room in a specific game constellation
--- Every room as created in Tiled has a unique "key" (analog of the 
--- "class" of a room). There can be multiple instances of such a room 
--- in a constellation for a specific game with random combination of 
--- rooms. Roommanager:get( id ) returns the instance with a given id
+function Roommanager:setup()
+	local roomA = newRoom( self, "start" )
+	local roomB = newRoom( self, "dungeon" )
+	local roomC = newRoom( self, "dungeon" )
+
+	roomA:connect( roomB )
+	roomA:connect( roomC )
+
+	roomB:connect( roomC )
+end
+
+
+-- Returns an instance of a room in a specific game constellation
+-- Every room as created in Tiled has a roomtype. There can be multiple 
+-- instances of each roomtype in a constellation for a specific game 
+-- with a random combination of rooms. Roommanager:get( id ) returns 
+-- the instance with a given id
 function Roommanager:get( id )
-	return self.constellation[ id ]
+	return self.rooms[ id ]
 end 
 
 
 function Roommanager:put( id, room )
-	self.constellation[ id ] = room
+	self.rooms[ id ] = room
 end 
 
 
-function Roommanager:room( key )
-	return self.rooms[ key ]
+function Roommanager:setCurrent( id )
+	self.current = self:get( id )
 end 
+
+
+function Roommanager:getCurrent()
+	return self.current
+end 
+
+
+function Roommanager:roomtype( key )
+	return self.roomtypes[ key ]
+end 
+
+
+function Roommanager:serialize()
+	local rooms = Serializable.new()
+	for id, room in pairs( self.rooms ) do 
+		rooms:putString( "" .. id, room:serialize() )
+	end
+	
+	return rooms:serialize()
+end
+
+
+function Roommanager:deserialize( model )
+	local obj = Serializable.deserialize( model.rooms )
+	local tRooms = obj:toTable() 
+	self.rooms = {}
+
+	-- create rooms
+	local id = 0
+	for iStr, serializedRoom in pairs( tRooms ) do
+		local roominfo = Serializable.deserialize( serializedRoom ):toTable()
+		roominfo.doors = Serializable.deserialize( roominfo.doors ):toTable()
+
+		id = tonumber( iStr )
+		self.rooms[ id ] = Room.new( roominfo.roomtype, roominfo.id )
+		self.rooms[ id ].doors = roominfo.doors
+		self.rooms[ id ].roomtype = self.roomtypes[ roominfo.roomtype ]
+	end
+
+	--[[
+	-- turn door index numbers to real references, now that the rooms exist
+	for id, room in ipairs( self.rooms ) do 
+		for name, door in pairs( room.doors ) do
+			local doorToRoomIndex = room.doors[ name ]
+			room.doors[ name ] = self.rooms[ doorToRoomIndex ]
+		end
+	end
+	--]]
+	
+	return self.rooms
+end
+
 
 
 return Roommanager

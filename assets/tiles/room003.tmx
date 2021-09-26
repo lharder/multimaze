@@ -69,13 +69,11 @@
 </data>
  </layer>
  <objectgroup id="5" name="objects">
-  <object id="1" name="exit" type="door" gid="108" x="576" y="320" width="64" height="64">
+  <object id="1" name="door02" type="door" gid="108" x="576" y="320" width="64" height="64">
    <properties>
     <property name="factory" value="door01factory"/>
     <property name="locked" type="bool" value="false"/>
-    <property name="open" type="bool" value="false"/>
-    <property name="roomid" value="001"/>
-    <property name="roomtags" value="start"/>
+    <property name="open" type="bool" value="true"/>
     <property name="variant" type="int" value="0"/>
    </properties>
   </object>
@@ -83,16 +81,14 @@
    <properties>
     <property name="color" value="blue"/>
     <property name="factory" value="buttonfactory"/>
-    <property name="listeners" value="exit"/>
+    <property name="listeners" value="door01,door02"/>
    </properties>
   </object>
-  <object id="4" name="entry" type="door" gid="108" x="128" y="640" width="64" height="64">
+  <object id="4" name="door01" type="door" gid="108" x="128" y="640" width="64" height="64">
    <properties>
     <property name="factory" value="door01factory"/>
     <property name="locked" type="bool" value="false"/>
-    <property name="open" type="bool" value="false"/>
-    <property name="roomid" value="002"/>
-    <property name="roomtags" value="dungeon"/>
+    <property name="open" type="bool" value="true"/>
     <property name="variant" type="int" value="0"/>
    </properties>
   </object>

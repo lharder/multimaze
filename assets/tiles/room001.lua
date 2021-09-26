@@ -215,30 +215,7 @@ return {
           properties = {
             ["factory"] = "door01factory",
             ["locked"] = false,
-            ["open"] = false,
-            ["roomid"] = "002",
-            ["roomtags"] = "dungeon",
-            ["variant"] = 1
-          }
-        },
-        {
-          id = 4,
-          name = "door03",
-          type = "door",
-          shape = "rectangle",
-          x = 1216,
-          y = 512,
-          width = 64,
-          height = 64,
-          rotation = 0,
-          gid = 58,
-          visible = true,
-          properties = {
-            ["factory"] = "door01factory",
-            ["locked"] = false,
-            ["open"] = false,
-            ["roomid"] = "002",
-            ["roomtags"] = "dungeon,medium",
+            ["open"] = true,
             ["variant"] = 1
           }
         },
@@ -257,9 +234,7 @@ return {
           properties = {
             ["factory"] = "door01factory",
             ["locked"] = false,
-            ["open"] = false,
-            ["roomid"] = "002",
-            ["roomtags"] = "dungeon",
+            ["open"] = true,
             ["variant"] = 1
           }
         },
@@ -296,7 +271,7 @@ return {
           properties = {
             ["color"] = "green",
             ["factory"] = "buttonfactory",
-            ["listeners"] = "door01,door03"
+            ["listeners"] = "door01,door02"
           }
         },
         {

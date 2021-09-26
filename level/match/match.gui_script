@@ -64,7 +64,7 @@ function broadcast( self, callsign )
 				
 				pprint( "All selected players confirmed, let's rock!!!" )
 				local messages = {}
-				messages[ "playground:/level" ] = { roomid = "001",  roomkey = "start" }
+				messages[ "playground:/level" ] = { roomid = 1,  entrypos = vmath.vector3( 320, 128, .5 ) }
 				msg.post( "main:/screenmaster", "load", { level = "/playground", messages = messages } )
 			end )
 		end, 

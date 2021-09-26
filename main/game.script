@@ -14,22 +14,27 @@ PLAYERS = {}
 MAP = {}
 ROOMMANAGER = Roommanager.new()
 
+-------------------------------------
 -- Globally available function: load a new room in the playground.
 -- Unload the entire level to get rid of all objects, stop syncing.
 -- Then reload playground with a new room and recreate all objects.
-function loadRoom( roomid, roomkey )
+function loadRoom( roomid, entrypos )
 	-- stop syncing objects
 	GAME.client.syncObjs = {}
 
 	local messages = {}
-	messages[ "playground:/level" ] = { roomid = roomid, roomkey = roomkey }
+	messages[ "playground:/level" ] = { roomid = roomid, entrypos = entrypos }
 	msg.post( "main:/screenmaster", "load", { level = "/playground", messages = messages } )
 end
--------------------------------------
 
+
+-------------------------------------
 function init( self )
 	lua.randomize()
-
 	msg.post( "main:/screenmaster", "load", { level = "setup" } ) 
 end
+
+
+
+
 
