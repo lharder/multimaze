@@ -144,21 +144,17 @@ function Roommanager:deserialize( model )
 		local roominfo = Serializable.deserialize( serializedRoom ):toTable()
 		roominfo.doors = Serializable.deserialize( roominfo.doors ):toTable()
 
+		local parts
+		for name, doorinfo in pairs( roominfo.doors ) do
+			parts = doorinfo:split( "|" )
+			roominfo.doors[ name ] = { roomid = tonumber( parts[ 1 ] ),  doorname = parts[ 2 ] }
+		end
+		
 		id = tonumber( iStr )
 		self.rooms[ id ] = Room.new( roominfo.roomtype, roominfo.id )
-		self.rooms[ id ].doors = roominfo.doors
+		self.rooms[ id ].doors = roominfo.doors 
 		self.rooms[ id ].roomtype = self.roomtypes[ roominfo.roomtype ]
 	end
-
-	--[[
-	-- turn door index numbers to real references, now that the rooms exist
-	for id, room in ipairs( self.rooms ) do 
-		for name, door in pairs( room.doors ) do
-			local doorToRoomIndex = room.doors[ name ]
-			room.doors[ name ] = self.rooms[ doorToRoomIndex ]
-		end
-	end
-	--]]
 	
 	return self.rooms
 end

@@ -39,14 +39,16 @@ local function animPlayerExit( self, playerId, sender )
 	local url = msg.url( nil, playerId, "sprite" )
 	go.animate( url, "tint", go.PLAYBACK_ONCE_FORWARD, vmath.vector4( 1, 1, 1, 0 ), go.EASING_LINEAR, 1, 0, function() 
 		local room = ROOMMANAGER:getCurrent()
-		local targetRoomId = room.doors[ self.name ]
+		local doorinfo = room.doors[ self.name ]
+		local targetRoomId = doorinfo.roomid
+		local targetDoorName = doorinfo.doorname
 		if targetRoomId == nil then 
-			pprint( "Door without a defined target (" .. room.id .. " / " .. self.name .. ")" )
+			pprint( "Door without a defined target (" .. self.name .. ")" )
 		else
 			-- find position of entry door (its gameobject does not yet exist!)
 			-- a bit clumsy, may need refactoring....
 			local targetRoom = ROOMMANAGER:get( targetRoomId ) 
-			local doorinfo = targetRoom:getObjByName( self.name )
+			local doorinfo = targetRoom:getObjByName( targetDoorName )
 			local yMax = ( targetRoom.roomtype.data.height + 1 ) * targetRoom.roomtype.data.tileheight  
 			loadRoom( targetRoomId, vmath.vector3( doorinfo.x, yMax - doorinfo.y, .5 ) )
 		end
@@ -124,6 +126,9 @@ function on_message( self, message_id, message, sender )
 		self.open 		= message.properties.open
 		self.locked 	= message.properties.locked
 
+		local doorinfo = ROOMMANAGER:getCurrent().doors[ self.name ]
+		label.set_text( "#caption" , "Room " .. doorinfo.roomid )
+		
 		if self.open then 
 			sprite.play_flipbook( "#sprite", "opened" )
 		else

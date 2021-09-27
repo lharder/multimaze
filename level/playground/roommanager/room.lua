@@ -33,10 +33,10 @@ function Room:connect( other )
 	if other.roomtype.maxDoors <= #other.doors then return false end
 
 	local selfDoorName = selectFreeDoorName( self )
-	self.doors[ selfDoorName ] = other.id 
-
 	local otherDoorName = selectFreeDoorName( other )
-	other.doors[ otherDoorName ] = self.id 
+
+	self.doors[ selfDoorName ] = { roomid = other.id,  doorname = otherDoorName } 
+	other.doors[ otherDoorName ] = { roomid = self.id,  doorname = selfDoorName }
 
 	return true
 end
@@ -48,8 +48,8 @@ function Room:serialize()
 	ser:putString( "roomtype", self.roomtype.key )
 
 	local doors = Serializable.new()
-	for key, roomId in pairs( self.doors ) do
-		doors:putNumber( key, roomId )
+	for key, doorinfo in pairs( self.doors ) do
+		doors:putString( key, doorinfo.roomid .. "|" .. doorinfo.doorname )
 	end
 	ser:putString( "doors", doors:serialize() )
 	
@@ -64,5 +64,13 @@ function Room:getObjByName( name )
 	return nil
 end
 
+
+function Room:getObjsByType( type )
+	local objs = {}
+	for i, obj in pairs( self.roomtype.data.layers[ "objects" ].objects ) do
+		if type == obj.type then table.insert( objs, obj ) end
+	end
+	return objs
+end
 
 return Room
