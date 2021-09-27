@@ -66,7 +66,7 @@ embedded_components {
   "pivot: PIVOT_CENTER\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   "line_break: false\n"
-  "text: \"caption\"\n"
+  "text: \"\"\n"
   "font: \"/defgui/assets/neuropol.font\"\n"
   "material: \"/builtins/fonts/label.material\"\n"
   ""

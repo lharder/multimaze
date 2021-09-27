@@ -35,7 +35,8 @@ local function animPlayerExit( self, playerId, sender )
 		local evt = Events.newObjectInteract( gid, gidPlayerId )
 		GAME.client:sendToOtherClients( evt )
 	end
-	
+
+	label.set_text( msg.url( nil, playerId, "caption" ), "" )
 	local url = msg.url( nil, playerId, "sprite" )
 	go.animate( url, "tint", go.PLAYBACK_ONCE_FORWARD, vmath.vector4( 1, 1, 1, 0 ), go.EASING_LINEAR, 1, 0, function() 
 		local room = ROOMMANAGER:getCurrent()
@@ -46,11 +47,9 @@ local function animPlayerExit( self, playerId, sender )
 			pprint( "Door without a defined target (" .. self.name .. ")" )
 		else
 			-- find position of entry door (its gameobject does not yet exist!)
-			-- a bit clumsy, may need refactoring....
 			local targetRoom = ROOMMANAGER:get( targetRoomId ) 
 			local doorinfo = targetRoom:getObjByName( targetDoorName )
-			local yMax = ( targetRoom.roomtype.data.height + 1 ) * targetRoom.roomtype.data.tileheight  
-			loadRoom( targetRoomId, vmath.vector3( doorinfo.x, yMax - doorinfo.y, .5 ) )
+			loadRoom( targetRoomId, vmath.vector3( doorinfo.x + 32, doorinfo.y + 40, .5 ) )
 		end
 	end )
 	go.animate( url, "scale", go.PLAYBACK_ONCE_FORWARD, .3, go.EASING_LINEAR, 1 )

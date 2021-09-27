@@ -129,7 +129,6 @@ function Tilemap:setup()
 	local tile
 	local obj 
 	local tiles = self.map.tilesets[ 1 ]
-	local yMax = self.map.height * self.map.tileheight
 	
 	for _, layer in pairs( self.map.layers ) do
 		
@@ -151,7 +150,7 @@ function Tilemap:setup()
 					-- pprint( obj.name .. ", " .. facUrl )
 					local cid = self:createObject( facUrl, vmath.vector3( 
 						obj.x + 32, 
-						yMax - obj.y + 32,
+						obj.y + 32,
 						0.3 
 					), obj )
 				end
@@ -193,8 +192,8 @@ function Tilemap:createObject( url, pos, obj )
 	self.objsByName[ name ] = id
 	msg.post( id, MSG_SET_PROPS, obj )
 
-	local yMax = self.map.height * self.map.tileheight
-	local gridLeft, gridBottom = self:pixToGrid( obj.x, yMax - obj.y )
+	--local yMax = self.map.height * self.map.tileheight
+	local gridLeft, gridBottom = self:pixToGrid( obj.x, obj.y )
 	local gridRight = gridLeft + lua.round( obj.width / self.map.tilewidth ) - 1
 	local gridTop = gridBottom - lua.round( obj.height / self.map.tileheight ) + 1
 	for y = math.min( gridBottom, gridTop ), math.max( gridBottom, gridTop ), 1 do

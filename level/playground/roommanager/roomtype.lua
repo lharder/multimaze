@@ -13,10 +13,15 @@ local function setup( roomtype )
 	end
 	roomtype.data.layers = layers
 
-	-- count doors
+	-- prepare objects for better access
 	roomtype.maxDoors = 0
 	roomtype.doorNames = {}
+	local yMax = roomtype.data.height * roomtype.data.tileheight  
 	for name, obj in pairs( layers[ "objects" ].objects ) do
+		-- calculate proper coordinates (inverted y-axis in Tiled)
+		obj.y = yMax - obj.y
+		
+		-- count doors
 		if obj.type == "door" then 
 			roomtype.maxDoors = roomtype.maxDoors + 1 
 			table.insert( roomtype.doorNames, obj.name )

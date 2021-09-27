@@ -22,8 +22,17 @@ local function createPlayer( attrs )
 		speed = attrs.speed,  
 		isLocalHero = attrs.isLocalHero 
 	}, 1.2 )
-	label.set_text( msg.url( nil, id, "caption" ), attrs.name )
-
+	
+	-- animate entering through door
+	local spr = msg.url( nil, id, "sprite" )
+	go.set( spr, "scale", vmath.vector3( .3, .3, .3 ) )
+	go.set( spr, "tint", vmath.vector4( 1, 1, 1, 0 ) )
+	go.animate( spr, "scale", go.PLAYBACK_ONCE_FORWARD, 1, go.EASING_LINEAR, 1 )
+	go.animate( spr, "tint", go.PLAYBACK_ONCE_FORWARD, vmath.vector4( 1, 1, 1, 1 ), go.EASING_LINEAR, 1, 0 ) 
+	go.animate( id, "position.x", go.PLAYBACK_ONCE_FORWARD, attrs.pos.x - 16, go.EASING_LINEAR, 1, 0, function() 
+		label.set_text( msg.url( nil, id, "caption" ), attrs.name )
+	end ) 
+		
 	GAME.client.registry:set( attrs.gid, id )
 	
 	if attrs.isLocalHero then 
