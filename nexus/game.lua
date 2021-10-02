@@ -58,11 +58,12 @@ Game.MSG_EXEC_CMD 	= hash( "execCmd" )
 local Match = {}
 Match.__index = Match
 
-function Match.new( ... )
+function Match.new( game, ... )
 	local this = {}
 	setmetatable( this, Match )
 
-	-- self.game: gets injected from the outside
+	-- reference to the game
+	this.game = game 
 	
 	-- list of callsigns containing my desired game peers
 	this.proposal = {...} 
@@ -187,8 +188,8 @@ function Game:newMatch( ... )
 	end
 	
 	-- a list of desired players including the player himself
-	self.match = Match.new( ... )
-	self.match.game = self
+	self.match = Match.new( self, ... )
+	-- self.match.game = self
 	
 	return self.match
 end

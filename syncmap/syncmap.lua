@@ -67,7 +67,8 @@ function Syncmap:put( gid, key, value )
 	end
 
 	-- use gid as namespace for key / values
-	env:putString( "namespace", gid )
+	-- this is a meta value, s. Envelope:toTable()
+	env:putString( "_meta_namespace", gid )
 	
 	-- self.client:sendToOtherClients( env )
 	self.client:send( "192.168.178.24", env, GAME.CLIENT_PORT )

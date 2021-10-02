@@ -5,11 +5,10 @@ function on_message( self, message_id, message, sender )
 	-- receive and react to commands from server/clients
 	if message_id == GAME.MSG_EXEC_CMD then
 		if message.meta.type == self.eventId then
-			local gid = "" .. message.attrs.namespace
-			message.attrs.namespace = nil
+			local gid = message.meta.namespace
 			for k, v in pairs( message.attrs ) do
 				STATE:put( gid, k, v )
-				-- pprint( STATE:get( gid, k ) )
+				pprint( STATE:get( gid, k ) )
 			end
 		end
 	end
