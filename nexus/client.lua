@@ -2,7 +2,7 @@ require( "deflibs.defold" )
 
 local udp = require "defnet.udp"
 local Envelope = require( "nexus.envelope" )
-local Syncset = require( "nexus.syncset" )
+local Syncpack = require( "nexus.syncpack" )
 local Registry = require( "nexus.registry" )
 local Syncmap = require( "nexus.syncmap" )
 
@@ -43,7 +43,7 @@ function Client.new( game )
 	-- server for auto sync gameobject states
 	this.syncer = udp.create( function( data, ip, port )
 		-- nexus sync events for gameobjects
-		local evt = Syncset.deserialize( data )
+		local evt = Syncpack.deserialize( data )
 
 		gid = evt:getGlobalId()
 		if gid then 
@@ -76,8 +76,7 @@ function Client.new( game )
 		local evt = Envelope.deserialize( data )
 
 		-- internal nexus system envelopes 
-		-- have their type < 0 (by definition)
-		if evt:getType() < 0 then 
+		if evt:isInternal() then 
 			-- currently, only one internal type: sync state variables.
 			-- gid is used as namespace for key/value pairs
 			local gid = evt:getUrl()
@@ -87,7 +86,7 @@ function Client.new( game )
 			end
 			
 		else
-			-- custom game logic events with type >= 0
+			-- custom game logic events 
 			local url = evt:getUrl()
 			-- if no absolute url is available, it must be a global id: 
 			-- replace globalId with local url
@@ -164,23 +163,23 @@ function Client:update()
 			for i, syncinfo in ipairs( self.syncObjs ) do
 				local cid = self.registry:getClientId( syncinfo.gid )
 				if cid then
-					local syncset = Syncset.new( syncinfo.gid )
-					syncset:setPosition( go.get_position( cid ) )
-					syncset:setRotation( go.get_rotation( cid ) )
+					local syncpack = Syncpack.new( syncinfo.gid )
+					syncpack:setPosition( go.get_position( cid ) )
+					syncpack:setRotation( go.get_rotation( cid ) )
 
 					-- try to avoid custom properties! Cost performance.
 					-- But if necessary, include keys, types and values...
 					if syncinfo.hasCustomProps then 
 						for _, kt in ipairs( syncinfo.custKeyTypes ) do 
-							syncset:put( kt.key, kt.type, go.get( msg.url( nil, cid, "script" ), kt.key ) )
+							syncpack:put( kt.key, kt.type, go.get( msg.url( nil, cid, "script" ), kt.key ) )
 						end
 					end
 
-					-- send syncset to all clients
+					-- send syncpack to all clients
 					for i, callsign in pairs( self.game.match.proposal ) do
 						local host = self.game.hosts:get( callsign )
 						if host.ip ~= self.game.meHost.ip then 
-							self.srv.send( syncset:serialize(), host.ip, self.game.SYNC_PORT ) 
+							self.srv.send( syncpack:serialize(), host.ip, self.game.SYNC_PORT ) 
 						end
 					end
 				else
