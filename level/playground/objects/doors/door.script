@@ -51,6 +51,8 @@ local function animPlayerExit( self, playerId, sender )
 			local namespaceId = targetRoom.id .. "/" .. targetDoorName
 			GAME.client.state:put( namespaceId, "open", true )
 			GAME.client.state:put( namespaceId, "locked", false )
+
+			-- transfer to remote room
 			loadRoom( targetRoomId, vmath.vector3( doorinfo.x + 32, doorinfo.y + 40, .5 ) )
 		end
 	end )
