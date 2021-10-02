@@ -1,10 +1,11 @@
 require( "deflibs.defold" )
 
-local Roommanager = require( "level.playground.roommanager.roommanager" )
-
 local lua = require( "deflibs.lualib" )
+local Roommanager = require( "level.playground.roommanager.roommanager" )
+local Registry = require( "nexus.registry" )
 local Game = require( "nexus.game" )
 local Host = require( "nexus.host" )
+
 
 -- global ---------------------------
 GAME = Game.new( "MultiMaze" )
@@ -21,6 +22,7 @@ ROOMMANAGER = Roommanager.new()
 function loadRoom( roomid, entrypos )
 	-- stop syncing objects
 	GAME.client.syncObjs = {}
+	GAME.client.registry = Registry.new()
 
 	local messages = {}
 	messages[ "playground:/level" ] = { roomid = roomid, entrypos = entrypos }
@@ -33,7 +35,6 @@ function init( self )
 	lua.randomize()
 	msg.post( "main:/screenmaster", "load", { level = "setup" } ) 
 end
-
 
 
 

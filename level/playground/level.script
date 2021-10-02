@@ -1,6 +1,5 @@
 local Roommanager = require( "level.playground.roommanager.roommanager" )
 local Events = require( "level.playground.events" )
-local Server = require( "nexus.server" )
 local lua = require( "deflibs.lualib" )
 local vctrl = require( "in.onscreen" )
 local Tilemap = require( "level.playground.tilemap.tilemap" )
@@ -93,14 +92,14 @@ local function setupPlayers( self, room )
 					callsign, self.entrypos, speed, callsign, true 
 				)
 				local host = GAME.hosts:get( callsign )
-				GAME.server:send( host.ip, evtLocalHero )
+				GAME.client:send( host.ip, evtLocalHero )
 
 				-- for all other hosts, this hero is only a drone to 
 				-- be controlled by somebody somewhere else
 				local evtRemoteHero = Events.newCreatePlayer( 
 					callsign, vmath.vector3( pos.x, pos.y, pos.z ), speed, callsign, false 
 				)
-				GAME.server:sendToClientsExcept( host.ip, evtRemoteHero )
+				GAME.client:sendToClientsExcept( host.ip, evtRemoteHero )
 			end
 		end )
 	end
@@ -145,6 +144,27 @@ end
 
 
 function init( self )
+	local Syncmap = require( "syncmap.syncmap" ) 
+	local Serializable = require( "nexus.serializable" )
+	STATE = Syncmap.new( "playground:/syncmap", GAME.client, 999 )
+	
+	STATE:put( "mytest", "foo", vmath.vector3( 2, 3, 4 ) )
+	
+	local tmpA = Serializable.new()
+	tmpA:putString( "abc", "nested" )
+	
+	local tmpB = Serializable.new()
+	tmpB:putSerializable( "def", tmpA )
+
+	local tmpC = Serializable.new()
+	tmpC:putSerializable( "xyz", tmpB )
+	
+	STATE:put( "mytest", "bar", tmpC )
+	STATE:put( "mytest", "baz", vmath.quat( 1, 2, 3, 4 ) )
+	STATE:put( "mytest", "xxx", true )
+	-------
+
+	
 	createVirtualCtrl()
 end
 
@@ -160,7 +180,7 @@ function on_message( self, message_id, message, sender )
 		if GAME:isServer() and #ROOMMANAGER.rooms == 0 then 
 			ROOMMANAGER:setup()
 			local rooms = ROOMMANAGER:serialize()
-			GAME.server:sendToClients( Events.newRoomConfig( "playground:/level", rooms ) )
+			GAME.client:sendToClients( Events.newRoomConfig( "playground:/level", rooms ) )
 		end	
 		-- load the specified room, but allow for 
 		-- initialization of roommanager on all clients
@@ -178,9 +198,6 @@ end
 
 
 function update( self, dt )
-	if GAME:isServer() then 
-		GAME.server:update( dt )
-	end
 	if GAME.client then 
 		GAME.client:update( dt )
 	end

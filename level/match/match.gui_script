@@ -115,7 +115,6 @@ function on_message( self, message_id, message, sender )
 
 			-- in case no network available: add local player
 			local port = GAME.CLIENT_PORT
-			if GAME:isServer() then port = Game.SERVER_PORT end
 			local host = Host.new( GAME.getLocalhostIP(), port, message.callsign )
 			GAME:addHost( host )
 			display( self )
