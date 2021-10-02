@@ -144,12 +144,9 @@ end
 
 
 function init( self )
-	local Syncmap = require( "syncmap.syncmap" ) 
 	local Serializable = require( "nexus.serializable" )
-	STATE = Syncmap.new( "playground:/syncmap", GAME.client, 999 )
-
 	if GAME:isServer() then 
-		STATE:put( "mytest", "foo", vmath.vector3( 2, 3, 4 ) )
+		GAME.client.state:put( "mytest", "foo", vmath.vector3( 2, 3, 4 ) )
 		
 		local tmpA = Serializable.new()
 		tmpA:putString( "abc", "nested" )
@@ -160,9 +157,9 @@ function init( self )
 		local tmpC = Serializable.new()
 		tmpC:putSerializable( "xyz", tmpB )
 		
-		STATE:put( "mytest", "bar", tmpC )
-		STATE:put( "mytest", "baz", vmath.quat( 1, 2, 3, 4 ) )
-		STATE:put( "mytest", "xxx", true )
+		GAME.client.state:put( "mytest", "bar", tmpC )
+		GAME.client.state:put( "mytest", "baz", vmath.quat( 1, 2, 3, 4 ) )
+		GAME.client.state:put( "mytest", "xxx", true )
 	end
 	-------
 

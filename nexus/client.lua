@@ -4,6 +4,7 @@ local udp = require "defnet.udp"
 local Envelope = require( "nexus.envelope" )
 local Syncset = require( "nexus.syncset" )
 local Registry = require( "nexus.registry" )
+local Syncmap = require( "nexus.syncmap" )
 
 local EVENT_TYPE_SYNC = -1
 local MSG_EXEC_CMD 	= hash( "execCmd" )
@@ -37,7 +38,7 @@ function Client.new( game )
 	this.nextSendTime = socket.gettime()
 	this.syncObjs = {}
 	this.registry = Registry.new()
-	this.indexOfTypes = {}
+	this.state = Syncmap.new( this )
 
 	-- server for auto sync gameobject states
 	this.syncer = udp.create( function( data, ip, port )
@@ -74,15 +75,28 @@ function Client.new( game )
 	this.srv = udp.create( function( data, ip, port )
 		local evt = Envelope.deserialize( data )
 
-		-- custom game events
-		local url = evt:getUrl()
-		-- if no absolute url is available, it must be a global id: 
-		-- replace globalId with local url
-		if url:find( ":/", 1, true ) == nil then 
-			evt:setUrl( msg.url( nil, game.client.registry:getClientId( url ), nil ) )
-		end
+		-- internal nexus system envelopes 
+		-- have their type < 0 (by definition)
+		if evt:getType() < 0 then 
+			-- currently, only one internal type: sync state variables.
+			-- gid is used as namespace for key/value pairs
+			local gid = evt:getUrl()
+			for k, v in pairs( evt:toTable().attrs ) do
+				this.state:put( gid, k, v )
+				pprint( this.state:get( gid, k ) )
+			end
+			
+		else
+			-- custom game logic events with type >= 0
+			local url = evt:getUrl()
+			-- if no absolute url is available, it must be a global id: 
+			-- replace globalId with local url
+			if url:find( ":/", 1, true ) == nil then 
+				evt:setUrl( msg.url( nil, game.client.registry:getClientId( url ), nil ) )
+			end
 
-		msg.post( evt:getUrl(), game.MSG_EXEC_CMD, evt:toTable() )
+			msg.post( evt:getUrl(), game.MSG_EXEC_CMD, evt:toTable() )
+		end
 	end, game.CLIENT_PORT )
 
 	return this
@@ -182,7 +196,6 @@ function Client:update()
 			-- pprint( "Client " .. self.game.meHost.ip .. " sending:  " .. Event.getName( evt ) .. " to " .. evt:getIP() .. ":" .. evt:getPort() )
 			self.srv.send( evt:serialize(), evt:getIP(), evt:getPort() )
 			self.queue = {}
-			self.indexOfTypes = {}
 		end
 	end
 end

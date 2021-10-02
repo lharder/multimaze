@@ -4,25 +4,19 @@ local Envelope = require( "nexus.envelope" )
 local Syncmap = {}
 Syncmap.__index = Syncmap
 
+-- MUST be negative to signify an internal nexus event
+local EVENT_VAR_CHANGE = -999
+
 
 -- Syncs key/values for game entities on all clients:
 -- Global map synced among all hosts automatically.
--- id		: local id of a gameobject handling incoming syncmap changes
--- client	: a nexus communication client
--- eventId	: id of the type of envelope that gets sent when a value changes
-function Syncmap.new( url, client, eventId )
+function Syncmap.new( client )
 	local this = {}
 	setmetatable( this, Syncmap )
 
-	this.url = url
 	this.client = client
-	this.eventId = eventId
-
 	this.gids = {}
 
-	-- set event ID when a change of state occurrs
-	go.set( msg.url( url .. "#script" ), "eventId", eventId )
-	
 	return this
 end
 
@@ -37,18 +31,18 @@ function Syncmap:put( gid, key, value )
 	-- no change in value: no more action required. 
 	-- Prevent endless loop!
 	if self.gids[ gid ][ key ] == value then return end
-	
+
 	self.gids[ gid ][ key ] = value 
-	
-	local env = Envelope.new( self.eventId, self.url )
+
+	local env = Envelope.new( EVENT_VAR_CHANGE, gid )
 	local tv = type( value )
 
 	if tv == "string" then 
 		env:putString( key, value )
-		
+
 	elseif tv == "number" then 
 		env:putNumber( key, value )
-		
+
 	elseif tv == "userdata" then 
 		local udata = tostring( value )
 		if udata:indexOf( "quat" ) > -1 then 
@@ -58,20 +52,16 @@ function Syncmap:put( gid, key, value )
 		elseif udata:indexOf( "boolean" ) > -1 then 
 			env:putBool( key, value )
 		end
-		
+
 	elseif tv == "table" then 	
 		env:putSerializable( key, value )
-	
+
 	elseif tv == "boolean" then 
 		env:putBool( key, value ) 
 	end
 
-	-- use gid as namespace for key / values
-	-- this is a meta value, s. Envelope:toTable()
-	env:putString( "_meta_namespace", gid )
-	
 	self.client:sendToOtherClients( env )
-	-- self.client:send( "192.168.178.24", env, GAME.CLIENT_PORT )
+	-- self.client:send( "192.168.178.24", env )
 end
 
 
