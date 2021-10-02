@@ -290,7 +290,7 @@ return {
             ["factory"] = "safefactory",
             ["item"] = 0,
             ["locked"] = true,
-            ["variant"] = 1
+            ["variant"] = 0
           }
         },
         {

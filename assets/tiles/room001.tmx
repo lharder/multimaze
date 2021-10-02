@@ -136,7 +136,7 @@
     <property name="factory" value="safefactory"/>
     <property name="item" type="int" value="0"/>
     <property name="locked" type="bool" value="true"/>
-    <property name="variant" type="int" value="1"/>
+    <property name="variant" type="int" value="0"/>
    </properties>
   </object>
   <object id="25" name="term01" type="terminal" gid="26" x="704" y="1152" width="64" height="64">
