@@ -147,43 +147,43 @@
   </object>
   <object id="31" name="crate01" type="crate" gid="76" x="192" y="640" width="64" height="64">
    <properties>
+    <property name="blocking" type="bool" value="true"/>
     <property name="factory" value="cratefactory"/>
-    <property name="open" type="bool" value="false"/>
     <property name="variant" type="int" value="1"/>
    </properties>
   </object>
   <object id="32" name="crate02" type="crate" gid="76" x="256" y="576" width="64" height="64">
    <properties>
+    <property name="blocking" type="bool" value="true"/>
     <property name="factory" value="cratefactory"/>
-    <property name="open" type="bool" value="false"/>
     <property name="variant" type="int" value="1"/>
    </properties>
   </object>
   <object id="33" name="crate03" type="crate" gid="76" x="192" y="576" width="64" height="64">
    <properties>
+    <property name="blocking" type="bool" value="true"/>
     <property name="factory" value="cratefactory"/>
-    <property name="open" type="bool" value="false"/>
     <property name="variant" type="int" value="1"/>
    </properties>
   </object>
   <object id="34" name="crate04" type="crate" gid="76" x="128" y="576" width="64" height="64">
    <properties>
+    <property name="blocking" type="bool" value="true"/>
     <property name="factory" value="cratefactory"/>
-    <property name="open" type="bool" value="false"/>
     <property name="variant" type="int" value="1"/>
    </properties>
   </object>
   <object id="35" name="crate05" type="crate" gid="76" x="128" y="512" width="64" height="64">
    <properties>
+    <property name="blocking" type="bool" value="true"/>
     <property name="factory" value="cratefactory"/>
-    <property name="open" type="bool" value="false"/>
     <property name="variant" type="int" value="1"/>
    </properties>
   </object>
   <object id="36" name="crate06" type="crate" gid="76" x="192" y="512" width="64" height="64">
    <properties>
+    <property name="blocking" type="bool" value="true"/>
     <property name="factory" value="cratefactory"/>
-    <property name="open" type="bool" value="false"/>
     <property name="variant" type="int" value="1"/>
    </properties>
   </object>
@@ -220,18 +220,6 @@
     <property name="factory" value="neonfactory"/>
     <property name="variant" type="int" value="9"/>
    </properties>
-  </object>
-  <object id="48" name="player01" type="spawnpoint" x="96" y="1184">
-   <properties>
-    <property name="factory" value="localherofactory"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="49" name="player02" type="spawnpoint" x="160" y="1184">
-   <properties>
-    <property name="factory" value="remoteherofactory"/>
-   </properties>
-   <point/>
   </object>
  </objectgroup>
 </map>

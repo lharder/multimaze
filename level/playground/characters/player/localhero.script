@@ -32,9 +32,10 @@ local CMD_OPTION_RIGHT = hash( "key_ralt" )
 
 
 local function shoot( self )
-	local speed = 500
+	local speed = 600
+	local range = 600
 	local pos = go.get_position() + self.angle * 30
-	local maxPos = pos + ( self.angle * speed )
+	local maxPos = pos + ( vmath.normalize( self.angle ) * range )
 	local cid = factory.create( "/factories#locallaserfactory", pos, nil, { 
 		speed = speed,  angle = self.angle,  maxPos = maxPos 
 	}, .5 )

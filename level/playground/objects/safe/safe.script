@@ -22,8 +22,10 @@ end
 
 
 local function removeChallenge( self )
-	go.delete( self.challengeObj )
-	self.challengeObj = nil
+	if self.challengeObj ~= nil then 
+		go.delete( self.challengeObj )
+		self.challengeObj = nil
+	end
 end
 
 

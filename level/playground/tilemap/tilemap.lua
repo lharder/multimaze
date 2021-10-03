@@ -48,8 +48,8 @@ end
 
 
 function Tilemap:pixToGrid( xPix, yPix )
-	xPix = xPix + 32 -- self.map.tilewidth / 2
-	yPix = yPix + 32 -- self.map.tileheight / 2
+	xPix = xPix + self.map.tilewidth / 2
+	yPix = yPix + self.map.tileheight / 2
 	local xGrid = lua.round( xPix / self.map.tilewidth )
 	local yGrid = self.map.height - lua.round( yPix / self.map.tileheight ) 
 	
@@ -104,21 +104,13 @@ function Tilemap:isPassable( xPix, yPix )
 	if self:getTileValue( xPix, yPix ) > 0 then return false end
 	
 	-- check if a blocking object is in the way?
-	-- Currently, objects never block passage!
-	--[[
-	if isOk then 
-		local xGrid, yGrid = self:pixToGrid( xPix, yPix )
-		local id = self.objsByPos[ xGrid .. "-" .. yGrid ]
-		if id ~= nil then
-			-- there is an object, not passable by default
-			isOk = false
-
-			-- possibly the object is "open"?
-			local open = goGetProperty( msg.url( nil, id, "script" ), "open" )
-			if open ~= nil then isOk = open end
-		end
+	local xGrid, yGrid = self:pixToGrid( xPix, yPix )
+	local id = self.objsByPos[ xGrid .. "-" .. yGrid ]
+	if id ~= nil then
+		-- there is an object, passable by default
+		local blocking = goGetProperty( msg.url( nil, id, "script" ), "blocking" )
+		if blocking ~= nil then return not blocking end
 	end
-	--]]
 	
 	return true
 end

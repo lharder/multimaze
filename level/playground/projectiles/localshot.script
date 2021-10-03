@@ -48,8 +48,8 @@ function update( self, dt )
 	self.pos = go.get_position() + self.velocity
 	go.set_position( self.pos )
 
-	if 	lua.approximates( self.pos.x, self.maxPos.x, 5 ) and
-		lua.approximates( self.pos.y, self.maxPos.y, 5 ) then 
+	if lua.approximates( self.pos.x, self.maxPos.x, 5 ) and
+	   lua.approximates( self.pos.y, self.maxPos.y, 5 ) then 
 		explode( self )
 	end
 end

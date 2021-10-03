@@ -1,0 +1,5 @@
+go.property( "blocking", true )
+
+
+function init( self )
+end

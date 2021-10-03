@@ -323,8 +323,8 @@ return {
           gid = 76,
           visible = true,
           properties = {
+            ["blocking"] = true,
             ["factory"] = "cratefactory",
-            ["open"] = false,
             ["variant"] = 1
           }
         },
@@ -341,8 +341,8 @@ return {
           gid = 76,
           visible = true,
           properties = {
+            ["blocking"] = true,
             ["factory"] = "cratefactory",
-            ["open"] = false,
             ["variant"] = 1
           }
         },
@@ -359,8 +359,8 @@ return {
           gid = 76,
           visible = true,
           properties = {
+            ["blocking"] = true,
             ["factory"] = "cratefactory",
-            ["open"] = false,
             ["variant"] = 1
           }
         },
@@ -377,8 +377,8 @@ return {
           gid = 76,
           visible = true,
           properties = {
+            ["blocking"] = true,
             ["factory"] = "cratefactory",
-            ["open"] = false,
             ["variant"] = 1
           }
         },
@@ -395,8 +395,8 @@ return {
           gid = 76,
           visible = true,
           properties = {
+            ["blocking"] = true,
             ["factory"] = "cratefactory",
-            ["open"] = false,
             ["variant"] = 1
           }
         },
@@ -413,8 +413,8 @@ return {
           gid = 76,
           visible = true,
           properties = {
+            ["blocking"] = true,
             ["factory"] = "cratefactory",
-            ["open"] = false,
             ["variant"] = 1
           }
         },
@@ -515,36 +515,6 @@ return {
           properties = {
             ["factory"] = "neonfactory",
             ["variant"] = 9
-          }
-        },
-        {
-          id = 48,
-          name = "player01",
-          type = "spawnpoint",
-          shape = "point",
-          x = 96,
-          y = 1184,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["factory"] = "localherofactory"
-          }
-        },
-        {
-          id = 49,
-          name = "player02",
-          type = "spawnpoint",
-          shape = "point",
-          x = 160,
-          y = 1184,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["factory"] = "remoteherofactory"
           }
         }
       }
