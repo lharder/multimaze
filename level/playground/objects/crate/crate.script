@@ -10,6 +10,14 @@ local GROUP_OBSTACLES = hash( "obstacle" )
 
 
 local function explode( self )
+	self.exploding = true
+	local exploID = factory.create( "/factories#smokefactory", go.get_position(), nil, nil, 2 )
+	GAME.client.registry:remove( go.get_id() )
+	go.delete()
+end
+
+
+local function destroy( self )
 	local gid = GAME.client.registry:getGlobalId( go.get_id() )
 	-- possibly another instance of the shot on one of the remote
 	-- hosts has already exploded and removed the gid
@@ -18,10 +26,7 @@ local function explode( self )
 		GAME.client:sendToOtherClients( evt )
 	end
 
-	self.exploding = true
-	local exploID = factory.create( "/factories#smokefactory", go.get_position(), nil, nil, 2 )
-	GAME.client.registry:remove( go.get_id() )
-	go.delete()
+	explode( self )
 end
 
 
@@ -35,11 +40,13 @@ local function isFree( self, vDir )
 	local pos = go.get_position()
 	local other = pos + vDir
 	local res = physics.raycast( pos, other, { GROUP_OBSTACLES } )
+	--[[
 	if res == nil then 
 		drawLine( pos, other, vmath.vector4( 0, 1, 0, 1 ) ) 
 	else
 		drawLine( pos, other, vmath.vector4( 1, 0, 0, 1 ) ) 
 	end
+	--]]
 	return res == nil, res
 end
 
@@ -59,9 +66,23 @@ local function isFreeRight( self )
 end
 
 
+local function parse( self, message )
+	if message.meta.type == Events.DELETE_OBJECT then
+		-- do not "destroy()": 
+		-- prevent rebroadcasting of event
+		explode( self )
+	end
+end
+
+
+
 --------
 function init( self )
 	self.correction = vmath.vector3()
+
+	self.pos = go.get_position()
+	self.pos.z = .6
+	go.set_position( self.pos )
 end
 
 
@@ -79,13 +100,14 @@ end
 
 
 function on_message(self, message_id, message, sender)
-	
 	if message_id == COLLISION_RESPONSE then
 		if message.other_group == GROUP_SHOTS then
-			explode( self )
-
-		elseif message.other_group == GROUP_OBSTACLES then
-			-- go.set_position( self.oldPos )
+			destroy( self )
 		end
+
+	elseif message_id == GAME.MSG_EXEC_CMD then
+		parse( self, message )
+		
 	end
 end
+

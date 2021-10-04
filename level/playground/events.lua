@@ -8,7 +8,6 @@ Events.OBJECT_READY_TO_INTERACT = 3
 Events.OBJECT_INTERACT 			= 4
 Events.CREATE_SHOT				= 5
 Events.DELETE_OBJECT			= 6
--- Events.SELECT_ROOM				= 7
 Events.DOOR_SET_ROOM			= 7
 Events.NEW_ROOM_CONFIG			= 8
 
