@@ -1,5 +1,91 @@
+require( "deflibs.defold" )
+
 go.property( "blocking", true )
 
+local Events = require( "level.playground.events" )
 
+local COLLISION_RESPONSE = hash( "collision_response" ) 
+local GROUP_SHOTS = hash( "shot" )
+local GROUP_OBSTACLES = hash( "obstacle" )
+
+
+local function explode( self )
+	local gid = GAME.client.registry:getGlobalId( go.get_id() )
+	-- possibly another instance of the shot on one of the remote
+	-- hosts has already exploded and removed the gid
+	if gid ~= nil then 
+		local evt = Events.newDeleteObject( gid )
+		GAME.client:sendToOtherClients( evt )
+	end
+
+	self.exploding = true
+	local exploID = factory.create( "/factories#smokefactory", go.get_position(), nil, nil, 2 )
+	GAME.client.registry:remove( go.get_id() )
+	go.delete()
+end
+
+
+local function drawLine( from, to, color )
+	if color == nil then color = vmath.vector4(1,0,0,1) end
+	msg.post("@render:", "draw_line", { start_point = from, end_point = to, color = color })
+end
+
+
+local function isFree( self, vDir )
+	local pos = go.get_position()
+	local other = pos + vDir
+	local res = physics.raycast( pos, other, { GROUP_OBSTACLES } )
+	if res == nil then 
+		drawLine( pos, other, vmath.vector4( 0, 1, 0, 1 ) ) 
+	else
+		drawLine( pos, other, vmath.vector4( 1, 0, 0, 1 ) ) 
+	end
+	return res == nil, res
+end
+
+local function isFreeBelow( self )
+	local pos = go.get_position()
+	return isFree( self, vmath.vector3( 0, -32, 0 ) )
+end
+
+local function isFreeLeft( self )
+	local pos = go.get_position()
+	return isFree( self, vmath.vector3( -32, 0, 0 ) )
+end
+
+local function isFreeRight( self )
+	local pos = go.get_position()
+	return isFree( self, vmath.vector3( 32, 0, 0 ) )
+end
+
+
+--------
 function init( self )
+	self.correction = vmath.vector3()
+end
+
+
+function update( self, dt )	
+	self.pos = go.get_position()
+	self.correction = vmath.vector3()
+
+	if MAP:isPassable( self.pos.x, self.pos.y - 32 ) then 
+		if isFreeBelow( self ) then 
+			self.pos.y = self.pos.y - 150 * dt
+			go.set_position( self.pos )
+		end
+	end
+end
+
+
+function on_message(self, message_id, message, sender)
+	
+	if message_id == COLLISION_RESPONSE then
+		if message.other_group == GROUP_SHOTS then
+			explode( self )
+
+		elseif message.other_group == GROUP_OBSTACLES then
+			-- go.set_position( self.oldPos )
+		end
+	end
 end

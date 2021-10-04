@@ -1,0 +1,12 @@
+image: "/assets/tiles/jumpruntiles01.png"
+tile_width: 64
+tile_height: 64
+tile_margin: 0
+tile_spacing: 0
+collision: ""
+material_tag: "tile"
+collision_groups: "default"
+collision_groups: "wall"
+extrude_borders: 2
+inner_padding: 0
+sprite_trim_mode: SPRITE_TRIM_MODE_OFF

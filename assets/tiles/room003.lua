@@ -9,7 +9,7 @@ return {
   tilewidth = 64,
   tileheight = 64,
   nextlayerid = 6,
-  nextobjectid = 8,
+  nextobjectid = 10,
   properties = {},
   tilesets = {
     {
@@ -225,33 +225,39 @@ return {
           }
         },
         {
-          id = 6,
-          name = "player01",
-          type = "spawnpoint",
-          shape = "point",
-          x = 96,
-          y = 608,
-          width = 0,
-          height = 0,
+          id = 8,
+          name = "crate01",
+          type = "crate",
+          shape = "rectangle",
+          x = 256,
+          y = 192,
+          width = 64,
+          height = 64,
           rotation = 0,
+          gid = 76,
           visible = true,
           properties = {
-            ["factory"] = "localherofactory"
+            ["blocking"] = true,
+            ["factory"] = "cratefactory",
+            ["variant"] = 1
           }
         },
         {
-          id = 7,
-          name = "player02",
-          type = "spawnpoint",
-          shape = "point",
-          x = 224,
-          y = 608,
-          width = 0,
-          height = 0,
+          id = 9,
+          name = "crate02",
+          type = "crate",
+          shape = "rectangle",
+          x = 256,
+          y = 576,
+          width = 64,
+          height = 64,
           rotation = 0,
+          gid = 76,
           visible = true,
           properties = {
-            ["factory"] = "remoteherofactory"
+            ["blocking"] = true,
+            ["factory"] = "cratefactory",
+            ["variant"] = 1
           }
         }
       }

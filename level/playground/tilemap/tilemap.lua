@@ -104,6 +104,7 @@ function Tilemap:isPassable( xPix, yPix )
 	if self:getTileValue( xPix, yPix ) > 0 then return false end
 	
 	-- check if a blocking object is in the way?
+	--[[
 	local xGrid, yGrid = self:pixToGrid( xPix, yPix )
 	local id = self.objsByPos[ xGrid .. "-" .. yGrid ]
 	if id ~= nil then
@@ -111,6 +112,7 @@ function Tilemap:isPassable( xPix, yPix )
 		local blocking = goGetProperty( msg.url( nil, id, "script" ), "blocking" )
 		if blocking ~= nil then return not blocking end
 	end
+	--]]
 	
 	return true
 end

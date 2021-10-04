@@ -1,10 +1,11 @@
 local lua = require( "deflibs.lualib" )
+local Events = require( "level.playground.events" )
 
 go.property( "speed", 100 )
 go.property( "maxPos", vmath.vector3() )
 go.property( "angle", vmath.vector3() )
 
-local Events = require( "level.playground.events" )
+local MSG_COLLISION = hash( "collision_response" ) 
 
 
 local function explode( self )
@@ -58,6 +59,10 @@ end
 function on_message( self, message_id, message, sender )
 	if message_id == GAME.MSG_EXEC_CMD then 
 		parse( self, message )
+
+	elseif message_id == MSG_COLLISION then
+		explode( self )
+		
 	end
 end
 

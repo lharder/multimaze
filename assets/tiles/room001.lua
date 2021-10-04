@@ -9,7 +9,7 @@ return {
   tilewidth = 64,
   tileheight = 64,
   nextlayerid = 6,
-  nextobjectid = 50,
+  nextobjectid = 54,
   properties = {},
   tilesets = {
     {
@@ -515,6 +515,61 @@ return {
           properties = {
             ["factory"] = "neonfactory",
             ["variant"] = 9
+          }
+        },
+        {
+          id = 51,
+          name = "crate07",
+          type = "crate",
+          shape = "rectangle",
+          x = 512,
+          y = 1216,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          gid = 76,
+          visible = true,
+          properties = {
+            ["blocking"] = true,
+            ["factory"] = "cratefactory",
+            ["variant"] = 1
+          }
+        },
+        {
+          id = 52,
+          name = "crate08",
+          type = "crate",
+          shape = "rectangle",
+          x = 512,
+          y = 1088,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          gid = 76,
+          visible = true,
+          properties = {
+            ["blocking"] = true,
+            ["factory"] = "cratefactory",
+            ["variant"] = 1
+          }
+        },
+        {
+          id = 53,
+          name = "crate09",
+          type = "crate",
+          shape = "rectangle",
+          x = 512,
+          y = 1024,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          gid = 76,
+          visible = true,
+          properties = {
+            ["blocking"] = true,
+            ["factory"] = "cratefactory",
+            ["reward"] = "",
+            ["variant"] = 1
           }
         }
       }
