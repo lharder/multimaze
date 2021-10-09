@@ -1,0 +1,56 @@
+local Events = require( "level.playground.events" )
+
+go.property( "jumping", false )
+go.property( "turning", false )
+
+
+local MSG_SET_PROPS = hash( "setProps" )
+local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
+
+
+local function collect()
+	local pos = go.get_position()
+	local toPos = vmath.vector3( pos.x - 500, pos.y + 600, 0.5 )
+	go.animate( ".", "position", go.PLAYBACK_ONCE_FORWARD, toPos, go.EASING_LINEAR, 1, 0, function()
+		local gid = GAME.client.registry:getGlobalId( go.get_id() )
+		-- possibly another instance of the coin on one of the remote
+		-- hosts has already been collected and removed the gid
+		if gid ~= nil then 
+			local evt = Events.newDeleteObject( gid )
+			GAME.client:sendToOtherClients( evt )
+		end
+
+		GAME.client.registry:remove( go.get_id() )
+		go.delete()
+	end )
+end
+
+
+---------------
+function init( self )
+	if self.jumping then
+		self.pos = go.get_position()
+		local toPos = self.pos.y + 90
+		local url = msg.url( nil, go.get_id(), "sprite" )
+		go.animate( ".", "position.y", go.PLAYBACK_ONCE_FORWARD, toPos, go.EASING_OUTBOUNCE, 1 )
+	end
+
+	if self.turning then
+		sprite.play_flipbook( "#sprite", "turn", function() end )
+	end
+
+	self.collectTime = socket.gettime() + 1
+end
+
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == MSG_SET_PROPS then
+		self.name 			= message.name
+		self.rewardCnt 		= message.rewardCnt
+
+	elseif message_id == MSG_TRIGGER_COLLISION then
+		if socket.gettime() > self.collectTime then collect() end
+		
+	end
+end

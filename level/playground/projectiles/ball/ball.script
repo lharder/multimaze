@@ -1,0 +1,79 @@
+local Events = require( "level.playground.events" )
+
+go.property( "speed", 0 )
+go.property( "dir", vmath.vector3() )
+
+
+local MSG_COLLISION = hash( "collision_response" ) 
+
+
+local function destroyRemotes()
+	local gid = GAME.client.registry:getGlobalId( go.get_id() )
+	-- possibly another instance of the shot on one of the remote
+	-- hosts has already exploded and removed the gid
+	if gid ~= nil then 
+		local evt = Events.newDeleteObject( gid )
+		GAME.client:sendToOtherClients( evt )
+	end
+end
+
+
+local function destroy()
+	local exploID = factory.create( "/factories#smallexplofactory", go.get_position() )
+	GAME.client.registry:remove( go.get_id() )
+	go.delete()
+end
+
+
+local function parse( message )
+	if message.meta.type == Events.DELETE_OBJECT then 
+		destroyRemotes()
+		destroy()
+	end
+end
+
+
+---------------
+function init( self )
+	go.set_scale( .8 )
+
+	self.pos = go.get_position()
+	go.set_position( vmath.vector3( self.pos.x, self.pos.y, .4 ) )
+
+	-- self-destruct after ttl seconds
+	self.ttl = 2
+	self.lifetime = 0
+end
+
+
+function update( self, dt )
+	self.lifetime = self.lifetime + dt
+	if self.lifetime > self.ttl then 
+		destroyRemotes()
+		destroy()
+	end
+		
+	self.pos = go.get_position()
+	self.pos.x = self.pos.x + self.dir.x * self.speed * dt 
+	self.pos.y = self.pos.y + 3 * math.sin( math.rad( self.pos.x ) )
+	go.set_position( self.pos )
+
+	if self.pos.x < -50 or self.pos.y > 1000 then
+		destroyRemotes()
+		destroy()
+	end
+end
+
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == GAME.MSG_EXEC_CMD then 
+		parse( self, message )
+
+	elseif message_id == MSG_COLLISION then
+		destroyRemotes()
+		destroy()
+		
+	end
+end
+

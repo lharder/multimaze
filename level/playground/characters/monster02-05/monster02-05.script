@@ -1,5 +1,7 @@
 local lua = require( "deflibs.lualib" )
 local Registry = require( "nexus.registry" )
+local Events = require( "level.playground.events" )
+
 
 go.property( "dir", vmath.vector3( 1, 0, 0 ) )
 go.property( "speed", 200 )
@@ -7,11 +9,34 @@ go.property( "speed", 200 )
 local MSG_SET_PROPS = hash( "setProps" )
 
 
-local function animate( self )
-	if self.speed > 0 then self.animname = "walk" end
-	if self.hunting then self.animname = "attack" end
-	sprite.play_flipbook( "#sprite", self.animname )
+
+local function shoot( self )
+	self.animating = true
+	sprite.play_flipbook( "#sprite", "attack", function() 
+		local speed = 400
+		local pos = go.get_position() 
+		pos.x = pos.x + self.dir.x * 45
+		pos.y = pos.y + 24
+		local cid = factory.create( "/factories#ballfactory", pos, nil, { 
+			speed = speed,  dir = self.dir 
+		}, .5 )
+
+		-- make id globally available
+		local shotGid = sprintf( "%s-%d", self.gid, math.random( 0, 999999 ) )
+		GAME.client.registry:set( shotGid, cid )
+
+		-- inform other clients
+		local evt = Events.newCreateShot( self.gid, shotGid, self.dir, maxPos )
+		GAME.client:sendToOtherClients( evt )
+
+		sprite.play_flipbook( "#sprite", "reload", function() 
+			sprite.play_flipbook( "#sprite", "walk", function() 
+				self.animating = false
+			end )
+		end )
+	end )
 end
+
 
 
 local function turn( self, xDir )
@@ -22,12 +47,12 @@ end
 
 local function hunt( self, cid )
 	self.hunting = cid
+	self.speed = self.maxspeed
 	if self.pos.x < self.playerPos.y then 
 		turn( self, 1 )
 	else
 		turn( self, -1 )
 	end
-	animate( self )
 end
 
 
@@ -48,12 +73,17 @@ function init( self )
 
 	self.pos = go.get_position()
 	go.set_position( vmath.vector3( self.pos.x, self.pos.y, .4 ) )
-	
+
+	self.maxspeed = self.speed
 	self.pos = go.get_position()
 	self.hunting = nil
+	self.cooldown = 0
 	
 	turn( self, self.dir.x )
-	animate( self )
+
+	-- walk animation may be interrupted any time
+	self.animating = false
+	sprite.play_flipbook( "#sprite", "walk" )
 end
 
 
@@ -69,7 +99,9 @@ function update( self, dt )
 		else
 			self.dir.x = -self.dir.x
 			turn( self, self.dir.x )
-			animate( self )
+			if not self.animating then 
+				sprite.play_flipbook( "#sprite", "walk" ) 
+			end
 		end
 	 
 		-- no target yet - find one :o)
@@ -101,8 +133,9 @@ function update( self, dt )
 		-- follow target that has been identified already
 		self.playerPos = go.get_position( self.playerCid )
 		if lua.approximates( self.pos.x, self.playerPos.x, 30 ) then 
-			self.dir.x = 0
+			self.speed = 0
 		else
+			self.speed = self.maxspeed
 			if self.pos.x < self.playerPos.x then
 				turn( self, 1 )
 			else
@@ -110,10 +143,19 @@ function update( self, dt )
 			end
 		end
 
-		if not ( ( lua.approximates( self.pos.y, self.playerPos.y, 10 ) ) and
+		if not ( ( lua.approximates( self.pos.y, self.playerPos.y, 20 ) ) and
 		   ( MAP:isWalkable( self.pos.x, self.pos.y, self.playerPos.x ) ) ) then
 			hunt( self, nil ) 
 		end
+
+		if self.cooldown <= 0 then
+			self.cooldown = 1.2
+			shoot( self )
+		end
+	end
+
+	if self.cooldown > 0 then 
+		self.cooldown = self.cooldown - dt
 	end
 	
 	-- adjust position

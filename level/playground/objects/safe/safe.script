@@ -38,6 +38,19 @@ local function open( self )
 			self.locked = false
 			sprite.play_flipbook( "#sprite", "opened" )
 			removeChallenge( self )
+
+			-- create a reward: interaction is triggered on all clients alike,
+			-- so every client creates a reward with the same global id:
+			local gid = self.name .. "Reward"
+			local cid = factory.create( "/factories#" .. self.rewardFactory, go.get_position(), nil, { 
+				turning = true,
+				jumping = true
+			})
+			GAME.client.registry:set( gid, cid ) 
+			
+			msg.post( cid, MSG_SET_PROPS, {
+				name = gid
+			})
 		end )
 	end
 end
@@ -63,7 +76,6 @@ end
 
 -- methods --------------------
 function init( self )
-	
 end
 
 
@@ -79,10 +91,12 @@ function on_message( self, message_id, message, sender )
 		end	
 
 	elseif message_id == MSG_SET_PROPS then
-		self.name 	 = message.name
-		self.locked  = message.properties.locked
-		self.variant = message.properties.variant
-		self.item 	 = message.properties.item
+		self.name 	 		= message.name
+		self.locked  		= message.properties.locked
+		self.variant 		= message.properties.variant
+		self.rewardCnt 		= message.properties.rewardCnt
+		self.rewardFactory	= message.properties.rewardFactory
+		
 	end
 end
 

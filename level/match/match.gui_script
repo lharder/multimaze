@@ -90,7 +90,18 @@ function init( self )
 		button = "button/root",  
 		checkbox = "checkbox/root",  
 		label = "label/root",
+		txtfield = "txtfield/root",
 	})
+
+	self.customIP = self.form:addTextField( "customIP", 340, 96, 300, 36, function( guiSelf, field, action_id, action ) 
+		-- need format: xxx.xxx.xxx.xxx (with optional ":<port>")
+		local octets = field.value:split( "." )
+		if #octets == 4 then
+			pprint( "Calling custom IP address " .. field.value )
+			GAME.beacon:setCustomIP( field.value )
+		end
+	end, "" )
+	
 end
 
 

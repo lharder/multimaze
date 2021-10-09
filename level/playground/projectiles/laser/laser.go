@@ -1,6 +1,6 @@
 components {
   id: "script"
-  component: "/level/playground/projectiles/localshot.script"
+  component: "/level/playground/projectiles/laser/laser.script"
   position {
     x: 0.0
     y: 0.0
@@ -16,7 +16,7 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/level/playground/projectiles/laser.atlas\"\n"
+  data: "tile_set: \"/level/playground/projectiles/laser/laser.atlas\"\n"
   "default_animation: \"shot6\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
@@ -44,6 +44,7 @@ embedded_components {
   "group: \"shot\"\n"
   "mask: \"obstacle\"\n"
   "mask: \"enemy\"\n"
+  "mask: \"shot\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"

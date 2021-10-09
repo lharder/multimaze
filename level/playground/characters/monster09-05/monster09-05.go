@@ -1,6 +1,6 @@
 components {
   id: "walkmelee"
-  component: "/level/playground/characters/monster02-05/walkmelee.script"
+  component: "/level/playground/characters/monster02-05/monster02-05.script"
   position {
     x: 0.0
     y: 0.0

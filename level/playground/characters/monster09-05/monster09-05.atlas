@@ -198,6 +198,13 @@ animations {
     image: "/assets/characters/Monster09-05/Throw/Throw_15.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 60
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "reload"
   images {
     image: "/assets/characters/Monster09-05/Throw/Throw_16.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
@@ -294,7 +301,7 @@ animations {
     image: "/assets/characters/Monster09-05/Throw/Throw_39.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 60
   flip_horizontal: 0
   flip_vertical: 0

@@ -2,13 +2,12 @@ local Events = require( "level.playground.events" )
 local lua = require( "deflibs.lualib" )
 local vcontroller = require( "in.onscreen" )
 
-go.property( "dir", vmath.vector3() )
-go.property( "angle", vmath.vector3() )
+go.property( "dir", vmath.vector3( 0, 1, 0 ) )
+go.property( "angle", vmath.vector3( 0, 1, 0 ) )
 go.property( "speed", 0 )
 go.property( "isLocalHero", false )
 
 
-local MSG_COLLISION_RESPONSE = hash( "collision_response" ) 
 local MSG_ON_FIRST_TICK 	= hash( "firsttick" )
 local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
 local MSG_INTERACT 			= hash( "interact" )
@@ -35,7 +34,7 @@ local CMD_OPTION_RIGHT = hash( "key_ralt" )
 
 
 local function drawLine( from, to, color )
-	if color == nil then color = vmath.vector4(1,0,0,1) end
+	if color == nil then color = vmath.vector4( 1, 0, 0, 1 ) end
 	msg.post("@render:", "draw_line", { start_point = from, end_point = to, color = color })
 end
 
@@ -43,13 +42,6 @@ local function isFree( vDir, id )
 	local pos = go.get_position( id )
 	local other = pos + vDir
 	local res = physics.raycast( pos, other, { GROUP_OBSTACLES, GROUP_PLAYERS } )
-	--[[
-	if res == nil then 
-		drawLine( pos, other, vmath.vector4( 0, 1, 0, 1 ) ) 
-	else
-		drawLine( pos, other, vmath.vector4( 1, 0, 0, 1 ) ) 
-	end
-	--]]
 	return res == nil, res
 end
 
@@ -57,13 +49,6 @@ local function isFreeBelow( id )
 	return isFree( vmath.vector3( 0, -40, 0 ), id )
 end
 
-local function isFreeLeft( id )
-	return isFree( vmath.vector3( -40, 0, 0 ), id )
-end
-
-local function isFreeRight( id )
-	return isFree( vmath.vector3( 40, 0, 0 ), id )
-end
 
 
 local function shoot( self )
@@ -353,6 +338,9 @@ function update( self, dt )
 		if MAP:isPassable( p.x - obj.normal.x * 32, p.y ) and isFree( -32 * obj.normal, obj.id ) then 
 			p.x = p.x - obj.normal.x 
 			go.set_position( p, obj.id )
+
+			-- broadcast change of position to obstacle on other clients, as well
+			
 		end
 	end
 

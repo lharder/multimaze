@@ -4,7 +4,7 @@ go.property( "blocking", true )
 
 local Events = require( "level.playground.events" )
 
-local COLLISION_RESPONSE = hash( "collision_response" ) 
+local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
 local GROUP_SHOTS = hash( "shot" )
 local GROUP_OBSTACLES = hash( "obstacle" )
 
@@ -40,29 +40,19 @@ local function isFree( self, vDir )
 	local pos = go.get_position()
 	local other = pos + vDir
 	local res = physics.raycast( pos, other, { GROUP_OBSTACLES } )
-	--[[
+	
 	if res == nil then 
 		drawLine( pos, other, vmath.vector4( 0, 1, 0, 1 ) ) 
 	else
 		drawLine( pos, other, vmath.vector4( 1, 0, 0, 1 ) ) 
 	end
-	--]]
+	
 	return res == nil, res
 end
 
 local function isFreeBelow( self )
 	local pos = go.get_position()
 	return isFree( self, vmath.vector3( 0, -32, 0 ) )
-end
-
-local function isFreeLeft( self )
-	local pos = go.get_position()
-	return isFree( self, vmath.vector3( -32, 0, 0 ) )
-end
-
-local function isFreeRight( self )
-	local pos = go.get_position()
-	return isFree( self, vmath.vector3( 32, 0, 0 ) )
 end
 
 
@@ -100,7 +90,7 @@ end
 
 
 function on_message(self, message_id, message, sender)
-	if message_id == COLLISION_RESPONSE then
+	if message_id == MSG_TRIGGER_COLLISION then
 		if message.other_group == GROUP_SHOTS then
 			destroy( self )
 		end
