@@ -1,3 +1,4 @@
+require( "deflibs.defold" )
 local Events = require( "level.playground.events" )
 
 go.property( "speed", 0 )
@@ -58,6 +59,8 @@ function update( self, dt )
 	self.pos.y = self.pos.y + 3 * math.sin( math.rad( self.pos.x ) )
 	go.set_position( self.pos )
 
+	goRotateBy( 5, ".", dt )
+	
 	if self.pos.x < -50 or self.pos.y > 1000 then
 		destroyRemotes()
 		destroy()

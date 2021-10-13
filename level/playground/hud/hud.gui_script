@@ -1,0 +1,89 @@
+local MSG_MONEY = hash( "money" )
+local MSG_HEAT = hash( "heat" )
+local MSG_HEALTH = hash( "health" )
+local MSG_HEARTS = hash( "hearts" )
+
+local BAR_UNIT = 136 / 100
+local BAR_OFFSET = 12
+
+
+local function pulse( node )
+	local col = gui.get_color( node )
+	if col.w > .7 then col.w = .5 else col.w = .9 end
+	gui.animate( node, gui.PROP_COLOR, col, gui.EASING_LINEAR, 2, 0, function() 
+		pulse( node ) 
+	end )
+end
+
+
+local function setHearts( self, all, active )
+	if all then 
+		for i = 1, 8, 1 do 
+			gui.set_enabled( self.hearts[ i ], i <= all ) 
+		end
+	end 
+	if active then 
+		local alpha
+		for i = 1, 8, 1 do 
+			if i <= active then alpha = 0.8 else alpha = 0.5 end
+			gui.set_color( self.hearts[ i ], vmath.vector4( 1, 1, 1, alpha ) )
+		end
+	end
+end
+
+
+local function setBarValue( node, value )
+	local dim = gui.get_size( node )
+	dim.x = BAR_OFFSET + value * BAR_UNIT 
+	gui.set_size( node, dim )
+end
+
+
+---------
+function init( self )
+	self.money = gui.get_node( "money/text" )
+	self.heat = gui.get_node( "heat/bar" )
+	self.health = gui.get_node( "health/bar" )
+	
+	self.hearts = {}
+	self.hearts[ 1 ] = gui.get_node( "health/heart01" )
+	self.hearts[ 2 ] = gui.get_node( "health/heart02" )
+	self.hearts[ 3 ] = gui.get_node( "health/heart03" )
+	self.hearts[ 4 ] = gui.get_node( "health/heart04" )
+	self.hearts[ 5 ] = gui.get_node( "health/heart05" )
+	self.hearts[ 6 ] = gui.get_node( "health/heart06" )
+	self.hearts[ 7 ] = gui.get_node( "health/heart07" )
+	self.hearts[ 8 ] = gui.get_node( "health/heart08" )
+
+	-- initially, only 3 heart containers are available
+	-- and those are fully active
+	local alpha = 0.8
+	for i = 1, 8, 1 do 
+		gui.set_enabled( self.hearts[ i ], i <= 3 )
+		if i > 3 then alpha = 0.5 end
+		gui.set_color( self.hearts[ i ], vmath.vector4( 1, 1, 1, alpha ) )
+	end
+	
+	-- eye candy
+	pulse( gui.get_node( "money/icon" ) )
+	pulse( gui.get_node( "heat/icon" ) )
+	pulse( gui.get_node( "health/icon" ) )
+end
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == MSG_MONEY then
+		gui.set_text( self.money, message.value )
+		
+	elseif message_id == MSG_HEARTS then
+		setHearts( self, message.all, message.active )
+
+	elseif message_id == MSG_HEAT then
+		setBarValue( self.heat, message.value )
+		
+	elseif message_id == MSG_HEALTH then
+		setBarValue( self.health, message.value )
+		
+	end
+end
+

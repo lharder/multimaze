@@ -10,7 +10,7 @@ local MSG_TRIGGER_COLLISION = hash( "trigger_response" )
 
 local function collect()
 	local pos = go.get_position()
-	local toPos = vmath.vector3( pos.x - 500, pos.y + 600, 0.5 )
+	local toPos = vmath.vector3( pos.x - 300, pos.y + 600, 0.3 )
 	go.animate( ".", "position", go.PLAYBACK_ONCE_FORWARD, toPos, go.EASING_LINEAR, 1, 0, function()
 		local gid = GAME.client.registry:getGlobalId( go.get_id() )
 		-- possibly another instance of the coin on one of the remote

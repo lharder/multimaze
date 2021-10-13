@@ -3,10 +3,10 @@ local Events = require( "level.playground.events" )
 local lua = require( "deflibs.lualib" )
 local vctrl = require( "in.onscreen" )
 local Tilemap = require( "level.playground.tilemap.tilemap" )
+local Hud = require( "level.playground.hud.hud" )
 
 local MSG_ON_FIRST_TICK = hash( "firsttick" )
 local MSG_SCREEN_LOADED = hash( "screenmaster:loaded" ) 
-
 
 
 local function createVirtualCtrl( self ) 
@@ -122,7 +122,6 @@ end
 
 local function createRoomConfig( model )
 	ROOMMANAGER:deserialize( model )
-	
 end
 
 
@@ -144,26 +143,6 @@ end
 
 
 function init( self )
-	local Serializable = require( "nexus.serializable" )
-	if GAME:isServer() then 
-		GAME.client.state:put( "mytest", "foo", vmath.vector3( 2, 3, 4 ) )
-		
-		local tmpA = Serializable.new()
-		tmpA:putString( "abc", "nested" )
-		
-		local tmpB = Serializable.new()
-		tmpB:putSerializable( "def", tmpA )
-
-		local tmpC = Serializable.new()
-		tmpC:putSerializable( "xyz", tmpB )
-		
-		GAME.client.state:put( "mytest", "bar", tmpC )
-		GAME.client.state:put( "mytest", "baz", vmath.quat( 1, 2, 3, 4 ) )
-		GAME.client.state:put( "mytest", "xxx", true )
-	end
-	-------
-
-	
 	createVirtualCtrl()
 end
 

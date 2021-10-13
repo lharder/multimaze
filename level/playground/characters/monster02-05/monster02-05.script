@@ -10,10 +10,13 @@ local MSG_SET_PROPS = hash( "setProps" )
 
 
 
-local function shoot( self )
+local function shoot( self, shotGid )
 	self.animating = true
 	sprite.play_flipbook( "#sprite", "attack", function() 
+		-- make speed 10% faster if created remotely
 		local speed = 400
+		if shotGid then speed = speed * 1,1 end 
+		
 		local pos = go.get_position() 
 		pos.x = pos.x + self.dir.x * 45
 		pos.y = pos.y + 24
@@ -21,14 +24,16 @@ local function shoot( self )
 			speed = speed,  dir = self.dir 
 		}, .5 )
 
-		-- make id globally available
-		local shotGid = sprintf( "%s-%d", self.gid, math.random( 0, 999999 ) )
+		-- make id globally available if it originates on this host
+		if not shotGid then 
+			shotGid = sprintf( "%s-%d", self.gid, math.random( 0, 999999 ) )
+
+			-- inform other clients
+			local evt = Events.newCreateShot( self.gid, shotGid, self.dir, maxPos )
+			GAME.client:sendToOtherClients( evt )
+		end
 		GAME.client.registry:set( shotGid, cid )
-
-		-- inform other clients
-		local evt = Events.newCreateShot( self.gid, shotGid, self.dir, maxPos )
-		GAME.client:sendToOtherClients( evt )
-
+		
 		sprite.play_flipbook( "#sprite", "reload", function() 
 			sprite.play_flipbook( "#sprite", "walk", function() 
 				self.animating = false
@@ -67,29 +72,28 @@ local function setup( self, message )
 end
 
 
--- lifecycle methods ---------------------------
-function init( self )
-	go.set_scale( .5 )
-
-	self.pos = go.get_position()
-	go.set_position( vmath.vector3( self.pos.x, self.pos.y, .4 ) )
-
-	self.maxspeed = self.speed
-	self.pos = go.get_position()
-	self.hunting = nil
-	self.cooldown = 0
-	
-	turn( self, self.dir.x )
-
-	-- walk animation may be interrupted any time
-	self.animating = false
-	sprite.play_flipbook( "#sprite", "walk" )
+local function parse( self, message )
+	if message.meta.type == Events.CREATE_SHOT then 
+		shoot( self, message.attrs.gid )
+	end
 end
 
 
-function update( self, dt ) 
+local function updateDrone( self, dt ) 
+	-- standard animation is "walk". All other animations are hanbdled by "shoot()".
+	-- direction is derived from position after syncing automatically.
+	-- Shooting is triggered by remote command.
+	self.pos = go.get_position()
+	self.dir = self.pos - self.oldPos 
+	self.oldPos = self.pos
+	
+	turn( self, self.dir.x )
+end
+
+
+local function updateServer( self, dt ) 
 	if self.hunting == nil then
-		-- run sideways, turn at obstacle
+		-- patrolling: run sideways, turn at obstacle
 		self.pos = go.get_position()
 		self.side = self.pos.x + ( self.dir.x * 24 ) + ( self.dir.x * self.speed * dt )
 		self.below = self.pos.y - 40
@@ -103,34 +107,33 @@ function update( self, dt )
 				sprite.play_flipbook( "#sprite", "walk" ) 
 			end
 		end
-	 
+
 		-- no target yet - find one :o)
 		for i, gid in pairs( PLAYERS ) do
 			self.playerCid = GAME.client.registry:getClientId( gid ) 
-			
+
 			if self.playerCid ~= nil then 
 				self.playerPos = go.get_position( self.playerCid )	
 
 				if lua.approximates( self.pos.y, self.playerPos.y, 10 ) then
-					if MAP:isWalkable( self.pos.x, self.pos.y, self.playerPos.x ) then
-						hunt( self, self.playerCid ) 
-						
-						-- always attack only one player:
-						-- stop after finding one at proper position
-						break 
-					end
+					hunt( self, self.playerCid ) 
+
+					-- always attack only one player:
+					-- stop after finding one at proper position
+					break 
 				end
 			end
 		end
-		
+
 	else
+		-- hunting a selected target:
 		self.pos = go.get_position()
 		if( MAP:isPassable( self.side, self.pos.y ) and
 		  ( not MAP:isPassable( self.side, self.below ) ) ) then 
 			self.pos.x = self.pos.x + ( self.dir.x * self.speed * dt )
 		end
-		
-		-- follow target that has been identified already
+
+		-- follow target that has been identified before
 		self.playerPos = go.get_position( self.playerCid )
 		if lua.approximates( self.pos.x, self.playerPos.x, 30 ) then 
 			self.speed = 0
@@ -143,29 +146,66 @@ function update( self, dt )
 			end
 		end
 
-		if not ( ( lua.approximates( self.pos.y, self.playerPos.y, 20 ) ) and
-		   ( MAP:isWalkable( self.pos.x, self.pos.y, self.playerPos.x ) ) ) then
+		if not ( lua.approximates( self.pos.y, self.playerPos.y, 20 ) ) then
+			-- player has escaped, stop hunting
 			hunt( self, nil ) 
 		end
 
 		if self.cooldown <= 0 then
+			-- have not been shooting for a while - do
 			self.cooldown = 1.2
 			shoot( self )
 		end
 	end
 
-	if self.cooldown > 0 then 
+	
+	if self.cooldown > 0 then
 		self.cooldown = self.cooldown - dt
 	end
-	
-	-- adjust position
+
 	go.set_position( self.pos )
+end
+	
+
+
+-- lifecycle methods ---------------------------
+function init( self )
+	go.set_scale( .5 )
+
+	self.pos = go.get_position()
+	self.oldPos = go.get_position()
+	go.set_position( vmath.vector3( self.pos.x, self.pos.y, .4 ) )
+
+	self.maxspeed = self.speed
+	self.pos = go.get_position()
+	self.hunting = nil
+	self.cooldown = 0
+	
+	turn( self, self.dir.x )
+
+	-- walk animation may be interrupted any time
+	self.animating = false
+	sprite.play_flipbook( "#sprite", "walk" )
+
+end
+
+
+function update( self, dt ) 
+	if GAME:isServer() then 
+		updateServer( self, dt )
+	else
+		updateDrone( self, dt )
+	end
 end
 
 
 function on_message( self, message_id, message, sender )
 	if message_id == MSG_SET_PROPS then
 		setup( self, message )
+
+	elseif message_id == GAME.MSG_EXEC_CMD then 
+		parse( self, message )
+		
 	end
 end
 

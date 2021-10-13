@@ -40,13 +40,14 @@ local function isFree( self, vDir )
 	local pos = go.get_position()
 	local other = pos + vDir
 	local res = physics.raycast( pos, other, { GROUP_OBSTACLES } )
-	
+
+	--[[
 	if res == nil then 
 		drawLine( pos, other, vmath.vector4( 0, 1, 0, 1 ) ) 
 	else
 		drawLine( pos, other, vmath.vector4( 1, 0, 0, 1 ) ) 
 	end
-	
+	--]]
 	return res == nil, res
 end
 
