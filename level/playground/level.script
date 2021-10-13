@@ -3,7 +3,6 @@ local Events = require( "level.playground.events" )
 local lua = require( "deflibs.lualib" )
 local vctrl = require( "in.onscreen" )
 local Tilemap = require( "level.playground.tilemap.tilemap" )
-local Hud = require( "level.playground.hud.hud" )
 
 local MSG_ON_FIRST_TICK = hash( "firsttick" )
 local MSG_SCREEN_LOADED = hash( "screenmaster:loaded" ) 

@@ -124,7 +124,7 @@ nodes {
 }
 nodes {
   position {
-    x: 28.0
+    x: 84.0
     y: 0.0
     z: 0.0
     w: 1.0
@@ -155,12 +155,12 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "23.657"
+  text: ""
   font: "neuropol"
   id: "money/text"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
+  pivot: PIVOT_E
   outline {
     x: 1.0
     y: 1.0

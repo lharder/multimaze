@@ -2,6 +2,7 @@ local Events = require( "level.playground.events" )
 
 go.property( "jumping", false )
 go.property( "turning", false )
+go.property( "money", 0 )
 
 
 local MSG_SET_PROPS = hash( "setProps" )
@@ -39,7 +40,12 @@ function init( self )
 		sprite.play_flipbook( "#sprite", "turn", function() end )
 	end
 
-	self.collectTime = socket.gettime() + 1
+	-- money can only be collected after it has jumped up
+	-- takes one second, then value is available: state must
+	-- be accessible by localplayer as well!
+	timer.delay( 1, false, function() 
+		self.money = 1 
+	end )
 end
 
 
@@ -50,7 +56,7 @@ function on_message( self, message_id, message, sender )
 		self.rewardCnt 		= message.rewardCnt
 
 	elseif message_id == MSG_TRIGGER_COLLISION then
-		if socket.gettime() > self.collectTime then collect() end
+		if self.money > 0 then collect() end
 		
 	end
 end

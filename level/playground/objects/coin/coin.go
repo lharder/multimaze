@@ -1,5 +1,5 @@
 components {
-  id: "coin"
+  id: "script"
   component: "/level/playground/objects/coin/coin.script"
   position {
     x: 0.0

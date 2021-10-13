@@ -92,11 +92,12 @@ end
 
 
 local function updateServer( self, dt ) 
+	self.pos = go.get_position()
+	self.side = self.pos.x + ( self.dir.x * 24 ) + ( self.dir.x * self.speed * dt )
+	self.below = self.pos.y - 40
+	
 	if self.hunting == nil then
 		-- patrolling: run sideways, turn at obstacle
-		self.pos = go.get_position()
-		self.side = self.pos.x + ( self.dir.x * 24 ) + ( self.dir.x * self.speed * dt )
-		self.below = self.pos.y - 40
 		if( MAP:isPassable( self.side, self.pos.y ) and
 		  ( not MAP:isPassable( self.side, self.below ) ) ) then 
 			self.pos.x = self.pos.x + ( self.dir.x * self.speed * dt )
@@ -127,7 +128,6 @@ local function updateServer( self, dt )
 
 	else
 		-- hunting a selected target:
-		self.pos = go.get_position()
 		if( MAP:isPassable( self.side, self.pos.y ) and
 		  ( not MAP:isPassable( self.side, self.below ) ) ) then 
 			self.pos.x = self.pos.x + ( self.dir.x * self.speed * dt )

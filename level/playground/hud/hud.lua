@@ -11,54 +11,23 @@ function Hud.new( url )
 
 	this.url = url
 	
-	this.props = {}
-	this.props.money = 0
-	this.props.health = 100
-	this.props.hearts = 3
-	this.props.heat = 0
-	
 	return this
 end
 
-
-
 function Hud:setMoney( money )
-	self.props.money = money
 	msg.post( self.url, "money", { value = money } )
 end
 
-function Hud:getMoney()
-	return self.props.money
-end
-
-
 function Hud:setHealth( health )
-	self.props.health = health
 	msg.post( self.url, "health", { value = health } )
 end
 
-function Hud:getHealth()
-	return self.props.health
-end
-
-
 function Hud:setHearts( all, active )
-	self.props.hearts = { all = all, active = active }
-	msg.post( self.url, "hearts", self.props.hearts )
+	msg.post( self.url, "hearts", { all = all, active = active } )
 end
-
-function Hud:getHearts()
-	return self.props.hearts
-end
-
 
 function Hud:setHeat( heat )
-	self.props.heat = heat
 	msg.post( self.url, "heat", { value = heat } )
-end
-
-function Hud:getHeat()
-	return self.props.heat
 end
 
 

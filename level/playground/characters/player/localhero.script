@@ -1,6 +1,9 @@
+require( "deflibs.defold" )
+
 local Events = require( "level.playground.events" )
 local lua = require( "deflibs.lualib" )
 local vcontroller = require( "in.onscreen" )
+local Stats = require( "level.playground.characters.player.stats" )
 
 go.property( "dir", vmath.vector3( 0, 1, 0 ) )
 go.property( "angle", vmath.vector3( 0, 1, 0 ) )
@@ -215,6 +218,8 @@ function init( self )
 	self.xSpeed = 0
 	self.ySpeed = 0
 	self.jumpTicks = 0
+
+	self.stats = Stats.new()
 	
 	-- allow for change of animation only after completion
 	self.animating = false
@@ -372,6 +377,13 @@ function on_message( self, message_id, message, sender )
 				self.interactWith = nil
 				
 			end
+		end
+
+		if( message.other_group == GROUP_TREASURE ) then 
+			local url = msg.url( nil, message.other_id, "script" )
+			local money = goGetProperty( url, "money" )
+			if money and money > 0 then self.stats:addMoney( money ) end
+			
 		end
 		
 	elseif 	( message_id == vcontroller.ANALOG ) or 
