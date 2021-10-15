@@ -67,7 +67,7 @@ local function setup( self, message )
 		-- make globally available and start syncing
 		self.gid = message.name
 		GAME.client.registry:set( self.gid, go.get_id() )
-		GAME:sync( gid ) 
+		GAME:sync( self.gid ) 
 	end
 end
 
@@ -186,7 +186,6 @@ function init( self )
 	-- walk animation may be interrupted any time
 	self.animating = false
 	sprite.play_flipbook( "#sprite", "walk" )
-
 end
 
 
