@@ -4,6 +4,7 @@ local Events = require( "level.playground.events" )
 local lua = require( "deflibs.lualib" )
 local vcontroller = require( "in.onscreen" )
 local Stats = require( "level.playground.characters.player.stats" )
+local Weapon = require( "level.playground.characters.player.weapon" )
 
 go.property( "dir", vmath.vector3( 0, 1, 0 ) )
 go.property( "angle", vmath.vector3( 0, 1, 0 ) )
@@ -55,21 +56,25 @@ end
 
 
 local function shoot( self )
-	local speed = 600
-	local range = 600
-	local pos = go.get_position() + self.angle * 30
-	local maxPos = pos + ( vmath.normalize( self.angle ) * range )
-	local cid = factory.create( "/factories#locallaserfactory", pos, nil, { 
-		speed = speed,  angle = self.angle,  maxPos = maxPos 
-	}, .5 )
+	if self.stats.heat < 100 then
+		self.stats:addHeat( self.weapon.heat ) 
+		
+		local speed = 600
+		local range = 600
+		local pos = go.get_position() + self.angle * 30
+		local maxPos = pos + ( vmath.normalize( self.angle ) * range )
+		local cid = factory.create( "/factories#locallaserfactory", pos, nil, { 
+			speed = speed,  angle = self.angle,  maxPos = maxPos 
+		}, .5 )
 
-	-- make id globally available
-	local shotGid = sprintf( "%s-%d", self.gid, math.random( 0, 999999 ) )
-	GAME.client.registry:set( shotGid, cid )
-	
-	-- inform other clients
-	local evt = Events.newCreateShot( self.gid, shotGid, self.angle, maxPos )
-	GAME.client:sendToOtherClients( evt )
+		-- make id globally available
+		local shotGid = sprintf( "%s-%d", self.gid, math.random( 0, 999999 ) )
+		GAME.client.registry:set( shotGid, cid )
+		
+		-- inform other clients
+		local evt = Events.newCreateShot( self.gid, shotGid, self.angle, maxPos )
+		GAME.client:sendToOtherClients( evt )
+	end
 end
 
 
@@ -220,6 +225,8 @@ function init( self )
 	self.jumpTicks = 0
 
 	self.stats = Stats.new()
+
+	self.weapon = lua.deepcopy( Weapon.PULSE_RIFLE )
 	
 	-- allow for change of animation only after completion
 	self.animating = false
@@ -353,6 +360,10 @@ function update( self, dt )
 	self.pos.y = self.pos.y + self.dir.y * self.ySpeed * dt
 	go.set_position( self.pos ) 
 
+	-- cooldown weapon heat
+	if self.stats.heat > 0 then 
+		self.stats:addHeat( - dt * self.weapon.cool ) 
+	end
 end
 
 

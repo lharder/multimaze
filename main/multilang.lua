@@ -14,6 +14,7 @@ content[ "EN" ][ "Nahkampf" ] = "Melee combat"
 content[ "EN" ][ "Fernkampf" ] = "Ranged combat"
 content[ "EN" ][ "Technologie" ] = "Technology"
 content[ "EN" ][ "Gesundheit" ] = "Health"
+content[ "EN" ][ "Pulsgewehr" ] = "Pulse Rifle"
 
 -- create DE language set from keys of EN
 for key, value in pairs( content[ "EN" ] ) do
@@ -40,7 +41,7 @@ function MultiLang.new()
 	end
 	
 
-	function this:get( key )
+	function this:txt( key )
 		return content[ this.loc ][ key ]
 	end
 

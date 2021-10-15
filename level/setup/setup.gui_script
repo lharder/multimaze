@@ -1,12 +1,10 @@
 local defgui = require( "defgui.defgui" )
 local callsigns = require( "main.callsigns" )
-local R = require( "main.multilang" )
-
 local scale = vmath.vector4( 1.5, 1.5, 1.5, 1.5 )
 
 local function addProperty( frm, name, value, caption, yPos )
 	local field = frm:addLabel( name, 80, yPos, 470, 36, nil, 
-		formatNameValue( R:get( caption ) .. " ", ".", " " .. value, 440, "neuropol" )	
+		formatNameValue( R:txt( caption ) .. " ", ".", " " .. value, 440, "neuropol" )	
 	)
 	field:setScale( scale )
 	return field
@@ -17,7 +15,7 @@ function init( self )
 	msg.post( ".", "acquire_input_focus" )
 	msg.post( "@render:", "use_fixed_fit_projection", { near = -1, far = 1 } )
 
-	gui.set_text( gui.get_node( "title" ), R:get( "Setup" ) )
+	gui.set_text( gui.get_node( "title" ), R:txt( "Setup" ) )
 	
 	self.form = defgui.createForm( "info", { 
 		button = "button/root", 
@@ -25,7 +23,7 @@ function init( self )
 		label = "label/root",
 	})
 
-	self.nCaption = self.form:addLabel( "caption", 80, 450, 180, 40, nil, R:get( "Callsign" ) )
+	self.nCaption = self.form:addLabel( "caption", 80, 450, 180, 40, nil, R:txt( "Callsign" ) )
 	self.nCaption:setScale( scale )
 	
 	local callsign = callsigns[ math.random( 1, #callsigns ) ]
@@ -34,11 +32,11 @@ function init( self )
 		callsign 
 	)
 
-	self.nSpeed = addProperty( self.form, "speed", "70", R:get( "Schnelligkeit" ), 350 )
-	self.nMelee = addProperty( self.form, "melee", "40", R:get( "Nahkampf" ), 290 )
-	self.nRanged = addProperty( self.form, "ranged", "50", R:get( "Fernkampf" ), 230 )
-	self.nTechnology = addProperty( self.form, "technology", "30", R:get( "Technologie" ), 170 )
-	self.nHealth = addProperty( self.form, "health", "80", R:get( "Gesundheit" ), 110 )
+	self.nSpeed = addProperty( self.form, "speed", "70", R:txt( "Schnelligkeit" ), 350 )
+	self.nMelee = addProperty( self.form, "melee", "40", R:txt( "Nahkampf" ), 290 )
+	self.nRanged = addProperty( self.form, "ranged", "50", R:txt( "Fernkampf" ), 230 )
+	self.nTechnology = addProperty( self.form, "technology", "30", R:txt( "Technologie" ), 170 )
+	self.nHealth = addProperty( self.form, "health", "80", R:txt( "Gesundheit" ), 110 )
 	
 	self.nOk = self.form:addButton( "ok", 400, 50, 280, 60, 
 		function() 
@@ -49,7 +47,7 @@ function init( self )
 				level = "match",
 				messages = messages
 			})
-		end, R:get( "Ok" )
+		end, R:txt( "Ok" )
 	)
 	self.nOk:setImage( "gui/buttonGray" )
 

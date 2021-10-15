@@ -33,7 +33,8 @@ end
 
 function Stats:addMoney( delta )
 	if delta == nil then return end
-	self.hud:setMoney( self:getMoney() + delta )
+	self:setMoney( self:getMoney() + delta )
+	return self.money
 end
 
 
@@ -67,6 +68,13 @@ end
 function Stats:getHeat()
 	return self.heat
 end
+
+function Stats:addHeat( delta )
+	if delta == nil then return end
+	self:setHeat( self:getHeat() + delta )
+	return self.heat
+end
+
 
 
 function Stats:updateHud()

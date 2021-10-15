@@ -33,6 +33,7 @@ end
 
 
 local function setBarValue( node, value )
+	if value > 100 then value = 100 end
 	local dim = gui.get_size( node )
 	dim.x = BAR_OFFSET + value * BAR_UNIT 
 	gui.set_size( node, dim )

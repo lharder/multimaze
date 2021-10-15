@@ -8,6 +8,7 @@ local Host = require( "nexus.host" )
 
 
 -- global ---------------------------
+R = require( "main.multilang" )
 GAME = Game.new( "MultiMaze" )
 CAMERA_ID = "/camera"
 PLAYER_ID = ""
