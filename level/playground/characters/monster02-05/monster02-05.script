@@ -27,6 +27,7 @@ local function shoot( self, shotGid )
 		-- make id globally available if it originates on this host
 		if not shotGid then 
 			shotGid = sprintf( "%s-%d", self.gid, math.random( 0, 999999 ) )
+			pprint( "ShotGID: " .. shotGid )
 
 			-- inform other clients
 			local evt = Events.newCreateShot( self.gid, shotGid, self.dir, maxPos )
@@ -64,9 +65,8 @@ end
 local function setup( self, message ) 
 	if GAME:isServer() then
 		-- make globally available and start syncing
-		local gid = message.name
-		local cid = go.get_id()
-		GAME.client.registry:set( gid, cid )
+		self.gid = message.name
+		GAME.client.registry:set( self.gid, go.get_id() )
 		GAME:sync( gid ) 
 	end
 end
