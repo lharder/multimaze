@@ -46,7 +46,6 @@ end
 
 
 local function turn( self, xDir )
-	if xDir > 0 then pprint( "turning right" ) else pprint( "turning left" ) end
 	sprite.set_hflip( "#sprite", xDir > 0 )
 	self.dir.x = xDir
 end

@@ -64,34 +64,23 @@ end
 -- methods ---------------------
 function init( self )
 	self.dir = vmath.vector3()
-	self.oldPos = go.get_position()
-	
 	self.animating = false
 end
 
 
 function update( self, dt )
 	self.pos = go.get_position()
+	animWalk( self )
 
-	-- movement has occurred from the outside:
-	-- auto sync of gameobject by nexus client
-	if self.pos ~= self.oldPos then
-		-- positiopn has changed, calculate direction 
-		-- and speed of movement for proper animation 
-		self.dir = self.pos - self.oldPos 
-		animWalk( self )
-		self.oldPos = self.pos
-
-		-- push a movable object obstacle away 
-		-- (behave just like a localplayer next to an obstacle)
-		local freeSide, obj = isFree( self.dir * 18 )
-		if not freeSide then
-			local p = go.get_position( obj.id )	
-			-- but only if there is no additional obstacle beyond!
-			if MAP:isPassable( p.x - obj.normal.x * 32, p.y ) and isFree( -32 * obj.normal, obj.id ) then 
-				p.x = p.x - obj.normal.x 
-				go.set_position( p, obj.id )
-			end
+	-- push a movable object obstacle away 
+	-- (behave just like a localplayer next to an obstacle)
+	local freeSide, obj = isFree( self.dir * 18 )
+	if not freeSide then
+		local p = go.get_position( obj.id )	
+		-- but only if there is no additional obstacle beyond!
+		if MAP:isPassable( p.x - obj.normal.x * 32, p.y ) and isFree( -32 * obj.normal, obj.id ) then 
+			p.x = p.x - obj.normal.x 
+			go.set_position( p, obj.id )
 		end
 	end
 end
