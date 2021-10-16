@@ -55,10 +55,6 @@ end
 
 
 local function updateDrone( self, dt ) 
-	self.pos = go.get_position()
-	self.dir = self.pos - self.oldPos 
-	self.oldPos = self.pos
-	
 	turn( self, self.dir.x )
 end
 
@@ -132,7 +128,6 @@ function init( self )
 	go.set_scale( .5 )
 
 	self.pos = go.get_position()
-	self.oldPos = go.get_position()
 	go.set_position( vmath.vector3( self.pos.x, self.pos.y, .4 ) )
 
 	self.maxspeed = self.speed
