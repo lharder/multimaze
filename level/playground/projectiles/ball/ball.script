@@ -71,7 +71,7 @@ end
 
 function on_message( self, message_id, message, sender )
 	if message_id == GAME.MSG_EXEC_CMD then 
-		parse( self, message )
+		parse( message )
 
 	elseif message_id == MSG_COLLISION then
 		destroyRemotes()

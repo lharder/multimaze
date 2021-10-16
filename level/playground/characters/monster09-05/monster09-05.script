@@ -10,7 +10,9 @@ local MSG_SET_PROPS = hash( "setProps" )
 
 
 
-local function shoot( self, shotGid )
+local function shoot( self, shotGid, angle )
+	if angle == nil then angle = self.dir
+		
 	self.animating = true
 	sprite.play_flipbook( "#sprite", "attack", function() 
 		-- make speed 10% faster if created remotely
@@ -18,7 +20,7 @@ local function shoot( self, shotGid )
 		if shotGid then speed = speed * 1,1 end 
 		
 		local pos = go.get_position() 
-		pos.x = pos.x + self.dir.x * 45
+		pos.x = pos.x + angle.x * 45
 		pos.y = pos.y + 24
 		local cid = factory.create( "/factories#ballfactory", pos, nil, { 
 			speed = speed,  dir = self.dir 
@@ -74,7 +76,7 @@ end
 
 local function parse( self, message )
 	if message.meta.type == Events.CREATE_SHOT then 
-		shoot( self, message.attrs.gid )
+		shoot( self, message.attrs.gid, message.attrs.angle )
 	end
 end
 
