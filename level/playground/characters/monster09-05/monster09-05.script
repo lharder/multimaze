@@ -84,10 +84,7 @@ local function updateDrone( self, dt )
 	-- direction is derived from position after syncing automatically.
 	-- Shooting is triggered by remote command.
 	self.pos = go.get_position()
-	self.dir = self.pos - self.oldPos 
 	pprint( self.dir )
-	self.oldPos = self.pos
-	
 	turn( self, self.dir.x )
 end
 
@@ -174,7 +171,6 @@ function init( self )
 	go.set_scale( .5 )
 
 	self.pos = go.get_position()
-	self.oldPos = go.get_position()
 	go.set_position( vmath.vector3( self.pos.x, self.pos.y, .4 ) )
 
 	self.maxspeed = self.speed
