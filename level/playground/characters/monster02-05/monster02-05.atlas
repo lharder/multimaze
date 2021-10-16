@@ -28,7 +28,7 @@ animations {
     image: "/assets/characters/monster02-05/monster05_Idle_6.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 10
   flip_horizontal: 0
   flip_vertical: 0
@@ -55,7 +55,7 @@ animations {
     image: "/assets/characters/monster02-05/monster05_Jump_4.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_PINGPONG
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 10
   flip_horizontal: 0
   flip_vertical: 0
@@ -98,7 +98,7 @@ animations {
     image: "/assets/characters/monster02-05/monster05_Attack_8.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 10
   flip_horizontal: 0
   flip_vertical: 0

@@ -9,19 +9,44 @@ go.property( "speed", 200 )
 local MSG_SET_PROPS = hash( "setProps" )
 
 
-local function attack( self )
-	if not self.animating then 
-		self.animating = true
-		sprite.play_flipbook( "#sprite", "attack", function() 
-			-- make speed 10% faster if created remotely
-			self.animating = false
-			sprite.play_flipbook( "#sprite", "walk" ) 
+
+local function shoot( self, shotGid )
+	self.animating = true
+	sprite.play_flipbook( "#sprite", "attack", function() 
+		-- make speed 10% faster if created remotely
+		local speed = 400
+		if shotGid then speed = speed * 1,1 end 
+		
+		local pos = go.get_position() 
+		pos.x = pos.x + self.dir.x * 45
+		pos.y = pos.y + 24
+		local cid = factory.create( "/factories#ballfactory", pos, nil, { 
+			speed = speed,  dir = self.dir 
+		}, .5 )
+
+		-- make id globally available if it originates on this host
+		if not shotGid then 
+			shotGid = sprintf( "%s-%d", self.gid, math.random( 0, 999999 ) )
+			pprint( "ShotGID: " .. shotGid )
+
+			-- inform other clients
+			local evt = Events.newCreateShot( self.gid, shotGid, self.dir, maxPos )
+			GAME.client:sendToOtherClients( evt )
+		end
+		GAME.client.registry:set( shotGid, cid )
+		
+		sprite.play_flipbook( "#sprite", "reload", function() 
+			sprite.play_flipbook( "#sprite", "walk", function() 
+				self.animating = false
+			end )
 		end )
-	end
+	end )
 end
 
 
+
 local function turn( self, xDir )
+	if xDir == 1 then pprint( "turning right" ) else pprint( "turning left" ) end
 	sprite.set_hflip( "#sprite", xDir == 1 )
 	self.dir.x = xDir
 end
@@ -49,14 +74,19 @@ end
 
 
 local function parse( self, message )
-	-- if message.meta.type == Events.CREATE_SHOT then 
-	-- end
+	if message.meta.type == Events.CREATE_SHOT then 
+		shoot( self, message.attrs.gid )
+	end
 end
 
 
 local function updateDrone( self, dt ) 
+	-- standard animation is "walk". All other animations are hanbdled by "shoot()".
+	-- direction is derived from position after syncing automatically.
+	-- Shooting is triggered by remote command.
 	self.pos = go.get_position()
 	self.dir = self.pos - self.oldPos 
+	pprint( self.dir )
 	self.oldPos = self.pos
 	
 	turn( self, self.dir.x )
@@ -76,6 +106,9 @@ local function updateServer( self, dt )
 		else
 			self.dir.x = -self.dir.x
 			turn( self, self.dir.x )
+			if not self.animating then 
+				sprite.play_flipbook( "#sprite", "walk" ) 
+			end
 		end
 
 		-- no target yet - find one :o)
@@ -106,7 +139,6 @@ local function updateServer( self, dt )
 		self.playerPos = go.get_position( self.playerCid )
 		if lua.approximates( self.pos.x, self.playerPos.x, 30 ) then 
 			self.speed = 0
-			attack( self )
 		else
 			self.speed = self.maxspeed
 			if self.pos.x < self.playerPos.x then
@@ -120,6 +152,17 @@ local function updateServer( self, dt )
 			-- player has escaped, stop hunting
 			hunt( self, nil ) 
 		end
+
+		if self.cooldown <= 0 then
+			-- have not been shooting for a while - do
+			self.cooldown = 1.2
+			shoot( self )
+		end
+	end
+
+	
+	if self.cooldown > 0 then
+		self.cooldown = self.cooldown - dt
 	end
 
 	go.set_position( self.pos )
@@ -138,6 +181,7 @@ function init( self )
 	self.maxspeed = self.speed
 	self.pos = go.get_position()
 	self.hunting = nil
+	self.cooldown = 0
 	
 	turn( self, self.dir.x )
 
