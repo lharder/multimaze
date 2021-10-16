@@ -1,6 +1,7 @@
 local Events = require( "level.playground.events" )
 local lua = require( "deflibs.lualib" )
 
+go.property( "dir", vmath.vector3() )
 go.property( "speed", 0 )
 go.property( "isLocalHero", false )
 

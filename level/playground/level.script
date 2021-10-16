@@ -18,7 +18,9 @@ end
 local function createPlayer( attrs )
 	local id = factory.create( attrs.factory, attrs.pos, nil, { 
 		speed = attrs.speed,  
-		isLocalHero = attrs.isLocalHero 
+		isLocalHero = attrs.isLocalHero,
+		dir = vmath.vector3(),
+		angle = vmath.vector3() 
 	}, 1.2 )
 	
 	-- animate entering through door
@@ -56,7 +58,7 @@ local function createPlayer( attrs )
 	return id
 end
 
-
+--[[
 local function createSyncedEntity( attrs )
 	local id = factory.create( attrs.factory, attrs.pos, nil, { 
 		speed = attrs.speed,
@@ -71,7 +73,7 @@ local function createSyncedEntity( attrs )
 
 	return id
 end
-
+--]]
 
 
 local function setupPlayers( self, room )
@@ -129,10 +131,10 @@ end
 local function parse( message )
 	if message.meta.type == Events.CREATE_PLAYER then
 		createPlayer( message.attrs )
-		
+	--[[	
 	elseif message.meta.type == Events.CREATE_SYNCED_ENTITY then
 		createSyncedEntity( message.attrs )
-
+	--]]
 	elseif message.meta.type == Events.NEW_ROOM_CONFIG then
 		createRoomConfig( message.attrs )
 		
