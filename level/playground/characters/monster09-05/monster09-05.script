@@ -11,7 +11,7 @@ local MSG_SET_PROPS = hash( "setProps" )
 
 
 local function shoot( self, shotGid, angle )
-	if angle == nil then angle = self.dir
+	if angle == nil then angle = self.dir end
 		
 	self.animating = true
 	sprite.play_flipbook( "#sprite", "attack", function() 
