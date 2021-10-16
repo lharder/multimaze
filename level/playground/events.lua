@@ -23,6 +23,10 @@ Events.names[ 8 ] = "NEW_ROOM_CONFIG"
 
 
 function Events.newCreatePlayer( gid, pos, speed, name, isLocalHero )
+	if gid == nil or pos == nil or speed == nil or name == nil or isLocalHero == nil then 
+		pprint( "Parameters must not be nil!" )
+		return 
+	end
 	local env = Envelope.new( Events.CREATE_PLAYER, "playground:/level" )
 	if isLocalHero then
 		env:putString( "factory", "playground:/factories#localherofactory" )
@@ -41,6 +45,10 @@ end
 
 
 function Events.newMoveTo( gid, pos )
+	if gid == nil or pos == nil then 
+		pprint( "Parameters must not be nil!" )
+		return 
+	end
 	local env = Envelope.new( Events.MOVE_TO, gid, false )
 	env:putVector3( "pos", pos )
 	return env
@@ -48,6 +56,10 @@ end
 
 
 function Events.newObjectInteract( gid, gidInteractWith )
+	if gid == nil or gidInteractWith == nil then 
+		pprint( "Parameters must not be nil!" )
+		return 
+	end
 	local env = Envelope.new( Events.OBJECT_INTERACT, gid )
 	env:putString( "interactWith", gidInteractWith )
 	return env
@@ -55,6 +67,10 @@ end
 
 
 function Events.newObjectReadyToInteract( gid, gidInteractWith, isReady )
+	if gid == nil or gidInteractWith == nil or isReady == nil then 
+		pprint( "Parameters must not be nil!" )
+		return 
+	end
 	local env = Envelope.new( Events.OBJECT_READY_TO_INTERACT, gid )
 	env:putString( "player", gidInteractWith )
 	env:putBool( "isReady", isReady )
@@ -63,6 +79,10 @@ end
 
 
 function Events.newCreateShot( parentGid, gid, angle, maxPos )
+	if parentGid == nil or gid == nil or angle == nil or maxPos == nil then 
+		pprint( "Parameters must not be nil!" )
+		return 
+	end
 	local env = Envelope.new( Events.CREATE_SHOT, parentGid )
 	env:putString( "factory", "playground:/factories#locallaserfactory" )
 	env:putString( "gid", gid )
@@ -73,6 +93,10 @@ end
 
 
 function Events.newDeleteObject( gid )
+	if gid == nil then 
+		pprint( "Parameters must not be nil!" )
+		return 
+	end
 	local env = Envelope.new( Events.DELETE_OBJECT, gid )
 	env:putString( "gid", gid )
 	return env
@@ -80,6 +104,10 @@ end
 
 
 function Events.newRoomConfig( gid, rooms )
+	if gid == nil or rooms == nil then 
+		pprint( "Parameters must not be nil!" )
+		return 
+	end
 	local env = Envelope.new( Events.NEW_ROOM_CONFIG, "playground:/level" )
 	env:putString( "rooms", rooms )
 	return env
@@ -87,6 +115,10 @@ end
 
 
 function Events.newDoorSetRoom( gid, roomid, roomkey )
+	if gid == nil or roomid == nil or roomkey == nil then 
+		pprint( "Parameters must not be nil!" )
+		return 
+	end
 	local env = Envelope.new( Events.DOOR_SET_ROOM, gid )
 	env:putString( "roomid", roomid )
 	env:putString( "roomkey", roomkey )
