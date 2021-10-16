@@ -30,6 +30,7 @@ local function shoot( self, shotGid )
 			pprint( "ShotGID: " .. shotGid )
 
 			-- inform other clients
+			local maxPos = pos + ( vmath.normalize( self.dir ) * 600 )
 			local evt = Events.newCreateShot( self.gid, shotGid, self.dir, maxPos )
 			GAME.client:sendToOtherClients( evt )
 		end
