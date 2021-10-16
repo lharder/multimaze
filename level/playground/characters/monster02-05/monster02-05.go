@@ -1,5 +1,5 @@
 components {
-  id: "monster05"
+  id: "script"
   component: "/level/playground/characters/monster02-05/monster02-05.script"
   position {
     x: 0.0
