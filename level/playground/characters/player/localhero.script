@@ -390,9 +390,6 @@ function on_message( self, message_id, message, sender )
 			local money = goGetProperty( url, "money" )
 			if money and money > 0 then 
 				self.stats:addMoney( money ) 
-				-- prevent collecting value more than once. 
-				-- Timing issue before coin gets deleted!
-				goSetProperty( url, "money", 0 )
 			end
 			
 		end

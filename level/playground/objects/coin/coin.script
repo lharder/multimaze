@@ -9,7 +9,12 @@ local MSG_SET_PROPS = hash( "setProps" )
 local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
 
 
-local function collect()
+local function collect( self )
+	-- Allow to collect only once! 
+	-- Timing issue with multiple collision.
+	self.money = 0
+
+	-- Remove this coin
 	local pos = go.get_position()
 	local toPos = vmath.vector3( pos.x - 300, pos.y + 600, 0.3 )
 	go.animate( ".", "position", go.PLAYBACK_ONCE_FORWARD, toPos, go.EASING_LINEAR, 1, 0, function()
@@ -56,7 +61,7 @@ function on_message( self, message_id, message, sender )
 		-- self.rewardCnt 	= message.rewardCnt
 
 	elseif message_id == MSG_TRIGGER_COLLISION then
-		if self.money > 0 then collect() end
+		if self.money > 0 then collect( self ) end
 		
 	end
 end
