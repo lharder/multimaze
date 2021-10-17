@@ -17,11 +17,7 @@ local GROUP_PLAYERS = hash( "player" )
 local function animate( self )
 	if not self.animating then
 
-		if self.xSpeed < .1 then
-			if self.dir.x > .3 then self.animname = "standright" end
-			if self.dir.x < -.3 then self.animname = "standleft" end
-
-		else
+		if self.xSpeed > 0 then
 			self.animating = true 
 			if self.dir.x > 0 then self.animname = "walkright" end
 			if self.dir.x < 0 then self.animname = "walkleft" end
@@ -78,6 +74,7 @@ function update( self, dt )
 	if self.pos ~= go.get_position() then
 		-- sync has changed my position: movement
 		self.xSpeed = self.speed
+		self.animating = false
 		pprint("moving")
 	else
 		-- no movement
