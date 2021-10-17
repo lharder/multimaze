@@ -19,16 +19,22 @@ local function animate( self )
 
 		if self.xSpeed > 0 then
 			self.animating = true 
+			
 			if self.dir.x > 0 then 
+				pprint( "walking right, busy" )
 				sprite.play_flipbook( "#sprite", "walkright", function( self, message_id, message, sender ) 
 					self.animating = false
-					sprite.play_flipbook( "#sprite", "standright", function() end )
+					sprite.play_flipbook( "#sprite", "standright" )
+					pprint( "Done walking right, waiting for change" )
 				end )
 			end
+			
 			if self.dir.x < 0 then 
+				pprint( "walking left, busy" )
 				sprite.play_flipbook( "#sprite", "walkleft", function( self, message_id, message, sender ) 
 					self.animating = false
-					sprite.play_flipbook( "#sprite", "standleft", function() end )
+					sprite.play_flipbook( "#sprite", "standleft" )
+					pprint( "Done walking left, waiting for change" )
 				end )
 			end
 		end
@@ -77,8 +83,6 @@ function update( self, dt )
 	if self.pos ~= go.get_position() then
 		-- sync has changed my position: movement
 		self.xSpeed = self.speed
-		-- self.animating = false
-		pprint("moving")
 	else
 		-- no movement
 		self.xSpeed = 0
