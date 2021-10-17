@@ -49,7 +49,7 @@ local function open( self )
 				jumping = true
 			})
 			GAME.client.registry:set( gid, cid ) 
-			pprint( "Created coin: " .. gid .. " / " .. cid )
+			-- pprint( "Created coin: " .. gid .. " / " .. cid )
 			
 			msg.post( cid, MSG_SET_PROPS, {
 				name = gid

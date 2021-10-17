@@ -83,8 +83,13 @@ function update( self, dt )
 		-- sync has changed my position: movement
 		self.xSpeed = self.speed
 	else
-		-- no movement
+		-- no movement via sync: try to interpolate
 		self.xSpeed = 0
+
+		--[[
+		self.pos = self.pos + self.dir * self.speed * dt
+		go.set_position( self.pos ) 
+		--]]
 	end
 	self.pos = go.get_position()
 	animate( self )
