@@ -74,13 +74,24 @@ local function animateAttempt( self, isOk )
 end
 
 
+
+local function parse( self, message )
+	if message.meta.type == Events.OBJECT_INTERACT then
+		if self.challengeObj then animateAttempt( self, true ) end
+	end
+end
+
+
 -- methods --------------------
 function init( self )
 end
 
 
 function on_message( self, message_id, message, sender )
-	if message_id == MSG_INTERACT then
+	if message_id == GAME.MSG_EXEC_CMD then
+		parse( self, message )
+
+	elseif message_id == MSG_INTERACT then
 		if self.challengeObj then animateAttempt( self, true ) end
 
 	elseif message_id == MSG_TRIGGER_COLLISION then
