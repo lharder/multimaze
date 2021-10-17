@@ -23,7 +23,7 @@ local function shoot( self, shotGid, angle )
 		pos.x = pos.x + angle.x * 45
 		pos.y = pos.y + 24
 		local cid = factory.create( "/factories#ballfactory", pos, nil, { 
-			speed = speed,  dir = self.dir 
+			speed = speed,  dir = angle
 		}, .5 )
 
 		-- make id globally available if it originates on this host
@@ -31,8 +31,8 @@ local function shoot( self, shotGid, angle )
 			shotGid = sprintf( "%s-%d", self.gid, math.random( 0, 999999 ) )
 			
 			-- inform other clients
-			local maxPos = pos + ( vmath.normalize( self.dir ) * 600 )
-			local evt = Events.newCreateShot( self.gid, shotGid, self.dir, maxPos )
+			local maxPos = pos + ( vmath.normalize( angle ) * 600 )
+			local evt = Events.newCreateShot( self.gid, shotGid, angle, maxPos )
 			GAME.client:sendToOtherClients( evt )
 		end
 		GAME.client.registry:set( shotGid, cid )
