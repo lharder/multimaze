@@ -19,23 +19,26 @@ local function animate( self )
 
 		if self.xSpeed > 0 then
 			self.animating = true 
-			if self.dir.x > 0 then self.animname = "walkright" end
-			if self.dir.x < 0 then self.animname = "walkleft" end
+			if self.dir.x > 0 then 
+				sprite.play_flipbook( "#sprite", "walkright", function( self, message_id, message, sender ) 
+					self.animating = false
+					sprite.play_flipbook( "#sprite", "standright", function() end )
+				end )
+			end
+			if self.dir.x < 0 then 
+				sprite.play_flipbook( "#sprite", "walkleft", function( self, message_id, message, sender ) 
+					self.animating = false
+					sprite.play_flipbook( "#sprite", "standleft", function() end )
+				end )
+			end
 		end
 
 		-- whether walking or standing: look up and down only 
 		-- when explicitly wanted. Is used as trigger for entering 
 		-- doors, etc. Jumping uses self.dir.y = .9 but we do not 
 		-- want the player to look up/down while jumping!
-		if self.dir.y >  .92 then self.animname = "standup" end
-		if self.dir.y < -.92 then self.animname = "standdown" end
-
-		if self.animname then 
-			sprite.play_flipbook( "#sprite", self.animname, function( self, message_id, message, sender ) 
-				-- pprint( "done " .. message.id )
-				self.animating = false
-			end )
-		end
+		if self.dir.y >  .92 then sprite.play_flipbook( "#sprite", "standup" ) end
+		if self.dir.y < -.92 then sprite.play_flipbook( "#sprite", "standdown" )  end
 	end
 end
 
@@ -74,7 +77,7 @@ function update( self, dt )
 	if self.pos ~= go.get_position() then
 		-- sync has changed my position: movement
 		self.xSpeed = self.speed
-		self.animating = false
+		-- self.animating = false
 		pprint("moving")
 	else
 		-- no movement
