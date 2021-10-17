@@ -37,11 +37,6 @@ local CMD_OPTION_LEFT = hash( "key_lalt" )
 local CMD_OPTION_RIGHT = hash( "key_ralt" )
 
 
-local function drawLine( from, to, color )
-	if color == nil then color = vmath.vector4( 1, 0, 0, 1 ) end
-	msg.post("@render:", "draw_line", { start_point = from, end_point = to, color = color })
-end
-
 local function isFree( vDir, id )
 	local pos = go.get_position( id )
 	local other = pos + vDir
@@ -314,7 +309,7 @@ function update( self, dt )
 		
 		-- currently jumping: important, do not use "1" but ".9"
 		-- self.dir.y > .92 is for explicitly turning up/down,
-		-- e.g. entering entering doors: also see animate()
+		-- e.g. entering doors: also see animate()
 		self.dir.y = .90
 		self.ySpeed = calcYSpeed( self.jumpTicks )
 		self.jumpTicks = self.jumpTicks - 1
