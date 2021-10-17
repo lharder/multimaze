@@ -13,35 +13,33 @@ local GROUP_OBSTACLES = hash( "obstacle" )
 local GROUP_PLAYERS = hash( "player" )
 
 
-local function animWalk( self )
+
+local function animate( self )
 	if not self.animating then
-		self.animating = true
 
-		local name = "walkdown"
-		if self.dir.x > 0 then name = "walkright" end
-		if self.dir.x < 0 then name = "walkleft" end
-		
-		sprite.play_flipbook( "#sprite", name, function( id, tileNo ) 
-			self.animating = false
-		end )
+		if self.xSpeed < .1 then
+			if self.dir.x > .3 then self.animname = "standright" end
+			if self.dir.x < -.3 then self.animname = "standleft" end
 
-	end
-end
+		else
+			self.animating = true 
+			if self.dir.x > 0 then self.animname = "walkright" end
+			if self.dir.x < 0 then self.animname = "walkleft" end
+		end
 
+		-- whether walking or standing: look up and down only 
+		-- when explicitly wanted. Is used as trigger for entering 
+		-- doors, etc. Jumping uses self.dir.y = .9 but we do not 
+		-- want the player to look up/down while jumping!
+		if self.dir.y >  .92 then self.animname = "standup" end
+		if self.dir.y < -.92 then self.animname = "standdown" end
 
-local function animStand( self )
-	if not self.animating then
-		self.animating = true
-		
-		local name = "standdown"
-		if self.dir.y > 0 then name = "standup" end
-		if self.dir.y < 0 then name = "standdown" end
-		if self.dir.x > 0 then name = "standright" end
-		if self.dir.x < 0 then name = "standleft" end
-		
-		sprite.play_flipbook( "#sprite", name, function( id, tileNo ) 
-			self.animating = false
-		end )
+		if self.animname then 
+			sprite.play_flipbook( "#sprite", self.animname, function( self, message_id, message, sender ) 
+				-- pprint( "done " .. message.id )
+				self.animating = false
+			end )
+		end
 	end
 end
 
@@ -77,7 +75,7 @@ end
 
 function update( self, dt )
 	self.pos = go.get_position()
-	animWalk( self )
+	animate( self )
 
 	-- push a movable object obstacle away 
 	-- (behave just like a localplayer next to an obstacle)
