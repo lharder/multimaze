@@ -37,6 +37,8 @@ end
 
 
 local function isFree( self, vDir )
+	if vmath.length( vDir ) == 0 then return true end
+	
 	local pos = go.get_position()
 	local other = pos + vDir
 	local res = physics.raycast( pos, other, { GROUP_OBSTACLES } )
