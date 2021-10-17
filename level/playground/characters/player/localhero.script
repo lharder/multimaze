@@ -388,7 +388,12 @@ function on_message( self, message_id, message, sender )
 		if( message.other_group == GROUP_TREASURE ) then 
 			local url = msg.url( nil, message.other_id, "script" )
 			local money = goGetProperty( url, "money" )
-			if money and money > 0 then self.stats:addMoney( money ) end
+			if money and money > 0 then 
+				self.stats:addMoney( money ) 
+				-- prevent collecting value more than once. 
+				-- Timing issue before coin gets deleted!
+				goSetProperty( url, "money", 0 )
+			end
 			
 		end
 		

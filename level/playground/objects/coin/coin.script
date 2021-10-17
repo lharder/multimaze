@@ -53,7 +53,7 @@ end
 function on_message( self, message_id, message, sender )
 	if message_id == MSG_SET_PROPS then
 		self.name 			= message.name
-		self.rewardCnt 		= message.rewardCnt
+		-- self.rewardCnt 	= message.rewardCnt
 
 	elseif message_id == MSG_TRIGGER_COLLISION then
 		if self.money > 0 then collect() end
