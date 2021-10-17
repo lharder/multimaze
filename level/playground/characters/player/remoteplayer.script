@@ -6,6 +6,13 @@ go.property( "speed", 0 )
 go.property( "isLocalHero", false )
 
 
+local GROUP_BUTTON = hash( "button" )
+local GROUP_TREASURE = hash( "treasure" )
+local GROUP_DOOR = hash( "door" )
+local GROUP_OBSTACLES = hash( "obstacle" )
+local GROUP_PLAYERS = hash( "player" )
+
+
 local function animWalk( self )
 	if not self.animating then
 		self.animating = true
