@@ -78,11 +78,14 @@ function update( self, dt )
 	if self.pos ~= go.get_position() then
 		-- sync has changed my position: movement
 		self.xSpeed = self.speed
+		pprint("moving")
 	else
 		-- no movement
-		self.speed = 0
+		self.xSpeed = 0
+		pprint("standing")
 	end
 	self.pos = go.get_position()
+	animate( self )
 	
 	-- push a movable object obstacle away 
 	-- (behave just like a localplayer next to an obstacle)
@@ -95,8 +98,6 @@ function update( self, dt )
 			go.set_position( p, obj.id )
 		end
 	end
-
-	animate( self )
 end
 
 
