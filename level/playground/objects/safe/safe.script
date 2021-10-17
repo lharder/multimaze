@@ -1,10 +1,12 @@
-local MSG_INTERACT 				= hash( "interact" )
-local MSG_TRIGGER_COLLISION 	= hash( "trigger_response" ) 
-local MSG_SET_PROPS 			= hash( "setProps" )
-
 go.property( "locked", true )
 go.property( "variant", 0 )
 go.property( "item", 0 )
+
+local Events = require( "level.playground.events" )
+
+local MSG_INTERACT 				= hash( "interact" )
+local MSG_TRIGGER_COLLISION 	= hash( "trigger_response" ) 
+local MSG_SET_PROPS 			= hash( "setProps" )
 
 
 -- helpers -------------------
