@@ -44,14 +44,14 @@ end
 
 function Room:serialize()
 	local ser = Serializable.new()
-	ser:putNumber( "id", self.id )
-	ser:putString( "roomtype", self.roomtype.key )
+	ser:put( "id", self.id )
+	ser:put( "roomtype", self.roomtype.key )
 
 	local doors = Serializable.new()
 	for key, doorinfo in pairs( self.doors ) do
-		doors:putString( key, doorinfo.roomid .. "|" .. doorinfo.doorname )
+		doors:put( key, doorinfo.roomid .. "|" .. doorinfo.doorname )
 	end
-	ser:putString( "doors", doors:serialize() )
+	ser:put( "doors", doors:serialize() )
 	
 	return ser:serialize()
 end

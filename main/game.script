@@ -6,6 +6,8 @@ local Registry = require( "nexus.registry" )
 local Game = require( "nexus.game" )
 local Host = require( "nexus.host" )
 
+local Serializable = require( "nexus.serializable" )
+
 
 -- global ---------------------------
 R = require( "main.multilang" )
@@ -34,7 +36,7 @@ end
 -------------------------------------
 function init( self )
 	lua.randomize()
-	msg.post( "main:/screenmaster", "load", { level = "setup" } ) 
+	msg.post( "main:/screenmaster", "load", { level = "setup" } ) 	
 end
 
 

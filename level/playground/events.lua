@@ -29,15 +29,15 @@ function Events.newCreatePlayer( gid, pos, speed, name, isLocalHero )
 	end
 	local env = Envelope.new( Events.CREATE_PLAYER, "playground:/level" )
 	if isLocalHero then
-		env:putString( "factory", "playground:/factories#localherofactory" )
+		env:put( "factory", "playground:/factories#localherofactory" )
 	else
-		env:putString( "factory", "playground:/factories#remoteherofactory" )
+		env:put( "factory", "playground:/factories#remoteherofactory" )
 	end
-	env:putString( "gid", gid )
-	env:putVector3( "pos", pos )
-	env:putString( "name", name )
-	env:putNumber( "speed", speed )
-	env:putBool( "isLocalHero", isLocalHero )
+	env:put( "gid", gid )
+	env:put( "pos", pos )
+	env:put( "name", name )
+	env:put( "speed", speed )
+	env:put( "isLocalHero", isLocalHero )
 
 	return env
 end
@@ -50,7 +50,7 @@ function Events.newMoveTo( gid, pos )
 		return 
 	end
 	local env = Envelope.new( Events.MOVE_TO, gid, false )
-	env:putVector3( "pos", pos )
+	env:put( "pos", pos )
 	return env
 end
 
@@ -61,7 +61,7 @@ function Events.newObjectInteract( gid, gidInteractWith )
 		return 
 	end
 	local env = Envelope.new( Events.OBJECT_INTERACT, gid )
-	env:putString( "interactWith", gidInteractWith )
+	env:put( "interactWith", gidInteractWith )
 	return env
 end
 
@@ -72,8 +72,8 @@ function Events.newObjectReadyToInteract( gid, gidInteractWith, isReady )
 		return 
 	end
 	local env = Envelope.new( Events.OBJECT_READY_TO_INTERACT, gid )
-	env:putString( "player", gidInteractWith )
-	env:putBool( "isReady", isReady )
+	env:put( "player", gidInteractWith )
+	env:put( "isReady", isReady )
 	return env
 end
 
@@ -84,10 +84,10 @@ function Events.newCreateShot( parentGid, gid, angle, maxPos )
 		return 
 	end
 	local env = Envelope.new( Events.CREATE_SHOT, parentGid )
-	env:putString( "factory", "playground:/factories#locallaserfactory" )
-	env:putString( "gid", gid )
-	env:putVector3( "angle", angle )
-	env:putVector3( "maxPos", maxPos )
+	env:put( "factory", "playground:/factories#locallaserfactory" )
+	env:put( "gid", gid )
+	env:put( "angle", angle )
+	env:put( "maxPos", maxPos )
 	return env
 end
 
@@ -98,7 +98,7 @@ function Events.newDeleteObject( gid )
 		return 
 	end
 	local env = Envelope.new( Events.DELETE_OBJECT, gid )
-	env:putString( "gid", gid )
+	env:put( "gid", gid )
 	return env
 end
 
@@ -109,7 +109,7 @@ function Events.newRoomConfig( gid, rooms )
 		return 
 	end
 	local env = Envelope.new( Events.NEW_ROOM_CONFIG, "playground:/level" )
-	env:putString( "rooms", rooms )
+	env:put( "rooms", rooms )
 	return env
 end
 
@@ -120,8 +120,8 @@ function Events.newDoorSetRoom( gid, roomid, roomkey )
 		return 
 	end
 	local env = Envelope.new( Events.DOOR_SET_ROOM, gid )
-	env:putString( "roomid", roomid )
-	env:putString( "roomkey", roomkey )
+	env:put( "roomid", roomid )
+	env:put( "roomkey", roomkey )
 	return env
 end
 

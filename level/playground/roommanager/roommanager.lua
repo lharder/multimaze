@@ -126,7 +126,7 @@ end
 function Roommanager:serialize()
 	local rooms = Serializable.new()
 	for id, room in pairs( self.rooms ) do 
-		rooms:putString( "" .. id, room:serialize() )
+		rooms:put( "" .. id, room:serialize() )
 	end
 	
 	return rooms:serialize()
@@ -134,15 +134,14 @@ end
 
 
 function Roommanager:deserialize( model )
-	local obj = Serializable.deserialize( model.rooms )
-	local tRooms = obj:toTable() 
+	local obj = Serializable.deserialize( model.rooms, true )
 	self.rooms = {}
 
 	-- create rooms
 	local id = 0
-	for iStr, serializedRoom in pairs( tRooms ) do
-		local roominfo = Serializable.deserialize( serializedRoom ):toTable()
-		roominfo.doors = Serializable.deserialize( roominfo.doors ):toTable()
+	for iStr, serializedRoom in pairs( obj ) do
+		local roominfo = Serializable.deserialize( serializedRoom, true )
+		roominfo.doors = Serializable.deserialize( roominfo.doors, true )
 
 		local parts
 		for name, doorinfo in pairs( roominfo.doors ) do
