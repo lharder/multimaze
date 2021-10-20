@@ -68,8 +68,7 @@ local function setupPlayers( self, room )
 			-- one player for each playing host
 			for i, callsign in pairs( GAME.match.proposal ) do
 				local speed = 180
-				local pos = { x = 100,  y = 180,  z = .5 }
-
+				
 				-- create one local hero on every game host / client ------------
 				-- who receives and transmits input from his player to all other hosts 
 				local evtLocalHero = Events.newCreatePlayer( 
@@ -81,7 +80,7 @@ local function setupPlayers( self, room )
 				-- for all other hosts, this hero is only a drone to 
 				-- be controlled by somebody somewhere else
 				local evtRemoteHero = Events.newCreatePlayer( 
-					callsign, vmath.vector3( pos.x, pos.y, pos.z ), speed, callsign, false 
+					callsign, self.entrypos, speed, callsign, false 
 				)
 				GAME.client:sendToClientsExcept( host.ip, evtRemoteHero )
 			end
