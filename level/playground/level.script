@@ -38,8 +38,8 @@ local function createPlayer( attrs )
 	if attrs.isLocalHero then 
 		PLAYER_ID = id
 
-		-- sync this object's pos/rot to all other clients
-		GAME:sync( attrs.gid ) 
+		-- sync this object's pos/rot/dir to all other clients
+		GAME:sync( attrs.gid, {{ key = "dir", segment = "script" }} ) 
 		
 		-- important: user input only from the one per host / right client!
 		msg.post( PLAYER_ID, "acquire_input_focus" ) 
@@ -57,23 +57,6 @@ local function createPlayer( attrs )
 
 	return id
 end
-
---[[
-local function createSyncedEntity( attrs )
-	local id = factory.create( attrs.factory, attrs.pos, nil, { 
-		speed = attrs.speed,
-		dir = attrs.dir,  
-		isLocalHero = attrs.isLocalHero
-	}, .25 )
-	GAME.client.registry:set( attrs.gid, id )
-	
-	if attrs.isLocalHero then 
-		GAME:sync( attrs.gid ) 
-	end
-
-	return id
-end
---]]
 
 
 local function setupPlayers( self, room )

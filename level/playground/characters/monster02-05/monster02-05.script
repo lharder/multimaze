@@ -43,7 +43,7 @@ local function setup( self, message )
 		-- make globally available and start syncing
 		self.gid = message.name
 		GAME.client.registry:set( self.gid, go.get_id() )
-		GAME:sync( self.gid ) 
+		GAME:sync( self.gid, {{ key = "dir", segment = "script" }} ) 
 	end
 end
 
