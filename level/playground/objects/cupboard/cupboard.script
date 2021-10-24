@@ -22,7 +22,8 @@ local function search( self, interactWith )
 		props[ hash( "/searchbar" ) ] = {
 			cupboard = msg.url( nil, go.get_id(), "script" ),
 			searchtime = self.searchtime,
-			interactWith = msg.url( nil, interactWith, "script" ),
+			-- interactWith = msg.url( nil, interactWith, "script" ),
+			interactWith = msg.url( nil, interactWith, nil ),
 			searchtext = msg.url()
 		}
 		pprint( "Cupboard rest searchtime: " .. self.searchtime )
@@ -53,12 +54,24 @@ end
 
 
 local function blink( self )
-	go.animate( "#sprite", "tint", go.PLAYBACK_ONCE_PINGPONG, vmath.vector4( 1, 1, 1, .6 ), go.EASING_LINEAR, 2, 0, function() 
+	go.animate( "#sprite", "tint", go.PLAYBACK_ONCE_PINGPONG, vmath.vector4( 1, 1, 1, .6 ), go.EASING_LINEAR, 1.5, 0, function() 
 		if self.searchtime > 0 then 
 			blink( self )
 		end
 	end )
 end
+
+
+local function setup( self, message )
+	self.name = message.name
+	self.room = ROOMMANAGER:getCurrent()
+	self.searchtime = message.properties.searchtime
+	self.reward = message.properties.reward
+
+	-- set cupboard sprite
+	sprite.play_flipbook( "#sprite", "cupboard0" .. message.properties.type )
+end
+
 
 -----
 function init( self )
@@ -73,9 +86,8 @@ end
 
 function on_message( self, message_id, message, sender )
 	if message_id == MSG_SET_PROPS then
-		self.name = message.name
-		self.room = ROOMMANAGER:getCurrent()
-
+		setup( self, message )
+		
 	elseif message_id == MSG_INTERACT then
 		if not self.searching then 
 			search( self, message.player ) 
@@ -83,7 +95,7 @@ function on_message( self, message_id, message, sender )
 
 	elseif message_id == GAME.MSG_EXEC_CMD then
 		parse( self, message )
-		
+
 	end
 end
 

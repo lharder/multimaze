@@ -23,6 +23,7 @@ local MSG_BTN_JUMP	 		= hash( "jump" )
 local GROUP_BUTTON = hash( "button" )
 local GROUP_TREASURE = hash( "treasure" )
 local GROUP_DOOR = hash( "door" )
+local GROUP_CUPBOARD = hash( "cupboard" )
 local GROUP_OBSTACLES = hash( "obstacle" )
 local GROUP_PLAYERS = hash( "player" )
 
@@ -176,6 +177,13 @@ local function vcontrol( self, action )
 					self.dir.y = action.y
 				end
 			end
+
+			-- search furniture automatically when turning towards them
+			-- i.e. without having to press a button
+			if self.interactAuto and self.interactWith and self.animname == "standup" then 
+				interact( self )
+			end
+			
 		end		
 		animate( self )
 
@@ -376,15 +384,21 @@ function on_message( self, message_id, message, sender )
 	elseif message_id == MSG_TRIGGER_COLLISION then
 		if( message.other_group == GROUP_BUTTON ) or 
 		  ( message.other_group == GROUP_TREASURE ) or
+		  ( message.other_group == GROUP_CUPBOARD ) or
 		  ( message.other_group == GROUP_DOOR ) then
-			if message.enter then
+
+			if message.enter == true then
 				self.interactWith = message.other_id
 				if message.other_group == GROUP_DOOR then readyToInteract( self, true ) end
-			else
+				if message.other_group == GROUP_CUPBOARD then self.interactAuto = true end
+				
+			elseif message.enter == false then
 				if message.other_group == GROUP_DOOR then readyToInteract( self, false ) end
+				if message.other_group == GROUP_CUPBOARD then self.interactAuto = false end
 				self.interactWith = nil
 				
 			end
+			pprint( "interacting with " .. ( self.interactWith or "nobody" ) )
 		end
 
 		if( message.other_group == GROUP_TREASURE ) then 

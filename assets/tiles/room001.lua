@@ -9,7 +9,7 @@ return {
   tilewidth = 64,
   tileheight = 64,
   nextlayerid = 6,
-  nextobjectid = 55,
+  nextobjectid = 57,
   properties = {},
   tilesets = {
     {
@@ -523,6 +523,24 @@ return {
           name = "cupboard01",
           type = "cupboard",
           shape = "point",
+          x = 448,
+          y = 1216,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["factory"] = "cupboardfactory",
+            ["reward"] = "1",
+            ["searchtime"] = 3,
+            ["type"] = 1
+          }
+        },
+        {
+          id = 55,
+          name = "cupboard02",
+          type = "cupboard",
+          shape = "point",
           x = 512,
           y = 1216,
           width = 0,
@@ -532,8 +550,26 @@ return {
           properties = {
             ["factory"] = "cupboardfactory",
             ["reward"] = "1",
-            ["searchtime"] = 4,
-            ["type"] = 1
+            ["searchtime"] = 6,
+            ["type"] = 2
+          }
+        },
+        {
+          id = 56,
+          name = "cupboard03",
+          type = "cupboard",
+          shape = "point",
+          x = 576,
+          y = 1216,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["factory"] = "cupboardfactory",
+            ["reward"] = "1",
+            ["searchtime"] = 8,
+            ["type"] = 3
           }
         }
       }

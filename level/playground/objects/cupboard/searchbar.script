@@ -30,14 +30,17 @@ function init( self )
 	pprint( "cupboard: " .. tostring( self.cupboard ) )
 	pprint( "interactWith: " .. tostring( self.interactWith ) )
 	pprint( "searchtime: " .. self.searchtime )
-	pprint( "player direction x: " .. go.get( self.interactWith, "dir" ).x )
+
+	self.playerPos = go.get_position( self.interactWith ) 
+	pprint( "playerPos.x: " .. self.playerPos.x )
 end
 
 
 function update( self, dt )
 	if self.interactWith then 
-		local playerDir = go.get( self.interactWith, "dir" )
-		if playerDir.x > .3 or playerDir.x < - .3 then 
+		-- local playerDir = go.get( self.interactWith, "dir" )
+		-- if playerDir.x > .3 or playerDir.x < - .3 then 
+		if self.playerPos.x ~= go.get_position( self.interactWith ).x then 
 			breakoff( self )
 		end
 	end
