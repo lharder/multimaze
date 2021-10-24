@@ -398,16 +398,26 @@ function on_message( self, message_id, message, sender )
 				self.interactWith = nil
 				
 			end
-			pprint( "interacting with " .. ( self.interactWith or "nobody" ) )
+			-- pprint( "interacting with " .. ( self.interactWith or "nobody" ) )
 		end
 
+		-- collect treasure - exactly once only
 		if( message.other_group == GROUP_TREASURE ) then 
 			local url = msg.url( nil, message.other_id, "script" )
 			local money = goGetProperty( url, "money" )
 			if money and money > 0 then 
 				self.stats:addMoney( money ) 
+			end		
+		end
+
+		-- if player is standing in front of a cupboard that has been
+		-- searched before, no further interaction is possible: correct!
+		if( message.other_group == GROUP_CUPBOARD ) then 
+			local cupboard = msg.url( nil, message.other_id, "script" )
+			if go.get( cupboard, "searchtime" ) == 0 then
+				self.interactWith = nil
+				self.interactAuto = false
 			end
-			
 		end
 		
 	elseif 	( message_id == vcontroller.ANALOG ) or 

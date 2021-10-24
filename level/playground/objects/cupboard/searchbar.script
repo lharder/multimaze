@@ -27,12 +27,11 @@ function init( self )
 		breakoff( self )
 	end )
 
-	pprint( "cupboard: " .. tostring( self.cupboard ) )
-	pprint( "interactWith: " .. tostring( self.interactWith ) )
-	pprint( "searchtime: " .. self.searchtime )
+	-- pprint( "cupboard: " .. tostring( self.cupboard ) )
+	-- pprint( "interactWith: " .. tostring( self.interactWith ) )
+	-- pprint( "searchtime: " .. self.searchtime )
 
 	self.playerPos = go.get_position( self.interactWith ) 
-	pprint( "playerPos.x: " .. self.playerPos.x )
 end
 
 
@@ -51,6 +50,5 @@ end
 function final( self )
 	local x = go.get( "#sprite", "scale.x" )
 	go.set( self.cupboard, "searchtime", self.searchtime * x )
-	pprint( "Setting rest time: " .. go.get( self.cupboard, "searchtime" ) .. " sec" )
 	
 end
