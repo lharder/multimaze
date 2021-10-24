@@ -69,7 +69,7 @@ local function setup( self, message )
 	self.reward = message.properties.reward
 
 	-- set cupboard sprite
-	sprite.play_flipbook( "#sprite", "cupboard0" .. message.properties.type )
+	sprite.play_flipbook( "#sprite", "furniture0" .. message.properties.type )
 end
 
 

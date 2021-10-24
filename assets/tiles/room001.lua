@@ -9,7 +9,7 @@ return {
   tilewidth = 64,
   tileheight = 64,
   nextlayerid = 6,
-  nextobjectid = 57,
+  nextobjectid = 58,
   properties = {},
   tilesets = {
     {
@@ -570,6 +570,24 @@ return {
             ["reward"] = "1",
             ["searchtime"] = 8,
             ["type"] = 3
+          }
+        },
+        {
+          id = 57,
+          name = "cupboard04",
+          type = "cupboard",
+          shape = "point",
+          x = 384,
+          y = 512,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["factory"] = "cupboardfactory",
+            ["reward"] = "1",
+            ["searchtime"] = 8,
+            ["type"] = 6
           }
         }
       }

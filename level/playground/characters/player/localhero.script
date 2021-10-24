@@ -398,7 +398,6 @@ function on_message( self, message_id, message, sender )
 				self.interactWith = nil
 				
 			end
-			-- pprint( "interacting with " .. ( self.interactWith or "nobody" ) )
 		end
 
 		-- collect treasure - exactly once only
@@ -419,6 +418,8 @@ function on_message( self, message_id, message, sender )
 				self.interactAuto = false
 			end
 		end
+		
+		-- pprint( "interacting with " .. ( self.interactWith or "nobody" ) )
 		
 	elseif 	( message_id == vcontroller.ANALOG ) or 
 			( message_id == vcontroller.BUTTON ) then 
