@@ -1,0 +1,53 @@
+go.property( "cupboard", msg.url() )
+go.property( "searchtext", msg.url() )
+go.property( "searchtime", 0 )
+go.property( "interactWith", msg.url() )
+
+
+local function breakoff( self )
+	go.set( self.cupboard, "searching", false )
+	go.delete( self.searchtext )
+	go.delete()
+end
+
+
+-------
+function init( self )
+	go.set( "#sprite", "tint", vmath.vector4( 1, 1, 1, .6 ) )
+	go.set_scale( vmath.vector3( .6, .8, 1 ) )
+
+	-- search bar on top of player
+	local pos = go.get_position()
+	pos.z = .6
+	go.set_position( pos )
+	
+	pos.x = pos.x - 50
+	go.animate( ".", "position", go.PLAYBACK_ONCE_FORWARD, pos, go.EASING_LINEAR, self.searchtime )
+	go.animate( "#sprite", "scale.x", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, self.searchtime, 0, function() 
+		breakoff( self )
+	end )
+
+	pprint( "cupboard: " .. tostring( self.cupboard ) )
+	pprint( "interactWith: " .. tostring( self.interactWith ) )
+	pprint( "searchtime: " .. self.searchtime )
+	pprint( "player direction x: " .. go.get( self.interactWith, "dir" ).x )
+end
+
+
+function update( self, dt )
+	if self.interactWith then 
+		local playerDir = go.get( self.interactWith, "dir" )
+		if playerDir.x > .3 or playerDir.x < - .3 then 
+			breakoff( self )
+		end
+	end
+end
+
+
+
+function final( self )
+	local x = go.get( "#sprite", "scale.x" )
+	go.set( self.cupboard, "searchtime", self.searchtime * x )
+	pprint( "Setting rest time: " .. go.get( self.cupboard, "searchtime" ) .. " sec" )
+	
+end

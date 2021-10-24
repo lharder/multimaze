@@ -9,7 +9,7 @@ return {
   tilewidth = 64,
   tileheight = 64,
   nextlayerid = 6,
-  nextobjectid = 54,
+  nextobjectid = 55,
   properties = {},
   tilesets = {
     {
@@ -519,58 +519,21 @@ return {
           }
         },
         {
-          id = 51,
-          name = "crate07",
-          type = "crate",
-          shape = "rectangle",
+          id = 54,
+          name = "cupboard01",
+          type = "cupboard",
+          shape = "point",
           x = 512,
           y = 1216,
-          width = 64,
-          height = 64,
+          width = 0,
+          height = 0,
           rotation = 0,
-          gid = 76,
           visible = true,
           properties = {
-            ["blocking"] = true,
-            ["factory"] = "cratefactory",
-            ["variant"] = 1
-          }
-        },
-        {
-          id = 52,
-          name = "crate08",
-          type = "crate",
-          shape = "rectangle",
-          x = 512,
-          y = 1088,
-          width = 64,
-          height = 64,
-          rotation = 0,
-          gid = 76,
-          visible = true,
-          properties = {
-            ["blocking"] = true,
-            ["factory"] = "cratefactory",
-            ["variant"] = 1
-          }
-        },
-        {
-          id = 53,
-          name = "crate09",
-          type = "crate",
-          shape = "rectangle",
-          x = 512,
-          y = 1024,
-          width = 64,
-          height = 64,
-          rotation = 0,
-          gid = 76,
-          visible = true,
-          properties = {
-            ["blocking"] = true,
-            ["factory"] = "cratefactory",
-            ["reward"] = "",
-            ["variant"] = 1
+            ["factory"] = "cupboardfactory",
+            ["reward"] = "1",
+            ["searchtime"] = 4,
+            ["type"] = 1
           }
         }
       }

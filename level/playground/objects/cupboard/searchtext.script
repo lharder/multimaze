@@ -1,0 +1,4 @@
+function init( self )
+	local off = vmath.vector4( 1, 1, 1, 0.3 )
+	go.animate( "#label", "color", go.PLAYBACK_LOOP_PINGPONG, off, go.EASING_LINEAR, 1 )
+end

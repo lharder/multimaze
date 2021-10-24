@@ -1,0 +1,91 @@
+go.property( "searchtime", 6 )
+go.property( "searching", false )
+
+local MSG_INTERACT = hash( "interact" )
+local MSG_SET_PROPS = hash( "setProps" )
+
+
+local function breakoff( self )
+	if self.searchtext then go.delete( self.searchtext ) end
+	if self.searchbar then go.delete( self.searchbar ) end
+	self.searching = false
+	self.serachtext = nil
+	self.searchbar = nil
+end
+
+
+local function search( self, interactWith )
+	if self.searchtime > 0 then 
+		self.searching = true
+		
+		local props = {}
+		props[ hash( "/searchbar" ) ] = {
+			cupboard = msg.url( nil, go.get_id(), "script" ),
+			searchtime = self.searchtime,
+			interactWith = msg.url( nil, interactWith, "script" ),
+			searchtext = msg.url()
+		}
+		pprint( "Cupboard rest searchtime: " .. self.searchtime )
+		
+		local pos = go.get_position()
+		pos.z = .3
+		self.ids = collectionfactory.create( "/factories#searchingfactory", pos, nil, props, 1 )
+		self.searchtext = self.ids[ "/searchtext" ]
+		self.searchbar = self.ids[ "/searchbar" ]
+
+		local searchbarscript = msg.url( nil, self.searchbar, "script" )
+		go.set( searchbarscript, "searchtext", msg.url( nil, self.searchtext, nil ) )
+	else
+		pprint( "Nothing left to search for!" )
+	end
+end
+
+
+local function parse( self, message )
+	if message.meta.type == Events.OBJECT_INTERACT then
+		if self.searching then 
+			breakoff( self )
+		else 
+			search( self, message.player ) 
+		end
+	end
+end
+
+
+local function blink( self )
+	go.animate( "#sprite", "tint", go.PLAYBACK_ONCE_PINGPONG, vmath.vector4( 1, 1, 1, .6 ), go.EASING_LINEAR, 2, 0, function() 
+		if self.searchtime > 0 then 
+			blink( self )
+		end
+	end )
+end
+
+-----
+function init( self )
+	self.pos = go.get_position()
+	self.pos.y = self.pos.y + 16
+	go.set_position( self.pos )
+
+	self.searching = false
+	if self.searchtime > 0 then blink( self ) end
+end
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == MSG_SET_PROPS then
+		self.name = message.name
+		self.room = ROOMMANAGER:getCurrent()
+
+	elseif message_id == MSG_INTERACT then
+		if not self.searching then 
+			search( self, message.player ) 
+		end
+
+	elseif message_id == GAME.MSG_EXEC_CMD then
+		parse( self, message )
+		
+	end
+end
+
+
+
