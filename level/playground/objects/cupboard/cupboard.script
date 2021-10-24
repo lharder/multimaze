@@ -4,6 +4,8 @@ go.property( "searching", false )
 local MSG_INTERACT = hash( "interact" )
 local MSG_SET_PROPS = hash( "setProps" )
 
+local Events = require( "level.playground.events" )
+
 
 local function breakoff( self )
 	if self.searchtext then go.delete( self.searchtext ) end
