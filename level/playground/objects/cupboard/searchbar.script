@@ -14,22 +14,18 @@ end
 -------
 function init( self )
 	go.set( "#sprite", "tint", vmath.vector4( 1, 1, 1, .6 ) )
-	go.set_scale( vmath.vector3( .6, .8, 1 ) )
+	-- go.set_scale( vmath.vector3( .6, .8, 1 ) )
 
 	-- search bar on top of player
 	local pos = go.get_position()
 	pos.z = .6
 	go.set_position( pos )
 	
-	pos.x = pos.x - 50
+	pos.x = pos.x - 64
 	go.animate( ".", "position", go.PLAYBACK_ONCE_FORWARD, pos, go.EASING_LINEAR, self.searchtime )
 	go.animate( "#sprite", "scale.x", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, self.searchtime, 0, function() 
 		breakoff( self )
 	end )
-
-	-- pprint( "cupboard: " .. tostring( self.cupboard ) )
-	-- pprint( "interactWith: " .. tostring( self.interactWith ) )
-	-- pprint( "searchtime: " .. self.searchtime )
 
 	self.playerPos = go.get_position( self.interactWith ) 
 end

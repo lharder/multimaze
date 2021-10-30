@@ -143,6 +143,9 @@ function on_message( self, message_id, message, sender )
 		-- initial value as defined in Tiled
 		self.name = message.name
 		self.room = ROOMMANAGER:getCurrent()
+
+		-- make accessible globally
+		GAME.client.registry:set( getNamespaceId( self ), go.get_id() )
 		
 		-- state available from previously having entered the room?
 		-- if not, use Tiled defaults

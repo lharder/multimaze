@@ -11,7 +11,10 @@ function on_message( self, message_id, message, sender )
 	if message_id == MSG_INTERACT and not self.animating then
 
 	elseif message_id == MSG_SET_PROPS then 
+		-- make accessible globally
 		self.name = message.name
+		GAME.client.registry:set( self.name, go.get_id() ) 
+
 		if message.listeners then 
 			self.listeners = message.listeners:split( "," ) 
 		end

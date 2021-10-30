@@ -110,7 +110,10 @@ function on_message( self, message_id, message, sender )
 		self.variant 		= message.properties.variant
 		self.rewardCnt 		= message.properties.rewardCnt
 		self.rewardFactory	= message.properties.rewardFactory
-		
+
+		-- make accessible globally
+		GAME.client.registry:set( self.name, go.get_id() ) 
+
 	end
 end
 

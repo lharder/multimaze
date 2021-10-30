@@ -29,12 +29,16 @@ local function press( self )
 end
 
 
-local function setup( self, params ) 
-	if params.properties.color then
-		self.color = params.properties.color
+local function setup( self, message ) 
+	-- make accessible globally
+	self.name = message.name
+	GAME.client.registry:set( self.name, go.get_id() ) 
+	
+	if message.properties.color then
+		self.color = message.properties.color
 		sprite.play_flipbook( "#sprite", self.color .. "fix" )
 
-		self.listeners = params.properties.listeners:split( "," )
+		self.listeners = message.properties.listeners:split( "," )
 	end
 end
 

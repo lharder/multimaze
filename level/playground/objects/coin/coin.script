@@ -34,6 +34,10 @@ end
 
 ---------------
 function init( self )
+	-- make accessible globally
+	self.name = message.name
+	GAME.client.registry:set( self.name, go.get_id() ) 
+	
 	if self.jumping then
 		self.pos = go.get_position()
 		local toPos = self.pos.y + 90

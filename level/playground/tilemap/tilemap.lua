@@ -181,7 +181,7 @@ function Tilemap:createObject( url, pos, obj )
 	local name = obj.name 
 	if name == "" then name = id end
 	
-	GAME.client.registry:set( name, id ) 
+	-- GAME.client.registry:set( name, id ) 
 	
 	self.objsByName[ name ] = id
 	msg.post( id, MSG_SET_PROPS, obj )

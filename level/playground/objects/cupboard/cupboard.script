@@ -7,6 +7,20 @@ local MSG_SET_PROPS = hash( "setProps" )
 local Events = require( "level.playground.events" )
 
 
+
+local function getNamespaceId( self )
+	return self.room.id .. "/" .. self.name
+end
+
+local function setState( self, key, value )
+	GAME.client.state:put( getNamespaceId( self ), key, value )
+end
+
+local function getState( self, key )
+	return GAME.client.state:get( getNamespaceId( self ), key )
+end
+
+
 local function breakoff( self )
 	if self.searchtext then go.delete( self.searchtext ) end
 	if self.searchbar then go.delete( self.searchbar ) end
@@ -32,7 +46,7 @@ local function search( self, interactWith )
 		
 		local pos = go.get_position()
 		pos.z = .3
-		self.ids = collectionfactory.create( "/factories#searchingfactory", pos, nil, props, 1 )
+		self.ids = collectionfactory.create( "/factories#searchingfactory", pos, nil, props, 1.25 )
 		self.searchtext = self.ids[ "/searchtext" ]
 		self.searchbar = self.ids[ "/searchbar" ]
 
@@ -70,6 +84,9 @@ local function setup( self, message )
 	self.searchtime = message.properties.searchtime
 	self.reward = message.properties.reward
 
+	-- make accessible globally
+	GAME.client.registry:set( getNamespaceId( self ), go.get_id() )
+	
 	-- set cupboard sprite
 	sprite.play_flipbook( "#sprite", "furniture0" .. message.properties.type )
 end
