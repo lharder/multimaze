@@ -1,4 +1,7 @@
 function init( self )
+	go.set( msg.url( nil, cid, "sprite" ), "tint.w", .8 )
+	go.set_scale( vmath.vector3( 1, 1, 1 ), cid )
+	
 	timer.delay( 1, false, function() 
 		local pos = go.get_position()
 		pos.y = pos.y - 30

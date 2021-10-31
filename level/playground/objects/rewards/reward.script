@@ -1,17 +1,17 @@
 local Events = require( "level.playground.events" )
 
+go.property( "type", hash( "coin" ) )
 go.property( "jumping", false )
-go.property( "money", 0 )
+go.property( "amount", 0 )
 
-
-local MSG_SET_PROPS = hash( "setProps" )
+local MSG_SET_PROPS 		= hash( "setProps" )
 local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
 
 
 local function collect( self )
 	-- Allow to collect only once! 
 	-- Timing issue with multiple collision.
-	self.money = 0
+	self.amount = 0
 
 	-- Remove this coin
 	local pos = go.get_position()
@@ -36,9 +36,13 @@ local function setup( self, message )
 	self.name = message.name
 	GAME.client.registry:set( self.name, go.get_id() ) 
 
-	if message.animname then 
-		sprite.play_flipbook( "#sprite", message.animname )
-	end
+	-- reward type 
+	self.rewardfactory = message.rewardfactory
+	self.rewardsubtype = message.rewardsubtype
+
+	-- cumbersome, but necessary due to defold limitation properties/strings:
+	-- need extra type to be externally accessible as a property
+	self.type = hash( self.rewardfactory:sub( 1, #self.rewardfactory - #"factory" ) )
 end
 
 
@@ -51,11 +55,11 @@ function init( self )
 		go.animate( ".", "position.y", go.PLAYBACK_ONCE_FORWARD, toPos, go.EASING_OUTBOUNCE, 1 )
 	end
 
-	-- money can only be collected after it has jumped up
+	-- amount can only be collected after it has jumped up
 	-- takes one second, then value is available: state must
 	-- be accessible by localplayer as well!
 	timer.delay( 1, false, function() 
-		self.money = 1 
+		self.amount = 1 
 	end )
 end
 
@@ -66,7 +70,7 @@ function on_message( self, message_id, message, sender )
 		setup( self, message )
 		
 	elseif message_id == MSG_TRIGGER_COLLISION then
-		if self.money > 0 then collect( self ) end
+		if self.amount > 0 then collect( self ) end
 		
 	end
 end

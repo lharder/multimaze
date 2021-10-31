@@ -20,22 +20,25 @@ local MSG_STICK 			= hash( "stick" )
 local MSG_BTN_ACTION 		= hash( "action" )
 local MSG_BTN_JUMP	 		= hash( "jump" )
 
-local GROUP_BUTTON = hash( "button" )
-local GROUP_TREASURE = hash( "treasure" )
-local GROUP_DOOR = hash( "door" )
-local GROUP_CUPBOARD = hash( "cupboard" )
-local GROUP_OBSTACLES = hash( "obstacle" )
-local GROUP_PLAYERS = hash( "player" )
+local GROUP_BUTTON 			= hash( "button" )
+local GROUP_TREASURE 		= hash( "treasure" )
+local GROUP_DOOR 			= hash( "door" )
+local GROUP_CUPBOARD 		= hash( "cupboard" )
+local GROUP_OBSTACLES 		= hash( "obstacle" )
+local GROUP_PLAYERS 		= hash( "player" )
+
+local REWARD_TYPE_COIN 		= hash( "coin" )
+local REWARD_TYPE_KEYCARD 	= hash( "keysfactory" )
 
 
-local LEFT = hash( "key_left" )
-local RIGHT = hash( "key_right" )
-local UP = hash( "key_up" )
-local DOWN = hash( "key_down" )
-local CMD_LEFT = hash( "key_lsuper" )
-local CMD_RIGHT = hash( "key_rsuper" )
-local CMD_OPTION_LEFT = hash( "key_lalt" )
-local CMD_OPTION_RIGHT = hash( "key_ralt" )
+local LEFT 					= hash( "key_left" )
+local RIGHT 				= hash( "key_right" )
+local UP 					= hash( "key_up" )
+local DOWN 					= hash( "key_down" )
+local CMD_LEFT 				= hash( "key_lsuper" )
+local CMD_RIGHT 			= hash( "key_rsuper" )
+local CMD_OPTION_LEFT 		= hash( "key_lalt" )
+local CMD_OPTION_RIGHT 		= hash( "key_ralt" )
 
 
 local function isFree( vDir, id )
@@ -400,13 +403,16 @@ function on_message( self, message_id, message, sender )
 			end
 		end
 
-		-- collect treasure - exactly once only
+		-- collect coin - exactly once only
 		if( message.other_group == GROUP_TREASURE ) then 
 			local url = msg.url( nil, message.other_id, "script" )
-			local money = goGetProperty( url, "money" )
-			if money and money > 0 then 
-				self.stats:addMoney( money ) 
-			end		
+			local type = goGetProperty( url, "type" )
+			if type == REWARD_TYPE_COIN then 
+				local amount = goGetProperty( url, "amount" )
+				if amount and amount > 0 then 
+					self.stats:addMoney( amount ) 
+				end	
+			end	
 		end
 
 		-- if player is standing in front of a cupboard that has been

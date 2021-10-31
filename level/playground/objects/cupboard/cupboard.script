@@ -48,9 +48,11 @@ local function search( self, interactWith )
 		self.searchtext = self.ids[ "/searchtext" ]
 		self.searchbar = self.ids[ "/searchbar" ]
 
-		-- identical gid 
+		-- identical searchbar gid with info for reward object
 		msg.post( self.searchbar, MSG_SET_PROPS, {
-			name = self.name .. "Reward"
+			name = self.name .. "Reward",
+			rewardfactory = self.rewardfactory,
+			rewardsubtype = self.rewardsubtype
 		})
 
 		local searchbarscript = msg.url( nil, self.searchbar, "script" )
@@ -85,7 +87,8 @@ local function setup( self, message )
 	self.name = message.name
 	self.room = ROOMMANAGER:getCurrent()
 	self.searchtime = message.properties.searchtime
-	self.reward = message.properties.reward
+	self.rewardfactory = message.properties.rewardfactory
+	self.rewardsubtype = message.properties.rewardsubtype
 
 	-- make accessible globally
 	GAME.client.registry:set( getNamespaceId( self ), go.get_id() )

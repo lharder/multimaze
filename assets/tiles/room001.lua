@@ -289,8 +289,8 @@ return {
           properties = {
             ["factory"] = "safefactory",
             ["locked"] = true,
-            ["rewardCnt"] = 1,
-            ["rewardFactory"] = "coinfactory",
+            ["rewardfactory"] = "coinfactory",
+            ["rewardsubtype"] = "5",
             ["variant"] = 0
           }
         },
@@ -531,7 +531,8 @@ return {
           visible = true,
           properties = {
             ["factory"] = "cupboardfactory",
-            ["reward"] = "1",
+            ["rewardfactory"] = "keysfactory",
+            ["rewardsubtype"] = "keyblue",
             ["searchtime"] = 3,
             ["type"] = 1
           }
@@ -549,7 +550,8 @@ return {
           visible = true,
           properties = {
             ["factory"] = "cupboardfactory",
-            ["reward"] = "1",
+            ["rewardfactory"] = "coinfactory",
+            ["rewardsubtype"] = "5",
             ["searchtime"] = 6,
             ["type"] = 2
           }
@@ -567,7 +569,8 @@ return {
           visible = true,
           properties = {
             ["factory"] = "cupboardfactory",
-            ["reward"] = "1",
+            ["rewardfactory"] = "keysfactory",
+            ["rewardsubtype"] = "keygold",
             ["searchtime"] = 8,
             ["type"] = 3
           }

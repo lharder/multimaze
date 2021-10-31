@@ -14,8 +14,8 @@ components {
   }
 }
 components {
-  id: "turning"
-  component: "/level/playground/objects/rewards/hover.script"
+  id: "keys"
+  component: "/level/playground/objects/rewards/keys.script"
   position {
     x: 0.0
     y: 0.0

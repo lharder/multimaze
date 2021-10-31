@@ -8,6 +8,8 @@ local MSG_SET_PROPS = hash( "setProps" )
 
 local function setup( self, message )
 	self.name = message.name
+	self.rewardfactory = message.rewardfactory
+	self.rewardsubtype = message.rewardsubtype
 end
 
 
@@ -17,18 +19,17 @@ local function reward( self )
 	local pos = go.get_position()
 	pos.x = pos.x + 64
 	pos.z = .4
-	local cid = factory.create( "/factories#keysfactory", pos, nil, { 
-		jumping = true
-	})
-	go.set( msg.url( nil, cid, "sprite" ), "tint.w", .8 )
-	go.set_scale( vmath.vector3( 1, 1, 1 ), cid )
+	local cid = factory.create( "/factories#" .. self.rewardfactory, pos, nil, { jumping = true })
+	-- go.set( msg.url( nil, cid, "sprite" ), "tint.w", .8 )
+	-- go.set_scale( vmath.vector3( 1, 1, 1 ), cid )
 	
 	GAME.client.registry:set( self.name, cid ) 
 	-- pprint( "Created reward: " .. gid .. " / " .. cid )
 
 	msg.post( cid, MSG_SET_PROPS, {
 		name = self.name,
-		animname = "default"
+		rewardfactory = self.rewardfactory,
+		rewardsubtype = self.rewardsubtype
 	})
 end
 
