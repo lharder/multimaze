@@ -3,6 +3,35 @@ go.property( "searchtext", msg.url() )
 go.property( "searchtime", 0 )
 go.property( "interactWith", msg.url() )
 
+local MSG_SET_PROPS = hash( "setProps" )
+
+
+local function setup( self, message )
+	self.name = message.name
+end
+
+
+local function reward( self )
+	-- create a reward: interaction is triggered on all clients alike,
+	-- so every client creates a reward with the same global id:
+	local pos = go.get_position()
+	pos.x = pos.x + 64
+	pos.z = .4
+	local cid = factory.create( "/factories#keysfactory", pos, nil, { 
+		jumping = true
+	})
+	go.set( msg.url( nil, cid, "sprite" ), "tint.w", .8 )
+	go.set_scale( vmath.vector3( 1, 1, 1 ), cid )
+	
+	GAME.client.registry:set( self.name, cid ) 
+	-- pprint( "Created reward: " .. gid .. " / " .. cid )
+
+	msg.post( cid, MSG_SET_PROPS, {
+		name = self.name,
+		animname = "default"
+	})
+end
+
 
 local function breakoff( self )
 	go.set( self.cupboard, "searching", false )
@@ -24,6 +53,7 @@ function init( self )
 	pos.x = pos.x - 64
 	go.animate( ".", "position", go.PLAYBACK_ONCE_FORWARD, pos, go.EASING_LINEAR, self.searchtime )
 	go.animate( "#sprite", "scale.x", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, self.searchtime, 0, function() 
+		reward( self )
 		breakoff( self )
 	end )
 
@@ -33,8 +63,6 @@ end
 
 function update( self, dt )
 	if self.interactWith then 
-		-- local playerDir = go.get( self.interactWith, "dir" )
-		-- if playerDir.x > .3 or playerDir.x < - .3 then 
 		if self.playerPos.x ~= go.get_position( self.interactWith ).x then 
 			breakoff( self )
 		end
@@ -48,3 +76,12 @@ function final( self )
 	go.set( self.cupboard, "searchtime", self.searchtime * x )
 	
 end
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == MSG_SET_PROPS then
+		setup( self, message )
+	end
+end
+
+

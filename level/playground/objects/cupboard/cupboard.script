@@ -38,17 +38,20 @@ local function search( self, interactWith )
 		props[ hash( "/searchbar" ) ] = {
 			cupboard = msg.url( nil, go.get_id(), "script" ),
 			searchtime = self.searchtime,
-			-- interactWith = msg.url( nil, interactWith, "script" ),
 			interactWith = msg.url( nil, interactWith, nil ),
 			searchtext = msg.url()
 		}
-		pprint( "Cupboard rest searchtime: " .. self.searchtime )
 		
 		local pos = go.get_position()
 		pos.z = .3
 		self.ids = collectionfactory.create( "/factories#searchingfactory", pos, nil, props, 1.25 )
 		self.searchtext = self.ids[ "/searchtext" ]
 		self.searchbar = self.ids[ "/searchbar" ]
+
+		-- identical gid 
+		msg.post( self.searchbar, MSG_SET_PROPS, {
+			name = self.name .. "Reward"
+		})
 
 		local searchbarscript = msg.url( nil, self.searchbar, "script" )
 		go.set( searchbarscript, "searchtext", msg.url( nil, self.searchtext, nil ) )

@@ -1,5 +1,5 @@
 animations {
-  id: "turn"
+  id: "default"
   images {
     image: "/assets/objects/coin/gold01.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
@@ -42,17 +42,6 @@ animations {
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 20
-  flip_horizontal: 0
-  flip_vertical: 0
-}
-animations {
-  id: "default"
-  images {
-    image: "/assets/objects/coin/gold01.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  playback: PLAYBACK_NONE
-  fps: 60
   flip_horizontal: 0
   flip_vertical: 0
 }

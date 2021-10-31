@@ -45,7 +45,6 @@ local function open( self )
 			-- so every client creates a reward with the same global id:
 			local gid = self.name .. "Reward"
 			local cid = factory.create( "/factories#" .. self.rewardFactory, go.get_position(), nil, { 
-				turning = true,
 				jumping = true
 			})
 			GAME.client.registry:set( gid, cid ) 

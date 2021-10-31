@@ -1,0 +1,9 @@
+function init( self )
+	timer.delay( 1, false, function() 
+		local pos = go.get_position()
+		pos.y = pos.y - 30
+		go.animate( ".", "position", go.PLAYBACK_LOOP_PINGPONG, pos, go.EASING_LINEAR, 5 )
+		
+		-- go.animate( ".", "euler.z", go.PLAYBACK_LOOP_FORWARD, 359, go.EASING_LINEAR, 8 )
+	end )
+end

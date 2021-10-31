@@ -1,6 +1,6 @@
 components {
   id: "script"
-  component: "/level/playground/objects/coin/coin.script"
+  component: "/level/playground/objects/rewards/reward.script"
   position {
     x: 0.0
     y: 0.0
@@ -16,8 +16,8 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/level/playground/objects/coin/coin.atlas\"\n"
-  "default_animation: \"turn\"\n"
+  data: "tile_set: \"/level/playground/objects/rewards/coin.atlas\"\n"
+  "default_animation: \"default\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   ""
