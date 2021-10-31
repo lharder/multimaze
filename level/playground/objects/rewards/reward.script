@@ -1,6 +1,7 @@
 local Events = require( "level.playground.events" )
 
 go.property( "type", hash( "coin" ) )
+go.property( "subtype", hash( "keyblue" ) )
 go.property( "jumping", false )
 go.property( "amount", 0 )
 
@@ -43,6 +44,7 @@ local function setup( self, message )
 	-- cumbersome, but necessary due to defold limitation properties/strings:
 	-- need extra type to be externally accessible as a property
 	self.type = hash( self.rewardfactory:sub( 1, #self.rewardfactory - #"factory" ) )
+	self.subtype = hash( self.rewardsubtype )
 end
 
 

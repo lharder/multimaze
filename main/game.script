@@ -5,6 +5,7 @@ local Roommanager = require( "level.playground.roommanager.roommanager" )
 local Registry = require( "nexus.registry" )
 local Game = require( "nexus.game" )
 local Host = require( "nexus.host" )
+local Stats = require( "level.playground.characters.player.stats" )
 
 local Serializable = require( "nexus.serializable" )
 
@@ -17,6 +18,7 @@ PLAYER_ID = ""
 PLAYERS = {}
 MAP = {}
 ROOMMANAGER = Roommanager.new()
+PLAYER_STATS = Stats.new()
 
 -------------------------------------
 -- Globally available function: load a new room in the playground.

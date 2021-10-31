@@ -182,6 +182,7 @@ return {
           visible = true,
           properties = {
             ["factory"] = "door01factory",
+            ["key"] = "",
             ["locked"] = false,
             ["open"] = true,
             ["variant"] = 0
@@ -219,6 +220,7 @@ return {
           visible = true,
           properties = {
             ["factory"] = "door01factory",
+            ["key"] = "",
             ["locked"] = false,
             ["open"] = true,
             ["variant"] = 0

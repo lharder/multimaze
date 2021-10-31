@@ -214,6 +214,7 @@ return {
           visible = true,
           properties = {
             ["factory"] = "door01factory",
+            ["key"] = "",
             ["locked"] = false,
             ["open"] = true,
             ["variant"] = 1
@@ -233,8 +234,9 @@ return {
           visible = true,
           properties = {
             ["factory"] = "door01factory",
-            ["locked"] = false,
-            ["open"] = true,
+            ["key"] = "keygold",
+            ["locked"] = true,
+            ["open"] = false,
             ["variant"] = 1
           }
         },
@@ -532,7 +534,7 @@ return {
           properties = {
             ["factory"] = "cupboardfactory",
             ["rewardfactory"] = "keysfactory",
-            ["rewardsubtype"] = "keyblue",
+            ["rewardsubtype"] = "keygold",
             ["searchtime"] = 3,
             ["type"] = 1
           }
@@ -570,7 +572,7 @@ return {
           properties = {
             ["factory"] = "cupboardfactory",
             ["rewardfactory"] = "keysfactory",
-            ["rewardsubtype"] = "keygold",
+            ["rewardsubtype"] = "keyred",
             ["searchtime"] = 8,
             ["type"] = 3
           }
@@ -589,6 +591,8 @@ return {
           properties = {
             ["factory"] = "cupboardfactory",
             ["reward"] = "1",
+            ["rewardfactory"] = "keysfactory",
+            ["rewardsubtype"] = "keyred",
             ["searchtime"] = 8,
             ["type"] = 6
           }

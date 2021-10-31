@@ -1,9 +1,15 @@
 local Events = require( "level.playground.events" )
 
+local KEYCARD_BLUE 	= hash( "keyblue" )
+local KEYCARD_RED 	= hash( "keyred" )
+local KEYCARD_GOLD 	= hash( "keygold" )
+
 local MSG_READY_TO_INTERACT = hash( "readyToInteract" )
 local MSG_INTERACT 			= hash( "interact" )
 local MSG_REMOTE_TRIGGER	= hash( "remoteTrigger" )
 local MSG_SET_PROPS 		= hash( "setProps" )
+
+go.property( "key", KEYCARD_BLUE )
 
 
 
@@ -102,6 +108,12 @@ local function parse( self, message )
 end
 
 
+local function unlock( self )
+	msg.post( "#locked", "disable" )  
+	self.locked = false
+end
+
+
 local function close( self )
 	self.animating = true
 	sprite.play_flipbook( "#sprite", "close", function() 
@@ -111,6 +123,7 @@ local function close( self )
 	end )
 end
 
+
 local function open( self )
 	self.animating = true
 	sprite.play_flipbook( "#sprite", "open", function() 
@@ -118,6 +131,59 @@ local function open( self )
 		self.animating = false
 		setState( self, "open", self.open )
 	end )
+end
+
+
+local function handleRemoteTrigger( self )
+	if self.locked then 
+		local cntKeysAvailable = PLAYER_STATS:getKeycards( self.key )
+		if cntKeysAvailable > 0 then 
+			PLAYER_STATS:setKeycards( self.key, cntKeysAvailable - 1 )
+			unlock( self )
+			open( self )
+		end
+	else
+		if self.open then close( self ) else open( self ) end
+	end
+end
+
+
+local function setup( self, message )
+	-- initial value as defined in Tiled
+	self.name = message.name
+	self.room = ROOMMANAGER:getCurrent()
+
+	-- make accessible globally
+	GAME.client.registry:set( getNamespaceId( self ), go.get_id() )
+
+	-- state available from previously having entered the room?
+	-- if not, use Tiled defaults
+	self.open = getState( self, "open" )
+	if self.open == nil then self.open = message.properties.open end
+
+	-- door status: locked? If so: which keycard?
+	self.locked = getState( self, "locked" ) 
+	if self.locked == nil then self.locked = message.properties.locked end
+	if self.locked then 
+		if message.properties.key then 
+			self.key = hash( message.properties.key ) 
+		else
+			self.key = KEYCARD_BLUE
+		end
+		sprite.play_flipbook( "#locked", self.key )
+	else
+		msg.post( "#locked", "disable" )  
+	end
+
+	if self.open then 
+		sprite.play_flipbook( "#sprite", "opened" )
+	else
+		sprite.play_flipbook( "#sprite", "closed" )
+	end
+
+	-- info where this door leads to: remote(!) room
+	local doorinfo = ROOMMANAGER:getCurrent().doors[ self.name ]
+	label.set_text( "#caption" , "Room " .. doorinfo.roomid )
 end
 
 
@@ -135,35 +201,10 @@ function on_message( self, message_id, message, sender )
 		parse( self, message )
 		
 	elseif message_id == MSG_REMOTE_TRIGGER and not self.animating then
-		if not self.locked then 
-			if self.open then close( self ) else open( self ) end
-		end
+		handleRemoteTrigger( self )
 
 	elseif message_id == MSG_SET_PROPS then
-		-- initial value as defined in Tiled
-		self.name = message.name
-		self.room = ROOMMANAGER:getCurrent()
-
-		-- make accessible globally
-		GAME.client.registry:set( getNamespaceId( self ), go.get_id() )
-		
-		-- state available from previously having entered the room?
-		-- if not, use Tiled defaults
-		self.open = getState( self, "open" )
-		if self.open == nil then self.open = message.properties.open end
-		
-		self.locked = getState( self, "locked" ) 
-		if self.locked == nil then self.locked = message.properties.locked end
-
-		if self.open then 
-			sprite.play_flipbook( "#sprite", "opened" )
-		else
-			sprite.play_flipbook( "#sprite", "closed" )
-		end
-
-		-- info where this door leads to: remote(!) room
-		local doorinfo = ROOMMANAGER:getCurrent().doors[ self.name ]
-		label.set_text( "#caption" , "Room " .. doorinfo.roomid )
+		setup( self, message )
 		
 	elseif message_id == MSG_READY_TO_INTERACT then
 		readyToInteract( self, message, sender )

@@ -1,7 +1,7 @@
 local Events = require( "level.playground.events" )
 
-local MSG_INTERACT = hash( "interact" )
-local MSG_SET_PROPS = hash( "setProps" )
+local MSG_INTERACT 			= hash( "interact" )
+local MSG_SET_PROPS 		= hash( "setProps" )
 local MSG_REMOTE_TRIGGER	= hash( "remoteTrigger" )
 
 go.property( "on", false )

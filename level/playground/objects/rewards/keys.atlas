@@ -10,7 +10,7 @@ animations {
   flip_vertical: 0
 }
 animations {
-  id: "red"
+  id: "keyred"
   images {
     image: "/assets/objects/keys/keycardred.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
@@ -21,12 +21,23 @@ animations {
   flip_vertical: 0
 }
 animations {
-  id: "gold"
+  id: "keygold"
   images {
     image: "/assets/objects/keys/keycardgold.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_NONE
+  fps: 60
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "keyblue"
+  images {
+    image: "/assets/objects/keys/keycardblue.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
   fps: 60
   flip_horizontal: 0
   flip_vertical: 0

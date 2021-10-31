@@ -30,6 +30,10 @@ function Hud:setHeat( heat )
 	msg.post( self.url, "heat", { value = heat } )
 end
 
+function Hud:setKeycards( type, value )
+	msg.post( self.url, "keycards", { type = type,  value = value } )
+end
+
 
 return Hud
 

@@ -3,7 +3,6 @@ require( "deflibs.defold" )
 local Events = require( "level.playground.events" )
 local lua = require( "deflibs.lualib" )
 local vcontroller = require( "in.onscreen" )
-local Stats = require( "level.playground.characters.player.stats" )
 local Weapon = require( "level.playground.characters.player.weapon" )
 
 go.property( "dir", vmath.vector3( 0, 1, 0 ) )
@@ -28,8 +27,7 @@ local GROUP_OBSTACLES 		= hash( "obstacle" )
 local GROUP_PLAYERS 		= hash( "player" )
 
 local REWARD_TYPE_COIN 		= hash( "coin" )
-local REWARD_TYPE_KEYCARD 	= hash( "keysfactory" )
-
+local REWARD_TYPE_KEYCARD 	= hash( "keys" )
 
 local LEFT 					= hash( "key_left" )
 local RIGHT 				= hash( "key_right" )
@@ -57,8 +55,8 @@ end
 
 
 local function shoot( self )
-	if self.stats.heat < 100 then
-		self.stats:addHeat( self.weapon.heat ) 
+	if PLAYER_STATS.heat < 100 then
+		PLAYER_STATS:addHeat( self.weapon.heat ) 
 		
 		local speed = 600
 		local range = 600
@@ -232,8 +230,6 @@ function init( self )
 	self.ySpeed = 0
 	self.jumpTicks = 0
 
-	self.stats = Stats.new()
-
 	self.weapon = lua.deepcopy( Weapon.PULSE_RIFLE )
 	
 	-- allow for change of animation only after completion
@@ -369,8 +365,8 @@ function update( self, dt )
 	go.set_position( self.pos ) 
 
 	-- cooldown weapon heat
-	if self.stats.heat > 0 then 
-		self.stats:addHeat( - dt * self.weapon.cool ) 
+	if PLAYER_STATS.heat > 0 then 
+		PLAYER_STATS:addHeat( - dt * self.weapon.cool ) 
 	end
 end
 
@@ -410,8 +406,17 @@ function on_message( self, message_id, message, sender )
 			if type == REWARD_TYPE_COIN then 
 				local amount = goGetProperty( url, "amount" )
 				if amount and amount > 0 then 
-					self.stats:addMoney( amount ) 
+					PLAYER_STATS:addMoney( amount ) 
 				end	
+
+			elseif type == REWARD_TYPE_KEYCARD then 
+				local amount = goGetProperty( url, "amount" )
+				if amount and amount > 0 then 
+					local keycard = goGetProperty( url, "subtype" )
+					if keycard then 
+						PLAYER_STATS:addKeycard( keycard, 1 )
+					end
+				end
 			end	
 		end
 

@@ -72,6 +72,7 @@
   <object id="1" name="door02" type="door" gid="108" x="576" y="320" width="64" height="64">
    <properties>
     <property name="factory" value="door01factory"/>
+    <property name="key" value=""/>
     <property name="locked" type="bool" value="false"/>
     <property name="open" type="bool" value="true"/>
     <property name="variant" type="int" value="0"/>
@@ -87,6 +88,7 @@
   <object id="4" name="door01" type="door" gid="108" x="128" y="640" width="64" height="64">
    <properties>
     <property name="factory" value="door01factory"/>
+    <property name="key" value=""/>
     <property name="locked" type="bool" value="false"/>
     <property name="open" type="bool" value="true"/>
     <property name="variant" type="int" value="0"/>

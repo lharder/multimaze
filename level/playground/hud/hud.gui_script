@@ -1,7 +1,12 @@
-local MSG_MONEY = hash( "money" )
-local MSG_HEAT = hash( "heat" )
-local MSG_HEALTH = hash( "health" )
-local MSG_HEARTS = hash( "hearts" )
+local MSG_MONEY 		= hash( "money" )
+local MSG_HEAT 			= hash( "heat" )
+local MSG_HEALTH 		= hash( "health" )
+local MSG_HEARTS 		= hash( "hearts" )
+local MSG_KEYCARDS	 	= hash( "keycards" )
+
+local TYPE_KEYCARD_BLUE = hash( "keyblue" )
+local TYPE_KEYCARD_RED 	= hash( "keyred" )
+local TYPE_KEYCARD_GOLD = hash( "keygold" )
 
 local BAR_UNIT = 136 / 100
 local BAR_OFFSET = 12
@@ -64,6 +69,11 @@ function init( self )
 		if i > 3 then alpha = 0.5 end
 		gui.set_color( self.hearts[ i ], vmath.vector4( 1, 1, 1, alpha ) )
 	end
+
+	-- keycards: 3 types
+	self.keyblue = gui.get_node( "keycards/bluetext" )
+	self.keyred = gui.get_node( "keycards/redtext" )
+	self.keygold = gui.get_node( "keycards/goldtext" )
 	
 	-- eye candy
 	pulse( gui.get_node( "money/icon" ) )
@@ -84,6 +94,15 @@ function on_message( self, message_id, message, sender )
 		
 	elseif message_id == MSG_HEALTH then
 		setBarValue( self.health, message.value )
+
+	elseif message_id == MSG_KEYCARDS then
+		if message.type == TYPE_KEYCARD_BLUE then 
+			gui.set_text( self.keyblue, message.value ) 
+		elseif message.type == TYPE_KEYCARD_RED then 
+			gui.set_text( self.keyred, message.value ) 
+		elseif message.type == TYPE_KEYCARD_GOLD then 
+			gui.set_text( self.keygold, message.value ) 
+		end
 		
 	end
 end

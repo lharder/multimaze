@@ -127,6 +127,7 @@ end
 
 function init( self )
 	createVirtualCtrl()
+	PLAYER_STATS:initGui()
 end
 
 
