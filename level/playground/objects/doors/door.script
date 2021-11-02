@@ -1,15 +1,13 @@
 local Events = require( "level.playground.events" )
 
-local KEYCARD_BLUE 	= hash( "keyblue" )
-local KEYCARD_RED 	= hash( "keyred" )
-local KEYCARD_GOLD 	= hash( "keygold" )
+local KEYCARD_BLUE 			= hash( "keyblue" )
+local KEYCARD_RED 			= hash( "keyred" )
+local KEYCARD_GOLD 			= hash( "keygold" )
 
-local MSG_READY_TO_INTERACT = hash( "readyToInteract" )
-local MSG_INTERACT 			= hash( "interact" )
-local MSG_REMOTE_TRIGGER	= hash( "remoteTrigger" )
-local MSG_SET_PROPS 		= hash( "setProps" )
-
-go.property( "key", KEYCARD_BLUE )
+local MSG_READY_TO_INTERACT = hash("readyToInteract")
+local MSG_INTERACT 			= hash("interact")
+local MSG_REMOTE_TRIGGER	= hash("remoteTrigger")
+local MSG_SET_PROPS 		= hash("setProps")
 
 
 

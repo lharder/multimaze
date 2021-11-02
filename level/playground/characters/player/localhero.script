@@ -159,7 +159,7 @@ local function vcontrol( self, action )
 			-- if player points upwards, do not move sideways:
 			-- allow for player to aim and shoot above and below. 
 			-- only move sideways when y movement is insignificant
-			if( math.abs( action.y ) < 0.6 ) then 
+			if( math.abs( action.y ) < 0.8 ) then 
 				if( math.abs( action.x ) > 0 ) then 
 					self.xSpeed = self.maxSpeed
 				end
@@ -171,7 +171,7 @@ local function vcontrol( self, action )
 			if( math.abs( action.y ) > 0 ) then 
 				-- horizontal firing is default, 
 				-- clamp to exactly 0 when close
-				if math.abs( action.y ) < .2 then 
+				if math.abs( action.y ) < .4 then 
 					self.angle.y = 0 
 				else
 					self.angle.y = action.y
@@ -193,7 +193,7 @@ local function vcontrol( self, action )
 		if action.released then self.buttons[ action.id ] = false end	
 		
 		if self.cooldown < socket.gettime() then
-			self.cooldown = socket.gettime() + .3
+			self.cooldown = socket.gettime() + .1
 
 			if self.interactWith and self.animname == "standup" then 
 				interact( self )

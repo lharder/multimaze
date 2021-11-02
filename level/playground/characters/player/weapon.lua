@@ -16,7 +16,7 @@ function Weapon.new( name, dammage, heat, cool, price )
 end
 
 
-Weapon.PULSE_RIFLE = Weapon.new( R:txt( "Pulsgewehr" ), 15, 12, 15, 240 )
+Weapon.PULSE_RIFLE = Weapon.new( R:txt( "Pulsgewehr" ), 15, 10, 16, 240 )
 
 return Weapon
 

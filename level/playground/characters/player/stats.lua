@@ -22,9 +22,9 @@ function Stats.new()
 	this.heat = 0
 	this.money = 0
 	this.keycards = {}
-	this.keycards[ KEYCARD_BLUE ] = 0
-	this.keycards[ KEYCARD_RED ] = 0
-	this.keycards[ KEYCARD_GOLD ] = 2
+	this.keycards[ KEYCARD_BLUE ] 	= 0
+	this.keycards[ KEYCARD_RED ] 	= 0
+	this.keycards[ KEYCARD_GOLD ] 	= 0
 
 	return this
 end
