@@ -82,9 +82,6 @@ function Tilemap:isWalkable( xPixFrom, yPix, xPixTo )
 	local min = math.min( xPixFrom, xPixTo )
 	local max = math.max( xPixFrom, xPixTo )
 	for xPix = min, max, 64 do 
-		-- local free = self:isPassable( xPix, yPix )
-		-- local solid = not self:isPassable( xPix, yPix - 40 )
-		-- if( not free ) or ( not solid ) then 
 		if(	not self:isPassable( xPix, yPix ) or 
 		  ( self:isPassable( xPix, yPix - 40 ) ) ) then
 			walkable = false 
@@ -102,9 +99,9 @@ function Tilemap:isPassable( xPix, yPix )
 
 	-- check if a wall is in the way
 	if self:getTileValue( xPix, yPix ) > 0 then return false end
-	
-	-- check if a blocking object is in the way?
+
 	--[[
+	-- check if a blocking object is in the way?
 	local xGrid, yGrid = self:pixToGrid( xPix, yPix )
 	local id = self.objsByPos[ xGrid .. "-" .. yGrid ]
 	if id ~= nil then

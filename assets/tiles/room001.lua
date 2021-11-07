@@ -9,7 +9,7 @@ return {
   tilewidth = 64,
   tileheight = 64,
   nextlayerid = 6,
-  nextobjectid = 58,
+  nextobjectid = 61,
   properties = {},
   tilesets = {
     {
@@ -559,25 +559,6 @@ return {
           }
         },
         {
-          id = 56,
-          name = "cupboard03",
-          type = "cupboard",
-          shape = "point",
-          x = 576,
-          y = 1216,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["factory"] = "cupboardfactory",
-            ["rewardfactory"] = "keysfactory",
-            ["rewardsubtype"] = "keyred",
-            ["searchtime"] = 8,
-            ["type"] = 3
-          }
-        },
-        {
           id = 57,
           name = "cupboard04",
           type = "cupboard",
@@ -595,6 +576,39 @@ return {
             ["rewardsubtype"] = "keyred",
             ["searchtime"] = 8,
             ["type"] = 6
+          }
+        },
+        {
+          id = 58,
+          name = "barrier01",
+          type = "generic",
+          shape = "point",
+          x = 704,
+          y = 1024,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["factory"] = "barrierfactory"
+          }
+        },
+        {
+          id = 59,
+          name = "btnBarrier",
+          type = "button",
+          shape = "rectangle",
+          x = 576,
+          y = 1216,
+          width = 64,
+          height = 64,
+          rotation = 0,
+          gid = 27,
+          visible = true,
+          properties = {
+            ["color"] = "red",
+            ["factory"] = "buttonfactory",
+            ["listeners"] = "barrier01"
           }
         }
       }

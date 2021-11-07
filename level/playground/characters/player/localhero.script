@@ -403,21 +403,20 @@ function on_message( self, message_id, message, sender )
 		if( message.other_group == GROUP_TREASURE ) then 
 			local url = msg.url( nil, message.other_id, "script" )
 			local type = goGetProperty( url, "type" )
-			if type == REWARD_TYPE_COIN then 
+			if goGetProperty( url, "collectible" ) then
+	
 				local amount = goGetProperty( url, "amount" )
-				if amount and amount > 0 then 
-					PLAYER_STATS:addMoney( amount ) 
-				end	
+				if type == REWARD_TYPE_COIN then 
+					if amount then PLAYER_STATS:addMoney( amount ) end	
 
-			elseif type == REWARD_TYPE_KEYCARD then 
-				local amount = goGetProperty( url, "amount" )
-				if amount and amount > 0 then 
-					local keycard = goGetProperty( url, "subtype" )
-					if keycard then 
-						PLAYER_STATS:addKeycard( keycard, 1 )
+				elseif type == REWARD_TYPE_KEYCARD then 
+					if amount then 
+						local keycard = goGetProperty( url, "subtype" )
+						if keycard then PLAYER_STATS:addKeycard( keycard, 1 ) end
 					end
-				end
-			end	
+				end	
+				
+			end
 		end
 
 		-- if player is standing in front of a cupboard that has been

@@ -15,6 +15,8 @@ content[ "EN" ][ "Fernkampf" ] = "Ranged combat"
 content[ "EN" ][ "Technologie" ] = "Technology"
 content[ "EN" ][ "Gesundheit" ] = "Health"
 content[ "EN" ][ "Pulsgewehr" ] = "Pulse Rifle"
+content[ "EN" ][ "Es muss einen Türöffner geben..." ] = "There must be a door opener..."
+content[ "EN" ][ "Ich brauche die richtige Keycard..." ] = "I need the right keycard..."
 
 -- create DE language set from keys of EN
 for key, value in pairs( content[ "EN" ] ) do

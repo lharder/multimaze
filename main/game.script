@@ -9,6 +9,8 @@ local Stats = require( "level.playground.characters.player.stats" )
 
 local Serializable = require( "nexus.serializable" )
 
+local MSG_SET_PROPS = hash( "setProps" )
+
 
 -- global ---------------------------
 R = require( "main.multilang" )
@@ -32,6 +34,25 @@ function loadRoom( roomid, entrypos )
 	local messages = {}
 	messages[ "playground:/level" ] = { roomid = roomid, entrypos = entrypos }
 	msg.post( "main:/screenmaster", "load", { level = "/playground", messages = messages } )
+end
+
+
+-- global function to allow for displaying 
+-- floating notifications, e.g. above the player
+function notify( txt, size, time, pos )
+	if pos == nil then pos = go.get_position() end
+	if size == nil then size = 1 end
+	if time == nil then time = 3 end
+	if txt == nil then txt = "???" end
+	
+	local scale = vmath.vector3( size, size, size )
+	local id = factory.create( "/factories#statementfactory", pos, nil, {}, scale )
+	local url = msg.url( nil, id, "script" )
+	msg.post( url, MSG_SET_PROPS, {
+		text = txt,
+		time = time
+	})
+	return id
 end
 
 

@@ -1,0 +1,61 @@
+
+local MSG_SET_PROPS = hash( "setProps" )
+
+
+local function fadeout()
+	go.animate( "#label", "color.w", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, .5, 0, function() 
+		go.delete()
+	end )
+end
+
+
+local function pulse()
+	local alpha = go.get( "#label", "color.w" )
+	if alpha == 1 then alpha = .7 else alpha = 1 end
+	go.animate( "#label", "color.w", go.PLAYBACK_ONCE_FORWARD, alpha, go.EASING_LINEAR, 2, 0, function() 
+		pulse()
+	end )
+end
+
+
+local function hover( time )
+	local pos = go.get_position()
+	pos.y = pos.y - 30
+	go.animate( ".", "position", go.PLAYBACK_ONCE_FORWARD, pos, go.EASING_LINEAR, time, 0, function() 
+		go.delete()
+	end )
+end
+
+
+local function floatup( self )
+	local pos = go.get_position()
+	pos.y = pos.y + 80
+	if pos.y > 600 then pos.y = 600 end
+	go.animate( ".", "position", go.PLAYBACK_ONCE_FORWARD, pos, go.EASING_LINEAR, .3, 0, function() 
+		timer.delay( self.time - 1, false, function() 
+			fadeout()
+		end )
+	end )
+end
+
+
+local function setup( self, message )
+	self.time = message.time
+	label.set_text( "#label", message.text )
+end
+
+
+----------
+function init( self )
+	pulse()
+	floatup( self )
+end
+
+
+function on_message( self, message_id, message, sender )
+	if message_id == MSG_SET_PROPS then
+		setup( self, message )
+	end
+end
+
+

@@ -1,3 +1,4 @@
+require( "deflibs.defold" )
 local lua = require( "deflibs.lualib" )
 local Registry = require( "nexus.registry" )
 local Events = require( "level.playground.events" )
@@ -6,7 +7,10 @@ local Events = require( "level.playground.events" )
 go.property( "dir", vmath.vector3( 1, 0, 0 ) )
 go.property( "speed", 200 )
 
-local MSG_SET_PROPS = hash( "setProps" )
+local MSG_SET_PROPS 		= hash( "setProps" )
+local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
+
+local GROUP_OBSTACLES 		= hash( "obstacle" )
 
 
 
@@ -48,8 +52,12 @@ end
 
 
 local function turn( self, xDir )
-	sprite.set_hflip( "#sprite", xDir > 0 )
-	self.dir.x = xDir
+	if socket.gettime() >= self.nextTurntime then 
+		self.nextTurntime = socket.gettime() + .1
+		
+		sprite.set_hflip( "#sprite", xDir > 0 )
+		self.dir.x = xDir
+	end
 end
 
 
@@ -178,6 +186,7 @@ function init( self )
 	self.pos = go.get_position()
 	self.hunting = nil
 	self.cooldown = 0
+	self.nextTurntime = socket.gettime()
 	
 	turn( self, self.dir.x )
 
@@ -202,6 +211,14 @@ function on_message( self, message_id, message, sender )
 
 	elseif message_id == GAME.MSG_EXEC_CMD then 
 		parse( self, message )
+
+	elseif message_id == MSG_TRIGGER_COLLISION then
+		if( message.other_group == GROUP_OBSTACLES ) then 
+			local url = msg.url( nil, message.other_id, "script" )
+			if goGetProperty( url, "blocking" ) then
+				turn( self, -1 * self.dir.x )
+			end
+		end
 		
 	end
 end

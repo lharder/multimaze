@@ -4,6 +4,7 @@ go.property( "type", hash( "coin" ) )
 go.property( "subtype", hash( "keyblue" ) )
 go.property( "jumping", false )
 go.property( "amount", 0 )
+go.property( "collectible", true )
 
 local MSG_SET_PROPS 		= hash( "setProps" )
 local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
@@ -13,6 +14,7 @@ local function collect( self )
 	-- Allow to collect only once! 
 	-- Timing issue with multiple collision.
 	self.amount = 0
+	self.collectible = false
 
 	-- Remove this coin
 	local pos = go.get_position()
@@ -50,6 +52,9 @@ end
 
 ---------------
 function init( self )
+	self.collectible = false
+	self.amount = 1 
+	
 	if self.jumping then
 		self.pos = go.get_position()
 		local toPos = self.pos.y + 90
@@ -60,8 +65,8 @@ function init( self )
 	-- amount can only be collected after it has jumped up
 	-- takes one second, then value is available: state must
 	-- be accessible by localplayer as well!
-	timer.delay( 1, false, function() 
-		self.amount = 1 
+	timer.delay( .5, false, function() 
+		self.collectible = true
 	end )
 end
 
@@ -72,7 +77,7 @@ function on_message( self, message_id, message, sender )
 		setup( self, message )
 		
 	elseif message_id == MSG_TRIGGER_COLLISION then
-		if self.amount > 0 then collect( self ) end
+		if self.collectible then collect( self ) end
 		
 	end
 end

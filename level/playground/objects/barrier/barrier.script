@@ -1,0 +1,49 @@
+require( "deflibs.defold" )
+
+local MSG_SET_PROPS 		= hash( "setProps" )
+local MSG_REMOTE_TRIGGER	= hash("remoteTrigger")
+local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
+
+go.property( "blocking", true )
+
+
+local function setup( self, message )
+	self.name = message.properties.name
+	
+	goRotate( 90 )
+	
+	local pos = go.get_position()
+	pos.y = pos.y - 64
+	pos.z = .6
+	go.set_position( pos )
+	
+	go.set_scale( vmath.vector3( 1.3, 1.3, 1 ) )
+end
+
+
+local function handleRemoteTrigger( self )
+	self.blocking = not self.blocking
+	if self.blocking then 
+		sprite.play_flipbook( "#sprite", "on" )
+	else
+		sprite.play_flipbook( "#sprite", "off" )
+	end
+end
+
+
+local function parse( self, message )
+end
+
+
+----------
+function on_message( self, message_id, message, sender )
+	if message_id == GAME.MSG_EXEC_CMD then
+		parse( self, message )
+
+	elseif message_id == MSG_REMOTE_TRIGGER then
+		handleRemoteTrigger( self )
+
+	elseif message_id == MSG_SET_PROPS then
+		setup( self, message )
+	end
+end
