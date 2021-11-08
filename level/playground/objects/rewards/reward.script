@@ -13,7 +13,6 @@ local MSG_TRIGGER_COLLISION = hash( "trigger_response" )
 local function collect( self )
 	-- Allow to collect only once! 
 	-- Timing issue with multiple collision.
-	self.amount = 0
 	self.collectible = false
 
 	-- Remove this coin
@@ -59,15 +58,10 @@ function init( self )
 		self.pos = go.get_position()
 		local toPos = self.pos.y + 90
 		local url = msg.url( nil, go.get_id(), "sprite" )
-		go.animate( ".", "position.y", go.PLAYBACK_ONCE_FORWARD, toPos, go.EASING_OUTBOUNCE, 1 )
+		go.animate( ".", "position.y", go.PLAYBACK_ONCE_FORWARD, toPos, go.EASING_OUTBOUNCE, .8, 0, function() 
+			self.collectible = true
+		end )
 	end
-
-	-- amount can only be collected after it has jumped up
-	-- takes one second, then value is available: state must
-	-- be accessible by localplayer as well!
-	timer.delay( .5, false, function() 
-		self.collectible = true
-	end )
 end
 
 

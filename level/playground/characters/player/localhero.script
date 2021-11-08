@@ -25,6 +25,7 @@ local GROUP_DOOR 			= hash( "door" )
 local GROUP_CUPBOARD 		= hash( "cupboard" )
 local GROUP_OBSTACLES 		= hash( "obstacle" )
 local GROUP_PLAYERS 		= hash( "player" )
+local GROUP_ENEMIES 		= hash( "enemy" )
 
 local REWARD_TYPE_COIN 		= hash( "coin" )
 local REWARD_TYPE_KEYCARD 	= hash( "keys" )
@@ -42,9 +43,13 @@ local CMD_OPTION_RIGHT 		= hash( "key_ralt" )
 local function isFree( vDir, id )
 	if vmath.length( vDir ) == 0 then return true end
 	
+	-- Beware: raycasts intersect only with kinematic 
+	-- collision objects, NOT with triggers!
 	local pos = go.get_position( id )
 	local other = pos + vDir
-	local res = physics.raycast( pos, other, { GROUP_OBSTACLES, GROUP_PLAYERS } )
+	local res = physics.raycast( pos, other, { 
+		GROUP_OBSTACLES, GROUP_PLAYERS, GROUP_ENEMIES 
+	})
 	return res == nil, res
 end
 
@@ -331,6 +336,12 @@ function update( self, dt )
 		else
 			self.ySpeed = 0
 			self.dir.y = 0
+
+			-- not very well implemented: prevent player from
+			-- sliding sideways into walls below their surface
+			-- where he can otherwise walk freely if in upper half.
+			-- This makes player jerk up or down several pixels....
+			self.pos.y = lua.round( self.pos.y / 64 ) * 64 - 26
 		end
 	end
 
@@ -354,12 +365,19 @@ function update( self, dt )
 		if MAP:isPassable( p.x - obj.normal.x * 32, p.y ) and isFree( -32 * obj.normal, obj.id ) then 
 			p.x = p.x - obj.normal.x 
 			go.set_position( p, obj.id )
-
-			-- broadcast change of position to obstacle on other clients, as well
-			
 		end
 	end
 
+	-- bounce off if *someone/something*  
+	-- provides a pushback force
+	if self.pushback then 
+		self.pos.x = self.pos.x + self.pushback.x * dt
+		self.pos.y = self.pos.y + self.pushback.y * dt
+		self.pushback = self.pushback * .95
+		if vmath.length( self.pushback ) < 1 then self.pushback = nil end
+	end
+
+	-- set calculated position
 	self.pos.x = self.pos.x + self.dir.x * self.xSpeed * dt
 	self.pos.y = self.pos.y + self.dir.y * self.ySpeed * dt
 	go.set_position( self.pos ) 
@@ -428,8 +446,15 @@ function on_message( self, message_id, message, sender )
 				self.interactAuto = false
 			end
 		end
-		
-		-- pprint( "interacting with " .. ( self.interactWith or "nobody" ) )
+
+		if( message.other_group == GROUP_OBSTACLES ) then 
+			local url = msg.url( nil, message.other_id, "script" )
+			if goGetProperty( url, "blocking" ) then
+				-- bounce off obstacles
+				self.pushback = -self.dir * 800
+				self.pushback.y = 0
+			end
+		end
 		
 	elseif 	( message_id == vcontroller.ANALOG ) or 
 			( message_id == vcontroller.BUTTON ) then 

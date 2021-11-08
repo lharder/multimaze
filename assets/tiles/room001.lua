@@ -301,7 +301,7 @@ return {
           name = "term01",
           type = "terminal",
           shape = "rectangle",
-          x = 704,
+          x = 640,
           y = 1152,
           width = 64,
           height = 64,

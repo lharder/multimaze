@@ -1,7 +1,7 @@
 require( "deflibs.defold" )
 
 local MSG_SET_PROPS 		= hash( "setProps" )
-local MSG_REMOTE_TRIGGER	= hash("remoteTrigger")
+local MSG_REMOTE_TRIGGER	= hash( "remoteTrigger")
 local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
 
 go.property( "blocking", true )
@@ -10,7 +10,7 @@ go.property( "blocking", true )
 local function setup( self, message )
 	self.name = message.properties.name
 	
-	goRotate( 90 )
+	-- goRotate( 90 )
 	
 	local pos = go.get_position()
 	pos.y = pos.y - 64
