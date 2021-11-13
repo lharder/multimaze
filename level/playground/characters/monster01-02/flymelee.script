@@ -9,27 +9,12 @@ local MODE_IDLE = 0
 local MODE_ATTACK = 1
 local IMPENETRABLE = { 29 }
 
-local MSG_SET_PROPS = hash( "setProps" )
+local MSG_SET_PROPS 		= hash( "setProps" )
+local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
+
+local GROUP_OBSTACLES 		= hash( "obstacle" )
 
 
---[[
-local function shoot( self )
-	local speed = 500
-	local pos = go.get_position() 
-	local maxPos = pos + ( self.dir * speed )
-	local cid = factory.create( "/factories#locallaserfactory", pos, nil, { 
-		speed = speed,  angle = self.dir,  maxPos = maxPos 
-	}, .5 )
-
-	-- make id globally available
-	local shotGid = sprintf( "%s-%d", self.gid, math.random( 0, 999999 ) )
-	GAME.client.registry:set( shotGid, cid )
-
-	-- inform other clients
-	local evt = Events.newCreateShot( self.gid, shotGid, self.angle, maxPos )
-	GAME.client:sendToOtherClients( evt )
-end
---]]
 
 local function switchToAttack( self )
 	self.mode = MODE_ATTACK
@@ -116,6 +101,18 @@ local function updateIdle( self, dt )
 	if isImpenetrable( self.pos.x, self.pos.y ) then
 		selectTargetPos( self )
 	else
+		-- bounce off if *someone/something*  
+		-- provides a pushback force
+		if self.pushback then 
+			if MAP:isPassable( self.pos.x + self.pushback.x * dt, self.pos.y + self.pushback.y * dt ) then
+				self.pos.x = self.pos.x + self.pushback.x * dt
+				self.pos.y = self.pos.y + self.pushback.y * dt
+				self.pushback = self.pushback * .95
+				if vmath.length( self.pushback ) < 1 then self.pushback = nil end
+			else
+				self.pushback = nil 
+			end
+		end
 		go.set_position( self.pos )
 	end
 end
@@ -138,6 +135,18 @@ local function updateAttack( self, dt )
 	if isImpenetrable( self.pos.x, self.pos.y ) then
 		switchToIdle( self )
 	else
+		-- bounce off if *someone/something*  
+		-- provides a pushback force
+		if self.pushback then 
+			if MAP:isPassable( self.pos.x + self.pushback.x * dt, self.pos.y + self.pushback.y * dt ) then
+				self.pos.x = self.pos.x + self.pushback.x * dt
+				self.pos.y = self.pos.y + self.pushback.y * dt
+				self.pushback = self.pushback * .95
+				if vmath.length( self.pushback ) < 1 then self.pushback = nil end
+			else
+				self.pushback = nil 
+			end
+		end
 		go.set_position( self.pos )
 	end
 end
@@ -160,7 +169,6 @@ end
 
 function update( self, dt ) 
 	if PLAYER_ID ~= "" then 
-		
 		if self.mode == MODE_IDLE then
 			updateIdle( self, dt )
 			
@@ -168,7 +176,6 @@ function update( self, dt )
 			updateAttack( self, dt )
 			
 		end
-		
 	end
 	
 end
@@ -180,7 +187,22 @@ function on_message( self, message_id, message, sender )
 
 	elseif message_id == GAME.MSG_EXEC_CMD then 
 		parse( self, message )
+
+	elseif message_id == MSG_TRIGGER_COLLISION then
+		if( message.other_group == GROUP_OBSTACLES ) then 
+			local url = msg.url( nil, message.other_id, "script" )
+			if message.enter == true then 
+				if goGetProperty( url, "blocking" ) then
+					-- bounce off obstacles
+					self.pushback = -self.dir * 400
+					self.pushback.y = 0
+
+					selectTargetPos( self )
+				end
+			end
+		end
 		
 	end
+	
 end
 

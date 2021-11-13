@@ -371,10 +371,14 @@ function update( self, dt )
 	-- bounce off if *someone/something*  
 	-- provides a pushback force
 	if self.pushback then 
-		self.pos.x = self.pos.x + self.pushback.x * dt
-		self.pos.y = self.pos.y + self.pushback.y * dt
-		self.pushback = self.pushback * .95
-		if vmath.length( self.pushback ) < 1 then self.pushback = nil end
+		if MAP:isPassable( self.pos.x + self.pushback.x * dt, self.pos.y + self.pushback.y * dt ) then
+			self.pos.x = self.pos.x + self.pushback.x * dt
+			self.pos.y = self.pos.y + self.pushback.y * dt
+			self.pushback = self.pushback * .95
+			if vmath.length( self.pushback ) < 1 then self.pushback = nil end
+		else
+			self.pushback = nil 
+		end
 	end
 
 	-- set calculated position

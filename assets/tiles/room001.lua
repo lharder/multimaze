@@ -9,7 +9,7 @@ return {
   tilewidth = 64,
   tileheight = 64,
   nextlayerid = 6,
-  nextobjectid = 61,
+  nextobjectid = 62,
   properties = {},
   tilesets = {
     {
@@ -255,7 +255,7 @@ return {
           properties = {
             ["color"] = "red",
             ["factory"] = "buttonfactory",
-            ["listeners"] = "door02"
+            ["listeners"] = "door02,barrier02"
           }
         },
         {
@@ -609,6 +609,21 @@ return {
             ["color"] = "red",
             ["factory"] = "buttonfactory",
             ["listeners"] = "barrier01"
+          }
+        },
+        {
+          id = 61,
+          name = "barrier02",
+          type = "generic",
+          shape = "point",
+          x = 704,
+          y = 704,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["factory"] = "barrierfactory"
           }
         }
       }

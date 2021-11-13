@@ -58,7 +58,7 @@ function init( self )
 		self.pos = go.get_position()
 		local toPos = self.pos.y + 90
 		local url = msg.url( nil, go.get_id(), "sprite" )
-		go.animate( ".", "position.y", go.PLAYBACK_ONCE_FORWARD, toPos, go.EASING_OUTBOUNCE, .8, 0, function() 
+		go.animate( ".", "position.y", go.PLAYBACK_ONCE_FORWARD, toPos, go.EASING_OUTBOUNCE, .6, 0, function() 
 			self.collectible = true
 		end )
 	end
