@@ -1,4 +1,4 @@
- local lua = require( "deflibs.lualib" )
+local lua = require( "deflibs.lualib" )
 local Events = require( "level.playground.events" )
 
 go.property( "dir", vmath.vector3( 1, 0, 0 ) )
