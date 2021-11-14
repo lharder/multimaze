@@ -401,7 +401,7 @@ function on_message( self, message_id, message, sender )
 		-- get my global id, does not work on init()
 		-- cannot pass in string params on factory.create...
 		self.gid = GAME.client.registry:getGlobalId( go.get_id() )
-
+		
 	elseif message_id == MSG_TRIGGER_COLLISION then
 		if( message.other_group == GROUP_BUTTON ) or 
 		  ( message.other_group == GROUP_TREASURE ) or
@@ -459,7 +459,7 @@ function on_message( self, message_id, message, sender )
 				self.pushback.y = 0
 			end
 		end
-		
+
 	elseif 	( message_id == vcontroller.ANALOG ) or 
 			( message_id == vcontroller.BUTTON ) then 
 		vcontrol( self, message )

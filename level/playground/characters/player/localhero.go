@@ -96,6 +96,7 @@ embedded_components {
   "mask: \"door\"\n"
   "mask: \"obstacle\"\n"
   "mask: \"cupboard\"\n"
+  "mask: \"enemy\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"

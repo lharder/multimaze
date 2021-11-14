@@ -1,4 +1,4 @@
-local lua = require( "deflibs.lualib" )
+ local lua = require( "deflibs.lualib" )
 local Registry = require( "nexus.registry" )
 local Events = require( "level.playground.events" )
 
@@ -10,6 +10,9 @@ local MSG_SET_PROPS = hash( "setProps" )
 local MSG_TRIGGER_COLLISION = hash( "trigger_response" ) 
 
 local GROUP_OBSTACLES 		= hash( "obstacle" )
+local GROUP_SHOTS			= hash( "shot" )
+local GROUP_PLAYER			= hash( "player" )
+
 
 
 
@@ -134,6 +137,19 @@ local function updateServer( self, dt )
 			self.pushback = nil 
 		end
 	end
+
+	-- dropping? Start movement only the next(!) frame:
+	-- no dropping intended when turning back at abyss!
+	if MAP:isPassable( self.side, self.below ) then
+		if self.dropping then 
+			self.pos.y = self.pos.y - 200 * dt
+		else
+			self.dropping = true
+		end
+	else
+		self.dropping = false
+	end
+	
 	go.set_position( self.pos )
 end
 	
@@ -175,6 +191,16 @@ function on_message( self, message_id, message, sender )
 		parse( self, message )
 
 	elseif message_id == MSG_TRIGGER_COLLISION then
+		if( message.other_group == GROUP_SHOTS ) then 
+			self.pushback = -self.dir * 500
+			self.pushback.y = 0
+		end
+
+		if( message.other_group == GROUP_PLAYER ) then 
+			self.pushback = -self.dir * 400
+			self.pushback.y = 0
+		end
+		
 		if( message.other_group == GROUP_OBSTACLES ) then 
 			local url = msg.url( nil, message.other_id, "script" )
 			if self.hunting then 
@@ -185,17 +211,15 @@ function on_message( self, message_id, message, sender )
 						self.pushback.y = 0
 					end
 				end
-				if message.enter == false then self.blocking = false end
-
+				
 			else
-
 				if goGetProperty( url, "blocking" ) then
 					if not message.enter == false then turn( self, -self.dir.x ) end
 				end
 			end
 		end
 	end
-	
+		
 end
 
 
