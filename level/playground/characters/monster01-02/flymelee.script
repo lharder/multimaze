@@ -53,9 +53,9 @@ local function selectTargetPos( self )
 			self.targetPos = go.get_position()
 			self.targetPos.x = self.targetPos.x + ( 4 * math.random( -60, 60 ) )
 			self.targetPos.y = self.targetPos.y + ( 4 * math.random( -60, 60 ) )
-		end
 
-		sendMoveTo( self.targetPos )
+			sendMoveTo( self.targetPos )
+		end
 	end
 end
 
@@ -69,13 +69,14 @@ end
 
 
 local function setup( self, message ) 
-	-- if self.isLocalHero then 
 	if GAME:isServer() then
 		-- make globally available and start syncing
 		self.gid = message.name
 		GAME.client.registry:set( self.gid, go.get_id() )
 		GAME:sync( self.gid, {{ key = "dir", segment = "script" }} ) 
 	end
+	
+	switchToIdle( self )
 end
 
 	
@@ -129,9 +130,11 @@ end
 local function updateAttack( self, dt )
 	self.pos = go.get_position()
 	self.targetPos = go.get_position( self.target )
-	self.dir = vmath.normalize( self.targetPos - self.pos )
-	self.pos.x = self.pos.x + self.dir.x * self.speed * dt
-	self.pos.y = self.pos.y + self.dir.y * self.speed * dt
+	if self.pos ~= self.targetPos then
+		self.dir = vmath.normalize( self.targetPos - self.pos )
+		self.pos.x = self.pos.x + self.dir.x * self.speed * dt
+		self.pos.y = self.pos.y + self.dir.y * self.speed * dt
+	end
 
 	sprite.set_hflip( "#sprite", self.dir.x > 0 )
 
@@ -160,9 +163,7 @@ function init( self )
 
 	self.mode = MODE_IDLE
 	self.dir = vmath.vector3()
-	self.targetPos = go.get_position()
-	
-	switchToIdle( self )
+	self.speed = 100
 end
 
 

@@ -24,6 +24,7 @@ local GROUP_TREASURE 		= hash( "treasure" )
 local GROUP_DOOR 			= hash( "door" )
 local GROUP_CUPBOARD 		= hash( "cupboard" )
 local GROUP_OBSTACLES 		= hash( "obstacle" )
+local GROUP_PUSHABLE 		= hash( "pushable" )
 local GROUP_PLAYERS 		= hash( "player" )
 local GROUP_ENEMIES 		= hash( "enemy" )
 
@@ -48,7 +49,7 @@ local function isFree( vDir, id )
 	local pos = go.get_position( id )
 	local other = pos + vDir
 	local res = physics.raycast( pos, other, { 
-		GROUP_OBSTACLES, GROUP_PLAYERS, GROUP_ENEMIES 
+		GROUP_OBSTACLES, GROUP_PLAYERS, GROUP_ENEMIES, GROUP_PUSHABLE 
 	})
 	return res == nil, res
 end

@@ -53,7 +53,8 @@ end
 
 
 local function turn( self, xDir )
-	if socket.gettime() >= self.nextTurntime then 
+	if socket.gettime() >= self.nextTurntime and
+	   not self.dropping then 
 		self.nextTurntime = socket.gettime() + .1
 		
 		sprite.set_hflip( "#sprite", xDir > 0 )
@@ -193,6 +194,12 @@ local function updateServer( self, dt )
 			self.dropping = true
 		end
 	else
+		if self.dropping then 
+			local dif = ( self.pos.y + 32 ) % 64
+			if dif > 0 then 
+				self.pos.y = self.pos.y - dif
+			end
+		end
 		self.dropping = false
 	end
 

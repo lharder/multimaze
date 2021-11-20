@@ -29,8 +29,10 @@ end
 
 
 local function turn( self, xDir )
-	sprite.set_hflip( "#sprite", xDir == 1 )
-	self.dir.x = xDir
+	if not self.dropping then 
+		sprite.set_hflip( "#sprite", xDir == 1 )
+		self.dir.x = xDir
+	end
 end
 
 
@@ -147,7 +149,14 @@ local function updateServer( self, dt )
 			self.dropping = true
 		end
 	else
+		if self.dropping then 
+			local dif = ( self.pos.y + 32 ) % 64
+			if dif > 0 then 
+				self.pos.y = self.pos.y - dif
+			end
+		end
 		self.dropping = false
+		
 	end
 	
 	go.set_position( self.pos )

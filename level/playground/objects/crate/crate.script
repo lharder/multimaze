@@ -8,6 +8,7 @@ local MSG_TRIGGER_COLLISION = hash( "trigger_response" )
 local MSG_SET_PROPS 		= hash( "setProps" )
 local GROUP_SHOTS 			= hash( "shot" )
 local GROUP_OBSTACLES 		= hash( "obstacle" )
+local GROUP_PUSHABLE 		= hash( "pushable" )
 
 
 local function explode( self )
@@ -36,7 +37,7 @@ local function isFree( self, vDir )
 	
 	local pos = go.get_position()
 	local other = pos + vDir
-	local res = physics.raycast( pos, other, { GROUP_OBSTACLES } )
+	local res = physics.raycast( pos, other, { GROUP_OBSTACLES, GROUP_PUSHABLE } )
 
 	return res == nil, res
 end

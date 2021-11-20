@@ -45,6 +45,7 @@ embedded_components {
   "mask: \"shot\"\n"
   "mask: \"player\"\n"
   "mask: \"obstacle\"\n"
+  "mask: \"pushable\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_SPHERE\n"
